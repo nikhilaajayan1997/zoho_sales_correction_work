@@ -1468,8 +1468,8 @@ class EmailAttachementView(View):
 
 
 def add_customer_for_estimate(request):
-   
-    return render(request,'createinvoice.html',{'sb':sb})
+    return redirect("add_customer")   
+    # return render(request,'createinvoice.html',{'sb':sb})
     
 def entr_custmr_for_estimate(request):
     if request.user.is_authenticated:

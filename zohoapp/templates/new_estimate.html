@@ -140,7 +140,7 @@
             $('#sgst').val(d.toFixed(2));
             document.getElementById('tr_igst').style.display = "table-row";
         }
-    }
+    }  
     // Calculate total
     $(document).ready(function () {
         $('#shipping, #adjustment').on('keyup', function () {
@@ -193,8 +193,8 @@
 
 
 <section>
-    <div class="fixed-top  " style="top: 7rem; margin-left: 20rem;">
-
+    <!-- <div class="fixed-top  " style="top: 7rem; margin-left: 20rem;"> -->
+    <div  style="top: 7rem;">
 
         <div class="row  ml-2">
             <div class="col-md-3 "><a class="text-white" style="font-size: 1.5rem;"><i class="fa-solid fa-plus"></i> New
@@ -202,191 +202,220 @@
             <input type="hidden" id="state" value="{{ company.state }}">
         </div>
 
-        <div style="height: 600px; overflow-y: scroll;">
+        <!-- <div style="height: 600px; overflow-y: scroll;"> -->
+         <div>
+
             <form method="POST" action="" class="p-5" enctype="multipart/form-data" novalidate
                 id="forms">
                 {% csrf_token %}
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
-                    <div class="col-sm-10">
-                        <select class="" id="customer_sel" name="customer_name" style="width: 50%;height: 35px;">
+                    <div class="col-sm-6">
+                        <select class="form-control text-dark" id="customer_sel" name="customer_name" >
                             <option>Select Customer</option>
                             {% for cust in customers %}
                             <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
                                 {{cust.customerName}}</option>
                             {% endfor %}
                         </select>
-                        <a href="{% url 'add_customer_for_estimate'  %}"><i class="fa-solid fa-plus p-2 rounded"
-                                style="color: white; background-color: rgb(210, 132, 30);height: 35px;"></i></a>
+                        
+                    </div>
+                    <div class="col-sm-4">
+                        <a  href="{% url 'add_customer_for_estimate'  %}"><i class="fa-solid  fa fa-plus p-2 rounded"
+                            style="color: white; background-color: rgb(210, 132, 30);height: 37px;"></i></a>
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-sm-2"><label for="estimate_number">Estimate#*</label></div>
-                    <div class="col-sm-10"><input type="text" id="estimate_number" name="estimate_number" class=""
-                            value="{{count}}" style="width: 38%;height: 35px;">
-                        <a class="btn " id="estimate-num" onclick="showPopup()"
+                    <div class="col-sm-6"><input type="text" id="estimate_number" name="estimate_number" class="form-control text-dark"
+                            value="EST-{{count}}">
+                        <!-- <a class="btn " id="estimate-num" onclick="showPopup()"
                             style="color: white; background-color: rgb(210, 132, 30);height: 35px;"><i
-                                class="fas fa-cog "></i></a>
+                                class="fas fa-cog "></i></a> -->
                     </div>
                 </div>
+
                 <div class="row mb-4">
                     <div class="col-sm-2"><label for="reference">Reference#</label></div>
-                    <div class="col-sm-10"> <input type="number" id="reference" name="reference" class=""
-                            style="width: 38%;height: 35px;"></div>
+                    <div class="col-sm-6"> <input type="number" id="reference" name="reference" class="form-control text-dark"
+                            style="height: 35px;"></div>
                 </div>
-                <div class="row mb-4 border-bottom pb-5">
+
+               <div class="row mb-4 border-bottom pb-5">
                     <div class="col-sm-2"><label for="reference">Estimate Date*</label></div>
-                    <div class="col-sm-4"> <input type="date" id="estimate_date" name="estimate_date" class=""
-                            style="width: 100%;height: 35px;">
+                    <div class="col-sm-2"> <input type="date" id="estimate_date" name="estimate_date" class="form-control text-dark" style="width: 100%;height: 35px;">
                     </div>
                     <div class="col-sm-2 text-right"><label for="reference">Expiry Date</label></div>
-                    <div class="col-sm-4"> <input type="date" id="expiry_date" name="expiry_date" class=""
-                            style="width: 60%;height: 35px;"></div>
+                    <div class="col-sm-2"> <input type="date" id="expiry_date" name="expiry_date" class="form-control text-dark"
+                            style="width: 100%;height: 35px;"></div>
+                </div>
+<!-- .............................................  TABLE  ..................................................... -->
+
+
+
+
+                <div class="row">
+                    <div class="col-sm-12 col-lg-12 col-md-12">
+                        <label for="">Price List</label><br>
+                        <div style="width: 100%;">
+                            <table class="table  text-black table-bordered " id="item_table" style="background-color: rgba(250, 227, 198, 0.8);table-layout: fixed;width: 100%;background-color: #b6b3b36b;"
+                            onchange="calc()">
+                            <thead>
+                                <tr>
+                                    <th class=" text-light">Item Details <a href="{% url 'additem_page_est' %}"><i class="fas fa-plus p-2 rounded"
+                                                style="color: white; background-color: rgb(210, 132, 30);"></i></a></th>
+                                    <th class="text-right text-light ">Quantity</th>
+                                    <th class="text-right text-light">Rate</th>
+                                    <th class="text-right text-light">Discount</th>
+                                    <th class="text-right text-light">Tax</th>
+                                    <th class="text-right text-light">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+        
+                                <tr id='row1'>
+                                    <td>
+                                        <div class='form-group'><select
+                                                class=' bg-transparent text-black border-0 item_select itm'
+                                                name='item[]' id='item1'>
+                                                <option class='text-dark'>Select Items</option>
+                                                {% for i in items %}
+                                                <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td class='text-right'><input type='number' id='qty1'
+                                            class='form-control bg-transparent border-0 text-black text-right qty' name='quantity[]'
+                                            value='0'>
+                                    </td>
+                                    <td class='text-right'><input type='number' id='rate1'
+                                            class='form-control bg-transparent border-0 text-black text-right rate' name='rate[]'
+                                            value='0.00'>
+                                    </td>
+                                    <td class='text-right'><input type='number' id='discount1'
+                                            class='form-control bg-transparent border-0 text-black text-right discount' name='discount[]'
+                                            value='0.00'>
+                                    </td>
+                                    <td class='text-right'> <select name='tax[]' id='tax1'
+                                            class=' bg-transparent text-black text-right border-0 tax' style="width: 85%;">
+                                            <option value=0>Non Taxable</option>
+                                            <option value=0>0% GST/IGST</option>
+                                            <option value=5>5% GST/IGST</option>
+                                            <option value=12>12% GST/IGST</option>
+                                            <option value=18>18% GST/IGST</option>
+                                            <option value=28>28% GST/IGST</option>
+        
+        
+                                            <option value=0>Out of Scope(0%)</option>
+                                        </select></td>
+                                    <td style="display: none;">
+                                        <input type="number" name='taxamount[]' id="taxamount1"
+                                            class="form-control taxamount" />
+                                    </td>
+                                    <td class='text-right'><input type='number' id='amount1'
+                                            class='bg-transparent border-0 text-black text-right amount' name='amount[]'
+                                            value='0.00' style="width: 85%;"></td>
+                                    <td class='text-center'><button type='button' id='del_btn1'
+                                            class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
+                                            style='width:30px'><i class='fa fa-times'></i></button>
+                                                <button type='button' class='btn btn-transparent text-primary btn-sm btn-outline-primary rounded-circle clone-row' data-row=1 style='width:30px'><i class="fa fa-clone"></i>
+                                                </button>
+                                              </td>
+                                </tr>
+                            </tbody>
+        
+                        </table>
+                        <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30) ;"
+                            id="add-row">Add another line</button>
+                    </div>
+                    
+
                 </div>
 
-                <label for="">Price List</label><br>
-                <table class="table  text-black" id="item_table" style="background-color: rgba(250, 227, 198, 0.8);"
-                    onchange="calc()">
-                    <thead>
-                        <tr>
-                            <th>Item Details <a href="{% url 'additem_page_est' %}"><i class="fas fa-plus p-2 rounded"
-                                        style="color: white; background-color: rgb(210, 132, 30);"></i></a></th>
-                            <th class="text-right">Quantity</th>
-                            <th class="text-right">Rate</th>
-                            <th class="text-right">Discount</th>
-                            <th class="text-right">Tax</th>
-                            <th class="text-right">Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr id='row1'>
-                            <td>
-                                <div class='form-group'><select
-                                        class='form-control bg-transparent text-black border-0 item_select itm'
-                                        name='item[]' id='item1'>
-                                        <option class='text-dark'>Select Items</option>
-                                        {% for i in items %}
-                                        <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
-                                        {% endfor %}
-                                    </select></div>
-                            </td>
-                            <td class='text-right'><input type='number' id='qty1'
-                                    class='bg-transparent border-0 text-black text-right qty' name='quantity[]'
-                                    value='0'>
-                            </td>
-                            <td class='text-right'><input type='number' id='rate1'
-                                    class='bg-transparent border-0 text-black text-right rate' name='rate[]'
-                                    value='0.00'>
-                            </td>
-                            <td class='text-right'><input type='number' id='discount1'
-                                    class='bg-transparent border-0 text-black text-right discount' name='discount[]'
-                                    value='0.00'>
-                            </td>
-                            <td class='text-right'> <select name='tax[]' id='tax1'
-                                    class='form-control bg-transparent text-black text-right border-0 tax'>
-                                    <option value=0>Non Taxable</option>
-                                    <option value=0>0% GST/IGST</option>
-                                    <option value=5>5% GST/IGST</option>
-                                    <option value=12>12% GST/IGST</option>
-                                    <option value=18>18% GST/IGST</option>
-                                    <option value=28>28% GST/IGST</option>
 
 
-                                    <option value=0>Out of Scope(0%)</option>
-                                </select></td>
-                            <td style="display: none;">
-                                <input type="number" name='taxamount[]' id="taxamount1"
-                                    class="form-control taxamount" />
-                            </td>
-                            <td class='text-right'><input type='number' id='amount1'
-                                    class='bg-transparent border-0 text-black text-right amount' name='amount[]'
-                                    value='0.00'></td>
-                            <td class='text-center'><button type='button' id='del_btn1'
-                                    class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
-                                    style='width:30px'><i class='fa fa-times'></i></button></td>
-                        </tr>
-                    </tbody>
+                
+<!-- ..................................................   END TABLE   .......................................................... -->
 
-                </table>
-                <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30) ;"
-                    id="add-row">Add another line</button>
-
-                <div class="row border-bottom pb-5">
-                    <div class="col-sm-6 d-flex flex-column mt-auto">
+                <div class="row border-bottom pb-5 mt-3">
+                    <div class="col-sm-12 col-lg-6 col-md-6">
 
                         <label for="">Customer Notes</label>
-                        <textarea name="customer_note" id="" cols="8" rows="3"
-                            placeholder=" Will be Displayed on the Estimate"></textarea>
+                        <textarea class="form-control text-dark" name="customer_note" id="" 
+                            placeholder=" Will be Displayed on the Estimate" style="height: 50%;"></textarea>
                     </div>
-                    <div class="col-sm-6">
-                        <table class=" table  text-black" style="background-color: rgba(250, 227, 198, 0.8);">
-                            <tr>
-                                <td>Sub Total</td>
-                                <td></td>
-                                <td><input type="number" id="subtotal" name="subtotal" step="any" value="0.00"
-                                        class="bg-transparent border-0 text-right subtotal"></td>
-                            </tr>
-                            <tr style="display: none;" id="tr_igst">
-                                <td>IGST</td>
-                                <td></td>
-                                <td><input type="number" id='igst' name="igst" step="any" value="0.00"
-                                        class="form-control bg-transparent border-0 text-right igst" ></td>
-                            </tr>
-                            <tr style="display: none;" id="tr_cgst">
-                                <td>CGST</td>
-                                <td></td>
-                                <td><input type="number" id='cgst' name="cgst" step="any" value="0.00"
-                                        class="form-control bg-transparent border-0 text-right cgst" ></td>
-                            </tr>
-                            <tr style="display: none;" id="tr_sgst">
-                                <td>SGST</td>
-                                <td></td>
-                                <td><input type="number" id='sgst' name="sgst" step="any" value="0.00"
-                                        class="form-control bg-transparent border-0 text-right sgst" ></td>
-                            </tr>
-                            <tr>
-                                <td>Tax Amount</td>
-                                <td></td>
-                                <td><input type="number" id="total_taxamount" name="total_taxamount" step="any" value="0.00" 
-                                    class="total_taxamount form-control bg-transparent border-0 text-right"></td>
-                            </tr>
-                            <tr>
-                                <td>Shipping Charges</td>
-                                <td><input type="number" id="shipping"> <i class="fas fa-question"></i></td>
-                                <td><input type="text" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
-                                    class="form-control bg-transparent border-0 text-right shipping_charge"></td>
-                            </tr>
-                            <tr>
-                                <td>Adjustmment</td>
-                                <td><input type="number" id="adjustment"> <i class="fas fa-question"></i></td>
-                                <td><input type="text" id="adjustment_charge" name="adjustment_charge" step="any" value="0.00" 
-                                    class="form-control bg-transparent border-0 text-right adjustment"> </td>
-                            </tr>
-                            <tr>
-                                <th>Total ( &#x20B9; )</th>
-                                <th></th>
-                                <th><input type="number" id="total" name="total" step="any" value="0.00" 
-                                        class="form-control bg-transparent border-0 text-right total"></th>
-                            </tr>
-                        </table>
+                    <div class="col-sm-12 col-md-6 col-lg-6">
+                        <div style="width: 100%;">
+                            <table class=" table  text-black table-bordered" style="background-color: rgba(141, 140, 139, 0.507);">
+                                <tr>
+                                    <td style="font-weight: bold;">Sub Total</td>
+                                    <td><center><input type="number" id="subtotal" name="subtotal" step="any" value="0.00"
+                                        class=" form-control bg-transparent  border-0 text-right subtotal" style="width: 50%;"></center></td>
+                                </tr>
+                                <tr style="display: none;font-weight: bold;" id="tr_igst">
+                                    <td>IGST</td>
+                                    <td><center><input type="number" id='igst' name="igst" step="any" value="0.00"
+                                        class="form-control bg-transparent border-0 text-right igst" style="width: 50%;"></center></td>
+                                </tr>
+                                <tr style="display: none;font-weight: bold;" id="tr_cgst">
+                                    <td>CGST</td>
+                                    <td><center><input type="number" id='cgst' name="cgst" step="any" value="0.00"
+                                        class="form-control bg-transparent border-0 text-right cgst" style="width: 50%;"></center></td>
+                                </tr>
+                                <tr style="display: none;font-weight: bold;" id="tr_sgst">
+                                    <td>SGST</td>
+                                    <td></td>
+                                    <td><center><input type="number" id='sgst' name="sgst" step="any" value="0.00"
+                                        class="form-control bg-transparent border-0 text-right sgst" style="width: 50%;"></center></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Tax Amount</td>
+                                    <!-- <td></td> -->
+                                    <td><center><input type="number" id="total_taxamount" name="total_taxamount" step="any" value="0.00" 
+                                        class="total_taxamount form-control bg-transparent border-0 text-right" style="width: 50%;"></center></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Shipping Charges</td>
+                                    <!-- <td></td> -->
+                                    <!-- <td><input type="number" id="shipping"> <i class="fas fa-question"></i></td> -->
+                                    <td><center><input type="number" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
+                                        class="form-control bg-transparent border-0 text-right shipping_charge" style="width: 50%;"></center></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;">Adjustmment</td>
+                                    <!-- <td></td> -->
+                                    <!-- <td><input type="number" id="adjustment"> <i class="fas fa-question"></i></td> -->
+                                    <td><center><input type="number" id="adjustment_charge" name="adjustment_charge" step="any" value="0.00" 
+                                        class="form-control bg-transparent border-0 text-right adjustment" style="width: 50%;"></center> </td>
+                                </tr>
+                                <tr>
+                                    <th style="color: rgb(204, 134, 3);">Total ( &#x20B9; )</th>
+                                    <th><center><input type="number" id="total" name="total" step="any" value="0.00" 
+                                        class="form-control bg-transparent border-0 text-right text-warning total" style="width: 50%;color: rgb(204, 134, 3);" readonly></center></th>
+                                </tr>
+                            </table>
+                        </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row py-5 border-bottom">
-                    <div class="col-md-8 d-flex flex-column w-60 text-black">
+                <div class="row  border-bottom">
+                    <div class="col-md-6 col-lg-6 col-sm-12 py-5">
                         <label for="">Terms & Conditions</label>
-                        <textarea name="tearms_conditions" id="" cols="20" rows="5"
+                        <textarea class="form-control text-dark" style="height: 100%;" rows="6"  name="terms_conditions" id="" 
                             placeholder=" Enter the terms & conditions of your business to be displayed in your transaction."></textarea>
                     </div>
-                    <div class="col-md-4 py-5 text-center rounded" style="background-color: rgba(250, 227, 198, 0.8);">
-                        <label class="text-dark" for="">Attach File(s) to Estimate</label><br>
+                    <div class="col-md-6 col-lg-6 col-sm-12 py-5 text-center rounded mt-4" >
+                        <div  style="width: 100%;background-color: rgba(153, 152, 152, 0.507);height: 120px;">
+                            <label class="text-black mt-3 pt-3" for="">Attach File(s) to Estimate</label><br>
 
                         <label for="file-upload" class="btn text-white border-0"
                             style="background-color: rgb(210, 132, 30);">
                             <i class="fas fa-upload text-white"></i> Upload File
                         </label>
-                        <input id="file-upload" type="file" name="file" style="display:none;">
+                        <input class="pb-3"  id="file-upload" type="file" name="file" style="display:none;">
+                        </div>
 
 
 
@@ -444,11 +473,11 @@
             var RowCount = table.rows.length;
             console.log(RowCount);
             var newRow = $(`
-            <tr id='row${RowCount}' >
+            <tr id='row${RowCount}'>
                 <td>
                     <div class='form-group'>
                         <select
-                            class='form-control bg-transparent text-black border-0 item_select' name='item[]'
+                            class='bg-transparent text-black border-0 item_select' name='item[]'
                             id='item${RowCount}'>
                             <option class='text-dark'>Select Items</option>
                             {% for i in items %}
@@ -456,17 +485,16 @@
                             {% endfor %}
                         </select></div>
                 </td>
-                <td class='text-right'><input type='number' id='qty${RowCount}'
-                        class='bg-transparent border-0 text-black text-right qty' name='quantity[]' value='0.00' >
+                <td class='text-right '><input type='number' id='qty${RowCount}'
+                        class='form_control bg-transparent border-0 text-black text-right qty' name='quantity[]' style="width:85%" value='0.00' >
                 </td>
-                <td class='text-right'><input type='number' id='rate${RowCount}'
-                        class='bg-transparent border-0 text-black text-right rate' name='rate[]' value='0.00'
-                        ></td>
+                <td class='text-right '><input type='number' id='rate${RowCount}'
+                        class='form_control bg-transparent border-0 text-black text-right rate' name='rate[]' value='0.00' style="width:85%"></td>
                 <td class='text-right'><input type='number' id='discount${RowCount}'
-                        class='bg-transparent border-0 text-black text-right discount' name='discount[]' value='0.00'>
+                        class='form_control bg-transparent border-0 text-black text-right discount' name='discount[]' value='0.00' style="width:85%">
                 </td>
                 <td class='text-right'> <select name='tax[]' id='tax${RowCount}'
-                        class="form-control bg-transparent text-black text-right border-0 tax">
+                        class="bg-transparent text-black text-right border-0 tax" style="width:85%">
                         <option value=0>Non Taxable</option>
                         <option value=0>0% GST/IGST</option>
                         <option value=5>5% GST/IGST</option>
@@ -477,13 +505,15 @@
                        
                     </select></td>
                 <td style="display: none;">
-                    <input type="text" name='taxamount1' id="taxamount${RowCount}" class="form-control taxamount" />
+                    <input type="text" name='taxamount1' id="taxamount${RowCount}"  class="taxamount" />
                             </td>
                 <td class='text-right'><input type='number' id='amount${RowCount}'
-                        class='bg-transparent border-0 text-black text-right amount' name='amount[]' value='0.00'></td>
+                        class='bg-transparent border-0 text-black text-right amount' style="width:85%" name='amount[]' value='0.00'></td>
                 <td class='text-center'><button type='button' id='del_btn${RowCount}'
                         class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
-                        style='width:30px'><i class='fa fa-times'></i></button></td>
+                        style='width:30px'><i class='fa fa-times'></i></button>
+                        <button type='button' class='btn btn-transparent text-primary btn-sm btn-outline-primary rounded-circle clone-row' data-row=1 style='width:30px'><i class="fa fa-clone"></i></button>
+                        </td>
             </tr>`);
             $('#item_table').append(newRow);
         });
@@ -496,7 +526,29 @@
     });
 
 
+// Event handler for clone button
+var rowCount = 1;
+$('#item_table').on('click', '.clone-row', function () {
+  var row = $(this).closest('tr');
+  var clonedRow = row.clone(); // Clone the current row
+  var newRowId = 'row' + rowCount; // Generate a new ID for the cloned row
+  clonedRow.attr('id', newRowId); // Set the new ID for the cloned row
 
+  // Clone the options for tax, account, and item
+  var currentItem = row.find('.item_select').val();
+  clonedRow.find('.item_select').val(currentItem);
+  
+  var currentTax = row.find('.tax').val();
+  clonedRow.find('.tax').val(currentTax);
+
+  rowCount++; // Increment row counter
+
+  $('#item_table tbody').append(clonedRow);
+  var row = $(this).closest('tr');
+  calc();
+  calc_total();
+     
+});
 
 
 </script>
