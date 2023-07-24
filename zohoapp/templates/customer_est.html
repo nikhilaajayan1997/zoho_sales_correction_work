@@ -69,10 +69,12 @@
   }
 </style>
 
-<div class="fixed-top  " style="top: 7rem; margin-left: 20rem;">
+<!-- <div class="fixed-top  " style="top: 7rem; margin-left: 20rem;"> -->
+  <div  style="top: 7rem;">
+
   <div class="" style="margin-top:1rem;color:white;">
     <h1></h1>
-    <div style="height: 450px; overflow-y: scroll;">
+    <div>
       <form action="{% url 'entr_custmr_for_estimate' %}" method="POST" enctype="multipart/form-data"
         style="color: azure ; font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size:22px;">
         {% csrf_token %}

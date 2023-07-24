@@ -1236,7 +1236,7 @@ def createestimate(request):
         shipping = request.POST['shipping_charge']
         adjustment = request.POST['adjustment_charge']
         total = request.POST['total']
-        tearms_conditions = request.POST['tearms_conditions']
+        tearms_conditions = request.POST['terms_conditions']
         attachment = request.FILES.get('file')
         status = 'Draft'
 
@@ -1293,7 +1293,7 @@ def create_and_send_estimate(request):
         shipping = float(request.POST['shipping_charge'])
         adjustment = float(request.POST['adjustment_charge'])
         total = float(request.POST['total'])
-        tearms_conditions = request.POST['tearms_conditions']
+        tearms_conditions = request.POST['terms_conditions ']
         attachment = request.FILES.get('file')
         status = 'Sent'
         tot_in_string = str(total)
@@ -1373,7 +1373,7 @@ def updateestimate(request,pk):
         estimate.shipping_charge = float(request.POST['shipping_charge'])
         estimate.adjustment = float(request.POST['adjustment_charge'])
         estimate.total = float(request.POST['total'])
-        estimate.terms_conditions = request.POST['tearms_conditions']
+        estimate.terms_conditions = request.POST['terms_conditions']
         estimate.status = 'Draft'
 
         old=estimate.attachment
@@ -1468,8 +1468,8 @@ class EmailAttachementView(View):
 
 
 def add_customer_for_estimate(request):
-    return redirect("add_customer")   
-    # return render(request,'createinvoice.html',{'sb':sb})
+    sb=payment_terms.objects.all()
+    return render(request,'customer_est.html',{'sb':sb})
     
 def entr_custmr_for_estimate(request):
     if request.user.is_authenticated:
