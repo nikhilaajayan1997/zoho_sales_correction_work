@@ -8,6 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"
     integrity="sha512-LwZthDLbb+dritfG9jbFyY1ClYqlkF4I9foqo+783wcl6EPR+kE3uqb0OPsieHt4pFH4HVduwX6rTTDmCaC20g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://fontawesome.com/icons/pencil?f=classic&s=solid   "></script> 
 
 <style>
     /* width */
@@ -17,7 +18,7 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        background: rgb(252, 236, 217)";
+        background: rgb(252, 236, 217);
 
     }
 
@@ -229,7 +230,7 @@
                         <td>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <p>EST-{{estimate.estimate_no}}</p>
+                                    <p>{{estimate.estimate_no}}</p>
                                 </div>
                                 <div class="col-md-3 text-left">
                                     <p>{{estimate.estimate_date}}</p>
@@ -252,12 +253,13 @@
         <div class="col-md-8">
             <div class="row  mx-2 py-3" style="background-color: rgba(252, 236, 217, 0.8)">
                 <div class="col-md-5 text-dark" style="font-size: 2.5rem;">
-                    EST-{{estimate.estimate_no }}</div>
+                    {{estimate.estimate_no }}</div>
                 <div class="col-md-7 text-white text-right my-auto">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <a href="{% url 'editestimate' estimate.id %}" class="btn btn-sm text-white"
+                        <a href="{% url 'editestimate' estimate.id %}" class="btn btn-sm  text-white"
                             style="background-color:  rgb(86, 86, 85);" data-toggle="tooltip" title="Edit">
-                            <i class="fa fa-pencil"></i></a>
+                            <i class="fa-solid fa-pencil" style="color: #eceff4;"></i>
+                        </a>
                         <a href="" class="btn btn-sm text-white btn_print" style="background-color:  rgb(86, 86, 85);"
                             data-toggle="tooltip" title="PDF" id="pdf">
                             <i class="fa fa-file-pdf-o"></i></a>
@@ -292,7 +294,7 @@
                         </div>
                         <div class="col-md-6 text-right">
                             <h1 class="text-dark" style="font-size: 3rem; ">ESTIMATE</h1>
-                            <h6 class="text-dark">Estimate Number : EST-{{estimate.estimate_no }}</h6>
+                            <h6 class="text-dark">Estimate Number : {{estimate.estimate_no }}</h6>
                         </div>
                     </div>
                     <hr>

@@ -178,6 +178,12 @@
         frm.action = ("{% url 'createestimate'%}")
     }
 
+    // function get_customer_email() {
+
+    //  var eml = document.getElementById("customer_sel");
+    //  eml.action = ("{% url 'newestimate'%}")
+    // }
+
     function saveAndSendDialog() {
 
         var frm = document.getElementById("forms");
@@ -190,7 +196,27 @@
 
 
 </script>
-
+<script>
+    function cust_mail(){
+        var customer= document.getElementById("customer_sel").value
+        $.ajax({
+                type: "GET",
+                url: "{% url 'get_cust_mail' %}",
+                data: {
+                 
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    data = response.email
+                    data1=response.cust_id
+                    document.getElementById("customer_mail").value = data
+                    document.getElementById("customer_id").value=data1
+                    
+                }
+            });
+    }
+</script>
 
 <section>
     <!-- <div class="fixed-top  " style="top: 7rem; margin-left: 20rem;"> -->
@@ -211,7 +237,7 @@
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
                     <div class="col-sm-6">
-                        <select class="form-control text-dark" id="customer_sel" name="customer_name" >
+                        <select class="form-control text-dark" id="customer_sel" name="customer_name" onchange="cust_mail()">
                             <option>Select Customer</option>
                             {% for cust in customers %}
                             <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
@@ -226,12 +252,18 @@
                     </div>
                 </div>
                 <div class="row mb-4">
+                    <div class="col-sm-2"><label for="estimate_number">Customer Mail ID</label></div>
+                    <div class="col-sm-6"><input type="text" id="customer_mail" name="customer_mail" class="form-control text-dark"
+                            value="" readonly>
+                           <input type="number" id="customer_id" name="customer_id"  style="display:none;" readonly>
+                        
+                    </div>
+                </div>
+                <div class="row mb-4">
                     <div class="col-sm-2"><label for="estimate_number">Estimate#*</label></div>
                     <div class="col-sm-6"><input type="text" id="estimate_number" name="estimate_number" class="form-control text-dark"
                             value="EST-{{count}}">
-                        <!-- <a class="btn " id="estimate-num" onclick="showPopup()"
-                            style="color: white; background-color: rgb(210, 132, 30);height: 35px;"><i
-                                class="fas fa-cog "></i></a> -->
+                        
                     </div>
                 </div>
 

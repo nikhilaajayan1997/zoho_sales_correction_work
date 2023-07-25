@@ -1159,13 +1159,20 @@ def allestimates(request):
 
     return render(request, 'all_estimates.html', context)
 
+def filter_by_draft(request):
+    estimates=Estimates.objects.filter(status='draft')
+    return render(request, 'all_estimates.html', {'estimates':estimates})
 
+def filter_by_sent(request):
+    estimates=Estimates.objects.filter(status='sent')
+    return render(request, 'all_estimates.html', {'estimates':estimates})
 
 
 
 def newestimate(request):
     user = request.user
     # print(user_id)
+    
     company = company_details.objects.get(user=user)
     items = AddItem.objects.filter(user_id=user.id)
     customers = customer.objects.filter(user_id=user.id)
@@ -1209,6 +1216,8 @@ def createestimate(request):
     print('hi1')
     if request.method == 'POST':
         cust_name = request.POST['customer_name']
+        customer_id=request.POST['customer_id']
+        customer_id1=customer.objects.get(id=customer_id)
         est_number = request.POST['estimate_number']
         reference = request.POST['reference']
         est_date = request.POST['estimate_date']
@@ -1240,7 +1249,7 @@ def createestimate(request):
         attachment = request.FILES.get('file')
         status = 'Draft'
 
-        estimate = Estimates(user=user, customer_name=cust_name, estimate_no=est_number, reference=reference, estimate_date=est_date, 
+        estimate = Estimates(user=user,customer=customer_id1,customer_name=cust_name, estimate_no=est_number, reference=reference, estimate_date=est_date, 
                              expiry_date=exp_date, sub_total=sub_total,igst=igst,sgst=sgst,cgst=cgst,tax_amount=tax_amnt, shipping_charge=shipping,
                              adjustment=adjustment, total=total, status=status, customer_notes=cust_note, terms_conditions=tearms_conditions, 
                              attachment=attachment)
@@ -1261,6 +1270,8 @@ def create_and_send_estimate(request):
     print("hello")
     if request.method == 'POST':
         cust_name = request.POST['customer_name']
+        customer_id=request.POST['customer_id']
+        customer_id1=customer.objects.get(id=customer_id)
         est_number = request.POST['estimate_number']
         reference = request.POST['reference']
         est_date = request.POST['estimate_date']
@@ -1293,12 +1304,11 @@ def create_and_send_estimate(request):
         shipping = float(request.POST['shipping_charge'])
         adjustment = float(request.POST['adjustment_charge'])
         total = float(request.POST['total'])
-        tearms_conditions = request.POST['terms_conditions ']
+        tearms_conditions = request.POST['terms_conditions']
         attachment = request.FILES.get('file')
         status = 'Sent'
         tot_in_string = str(total)
-
-        estimate = Estimates(user=user, customer_name=cust_name, estimate_no=est_number, reference=reference, estimate_date=est_date, 
+        estimate = Estimates(user=user,customer=customer_id1,customer_name=cust_name, estimate_no=est_number, reference=reference, estimate_date=est_date, 
                              expiry_date=exp_date, sub_total=sub_total,igst=igst,sgst=sgst,cgst=cgst,tax_amount=tax_amnt, shipping_charge=shipping,
                              adjustment=adjustment, total=total, status=status, customer_notes=cust_note, terms_conditions=tearms_conditions, 
                              attachment=attachment)
@@ -1478,9 +1488,9 @@ def entr_custmr_for_estimate(request):
             txtFullName=request.POST['txtFullName']
             cpname=request.POST['cpname']
            
-            email=request.POST.get('myEmail')
-            wphone=request.POST.get('wphone')
-            mobile=request.POST.get('mobile')
+            email=request.POST['email']            
+            wphone=request.POST['fname']
+            mobile=request.POST.get('lname')
             skname=request.POST.get('skname')
             desg=request.POST.get('desg')      
             dept=request.POST.get('dept')
@@ -3301,8 +3311,10 @@ def get_cust_mail(request):
     mob=item.customerMobile
     # print(mob)
 
+    cust_id=item.id
+
     
-    return JsonResponse({"status": " not", 'email': email,'ads':ads,'mob':mob})
+    return JsonResponse({"status": " not", 'email': email,'ads':ads,'mob':mob,'cust_id':cust_id})
     return redirect('/')
     
 def add_customer_edit_challan(request):

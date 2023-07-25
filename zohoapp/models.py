@@ -205,6 +205,7 @@ class Retaineritems(models.Model):
             
 class Estimates(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    customer=models.ForeignKey(customer,on_delete=models.CASCADE,null=True,blank=True)
     customer_name = models.CharField(max_length=100,null=True,blank=True)
     estimate_no = models.CharField(max_length=100,null=True,blank=True)
     reference = models.CharField(max_length=100,null=True,blank=True)
@@ -231,6 +232,7 @@ class EstimateItems(models.Model):
     discount = models.FloatField(null=True,blank=True)
     tax_percentage = models.IntegerField(null=True,blank=True)
     amount = models.FloatField(null=True,blank=True)
+
 
 class payment(models.Model):
     term=models.TextField(max_length=255)

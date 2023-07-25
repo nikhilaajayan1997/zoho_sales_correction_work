@@ -50,10 +50,10 @@
               <i style="color: chocolate;" class="fa fa-filter"></i>
             </a>
             <div class="dropdown-menu m-1">
-              <a class="dropdown-item" href="">All</a>
+              <a class="dropdown-item" href="{% url 'allestimates' %}">All</a>
 
-              <a class="dropdown-item" href="">Draft</a>
-              <a class="dropdown-item" href="">Sent</a>
+              <a class="dropdown-item" href="{% url 'filter_by_draft' %}">Draft</a>
+              <a class="dropdown-item" href="{% url 'filter_by_sent' %}">Sent</a>
             </div>
           </div>
 
@@ -75,6 +75,7 @@
             <th>ESTIMATE NUMBER</th>
             <th>REFERENCE NUMBER</th>
             <th>CUSTOMER NAME</th>
+            <th>CUSTOMER MAIL ID</th>
             <th>STATUS</th>
             <th>AMOUNT</th>
           </tr>
@@ -86,6 +87,7 @@
             <td>{{estimate.estimate_no}}</td>
             <td>{{estimate.reference}}</td>
             <td>{{estimate.customer_name}}</td>
+            <td>{{estimate.customer.customerEmail}}</td>
             <td>{{estimate.status}}</td>
             <td>{{estimate.total}}</td>
           </tr>
