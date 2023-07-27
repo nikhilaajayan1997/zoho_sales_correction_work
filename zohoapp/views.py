@@ -1167,6 +1167,35 @@ def filter_by_sent(request):
     estimates=Estimates.objects.filter(status='sent')
     return render(request, 'all_estimates.html', {'estimates':estimates})
 
+def filter_by_draft_estimate_view(request,pk):
+    user = request.user
+    company = company_details.objects.get(user=user)
+    all_estimates = Estimates.objects.filter(user=user,status='draft')
+    estimate = Estimates.objects.get(id=pk)
+    items = EstimateItems.objects.filter(estimate=estimate)
+    context = {
+        'company': company,
+        'all_estimates':all_estimates,
+        'estimate': estimate,
+        'items': items,
+        # 'estimates':estimates
+    }
+    return render(request, 'estimate_slip.html', context)
+
+def filter_by_sent_estimate_view(request,pk):
+    user = request.user
+    company = company_details.objects.get(user=user)
+    all_estimates = Estimates.objects.filter(user=user,status='sent')
+    estimate = Estimates.objects.get(id=pk)
+    items = EstimateItems.objects.filter(estimate=estimate)
+    context = {
+        'company': company,
+        'all_estimates':all_estimates,
+        'estimate': estimate,
+        'items': items,
+    }
+    return render(request, 'estimate_slip.html', context)
+
 
 
 def newestimate(request):
@@ -1297,7 +1326,7 @@ def create_and_send_estimate(request):
 
         cust_note = request.POST['customer_note']
         sub_total = float(request.POST['subtotal'])
-        igst = float(request.POST['igst'])
+        igst = float(request.POST.get('igst'))
         sgst = float(request.POST['sgst'])
         cgst = float(request.POST['cgst'])
         tax_amnt = float(request.POST['total_taxamount'])

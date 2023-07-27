@@ -135,7 +135,7 @@
 
 
 <section>
-    <div class="fixed-top  " style="top: 7rem; margin-left: 20rem;">
+    <div style="top: 7rem; ">
 
 
         <div class="row  ml-2">
@@ -144,7 +144,7 @@
             <input type="hidden" id="state" value="{{ company.state }}">
         </div>
 
-        <div style="height: 600px; overflow-y: scroll;">
+        <div >
             <form method="post" action="{% url 'updateestimate' estimate.id %}" class="p-5" enctype="multipart/form-data" novalidate
                 id="forms">
                 {% csrf_token %}
@@ -321,7 +321,7 @@
                 <div class="row py-5 border-bottom">
                     <div class="col-md-8 d-flex flex-column w-60 text-black">
                         <label for="">Terms & Conditions</label>
-                        <textarea name="tearms_conditions" id="" cols="20" rows="5"
+                        <textarea name="terms_conditions" id="" cols="20" rows="5"
                             placeholder=" Enter the terms & conditions of your business to be displayed in your transaction."></textarea>
                     </div>
                     <div class="col-md-4 py-5 text-center rounded" style="background-color: rgba(250, 227, 198, 0.8);">
