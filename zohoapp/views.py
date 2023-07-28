@@ -1213,7 +1213,7 @@ def newestimate(request):
                'count': next_count,
                }
 
-    return render(request, 'new_estimate.html', context)
+    return render(request,'new_estimate.html',context)
 
 
 def itemdata_est(request):
@@ -1225,9 +1225,7 @@ def itemdata_est(request):
     cust = request.GET.get('cust')
     print(id)
     print(cust)
-
     item = AddItem.objects.get(Name=id, user=user)
-
     rate = item.p_price
     place = company.state
     gst = item.intrastate

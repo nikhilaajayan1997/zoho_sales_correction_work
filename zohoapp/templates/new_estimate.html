@@ -55,7 +55,7 @@
 
 
 
-    function calc() {
+function calc() {
         $('#item_table tbody tr').each(function () {
 
             // var pos = $("#customer_sel option:selected").data("pos");
@@ -86,7 +86,6 @@
             }
         });
     }
-
     function calc_total() {
         total = 0;
         $('.amount').each(function () {
@@ -99,13 +98,11 @@
 
         });
        
-        // total = Math.round(total);
-        // taxamount = Math.round(taxamount);
+       
         $('#subtotal').val(total.toFixed(2));
         $('#total_taxamount').val(taxamount.toFixed(2));
 
         $('#total').val((taxamount + total).toFixed(2));
-        // $('#baldue').val((taxamount + total).toFixed(2));
 
         test();
     }
@@ -131,14 +128,17 @@
 
 
         }
-
         if (pos != state) {
+            // else{
             console.log(pos);
             console.log(state);
             $('#igst').val(taxamount.toFixed(2));
             $('#cgst').val(d.toFixed(2));
             $('#sgst').val(d.toFixed(2));
             document.getElementById('tr_igst').style.display = "table-row";
+            // document.getElementById('tr_cgst').style.display = "table-row";
+            // document.getElementById('tr_sgst').style.display = "table-row";
+
         }
     }  
     // Calculate total
@@ -225,7 +225,7 @@
         <div class="row  ml-2">
             <div class="col-md-3 "><a class="text-white" style="font-size: 1.5rem;"><i class="fa-solid fa-plus"></i> New
                     Estimate</a></div>
-            <input type="hidden" id="state" value="{{ company.state }}">
+            <input type="text" id="state" value="{{ company.state }}">
         </div>
 
         <!-- <div style="height: 600px; overflow-y: scroll;"> -->
@@ -241,7 +241,7 @@
                             <option>Select Customer</option>
                             {% for cust in customers %}
                             <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
-                                {{cust.customerName}}</option>
+                                {{cust.customerName}}{{cust.placeofsupply}}</option>
                             {% endfor %}
                         </select>
                         
@@ -579,6 +579,7 @@ $('#item_table').on('click', '.clone-row', function () {
   var row = $(this).closest('tr');
   calc();
   calc_total();
+//   test();
      
 });
 
