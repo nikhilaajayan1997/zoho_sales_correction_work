@@ -68,12 +68,20 @@ function calc() {
             // }
 
             var html = $(this).html();
+            var x=document.getElementById("cus_place").value
+            var y=document.getElementById("state").value
             if (html != '') {
                 console.log('rows');
                 var qty = $(this).find('.qty').val();
                 var rate = $(this).find('.rate').val();
                 var discount = $(this).find('.discount').val();
-                var tax = $(this).find('.tax').val();
+                if (x == y)
+                {
+                    var tax = $(this).find('.tax').val();
+                }
+                else{
+                    var tax = $(this).find('.taxx').val();
+                }
                 console.log(qty);
                 console.log(rate);
                 console.log(discount);
@@ -196,9 +204,13 @@ function calc() {
 
 
 </script>
+
 <script>
     function cust_mail(){
         var customer= document.getElementById("customer_sel").value
+        var table = document.getElementById("item_table");
+        var RowCount = table.rows.length;
+        
         $.ajax({
                 type: "GET",
                 url: "{% url 'get_cust_mail' %}",
@@ -210,42 +222,113 @@ function calc() {
                     console.log(response)
                     data = response.email
                     data1=response.cust_id
+                    data2=response.cust_place_supply
                     document.getElementById("customer_mail").value = data
                     document.getElementById("customer_id").value=data1
+                    document.getElementById("cus_place").value=data2
+
+                    var x=document.getElementById("cus_place").value
+                    var y=document.getElementById("state").value
+                                if (x == y)
+                                {
+                                    document.getElementById("tax").style.display="block"
+                                    document.getElementById("taxx").style.display="none"
+                        
+                                }
+                                if (x != y)
+                                {
+                                    document.getElementById("tax").style.display="none"
+                                    document.getElementById("taxx").style.display="block"
+                                }
+                    
                     
                 }
             });
+                                
     }
 </script>
+<!-- <script>
+     function cust_mail1()
+     {
+        var table = document.getElementById("item_table");
+        var RowCount = table.rows.length;
+        $.ajax({
+                type: "GET",
+                url: "{% url 'get_cust_mail' %}",
+                data: {
+                 
+                    cust: customer
+                },
+                success: function (response) {
+                    console.log(response)
+                    
+                    data2=response.cust_place_supply
+                    
+                    document.getElementById("cus_place").value=data2
+
+                    var x=document.getElementById("cus_place").value
+                    var y=document.getElementById("state").value
+                                if (x == y)
+                                {
+                                    document.getElementById("tax${RowCount}").style.display="block"
+                                    document.getElementById("taxx${RowCount}").style.display="none"
+                        
+                                }
+                                if (x != y)
+                                {
+                                    document.getElementById("tax${RowCount}").style.display="none"
+                                    document.getElementById("taxx${RowCount}").style.display="block"
+                                }
+                    
+                    
+                }
+            });
+     }
+</script>
+<script>
+    function tax_dropdown()
+    {
+        var x=document.getElementById("cus_place").value
+                    var y=document.getElementById("state").value
+                                if (x == y)
+                                {
+                                    document.getElementById("tax1").style.display="block"
+                                    document.getElementById("tax2").style.display="none"
+                        
+                                }
+                                if (x != y)
+                                {
+                                    document.getElementById("tax1").style.display="none"
+                                    document.getElementById("tax2").style.display="block"
+                                }
+    }
+</script> -->
 
 <section>
-    <!-- <div class="fixed-top  " style="top: 7rem; margin-left: 20rem;"> -->
     <div  style="top: 7rem;">
-
         <div class="row  ml-2">
             <div class="col-md-3 "><a class="text-white" style="font-size: 1.5rem;"><i class="fa-solid fa-plus"></i> New
                     Estimate</a></div>
-            <input type="text" id="state" value="{{ company.state }}">
+            <input type="hidden" id="state" value="{{ company.state }}">
+            <input type="hidden" id="cus_place"  value="">
+
         </div>
-
-        <!-- <div style="height: 600px; overflow-y: scroll;"> -->
          <div>
-
             <form method="POST" action="" class="p-5" enctype="multipart/form-data" novalidate
                 id="forms">
                 {% csrf_token %}
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
                     <div class="col-sm-6">
-                        <select class="form-control text-dark" id="customer_sel" name="customer_name" onchange="cust_mail()">
+                        <select class="form-control text-dark" id="customer_sel" name="customer_name" onchange="cust_mail()" >
                             <option>Select Customer</option>
                             {% for cust in customers %}
                             <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
-                                {{cust.customerName}}{{cust.placeofsupply}}</option>
+                                {{cust.customerName}}</option>
                             {% endfor %}
-                        </select>
-                        
+                        </select>                                                                       
                     </div>
+                   
                     <div class="col-sm-4">
                         <a  href="{% url 'add_customer_for_estimate'  %}"><i class="fa-solid  fa fa-plus p-2 rounded"
                             style="color: white; background-color: rgb(210, 132, 30);height: 37px;"></i></a>
@@ -299,7 +382,7 @@ function calc() {
                                     <th class="text-right text-light ">Quantity</th>
                                     <th class="text-right text-light">Rate</th>
                                     <th class="text-right text-light">Discount</th>
-                                    <th class="text-right text-light">Tax</th>
+                                    <th class="text-right text-light" >Tax</th>
                                     <th class="text-right text-light">Amount</th>
                                 </tr>
                             </thead>
@@ -329,18 +412,43 @@ function calc() {
                                             class='form-control bg-transparent border-0 text-black text-right discount' name='discount[]'
                                             value='0.00'>
                                     </td>
-                                    <td class='text-right'> <select name='tax[]' id='tax1'
-                                            class=' bg-transparent text-black text-right border-0 tax' style="width: 85%;">
-                                            <option value=0>Non Taxable</option>
-                                            <option value=0>0% GST/IGST</option>
-                                            <option value=5>5% GST/IGST</option>
-                                            <option value=12>12% GST/IGST</option>
-                                            <option value=18>18% GST/IGST</option>
-                                            <option value=28>28% GST/IGST</option>
-        
-        
-                                            <option value=0>Out of Scope(0%)</option>
-                                        </select></td>
+                                    <td class='text-right'> 
+                                        <select name='tax[]' id='tax'
+                                            class=' bg-transparent text-black text-right border-0 tax' style="width: 85%;" >
+                                            <option value="" selected>select</option>
+
+                                            <option value=0 class="opt1">Non Taxable</option>
+                                            <option value=0 class="opt1">0% GST/IGST</option>
+                                            <option value=5 class="opt1">5% GST/IGST</option>
+                                            <option value=12 class="opt1">12% GST/IGST</option>
+                                            <option value=18 class="opt1">18% GST/IGST</option>
+                                            <option value=28 class="opt1">28% GST/IGST</option> 
+
+                                            
+                                            
+                                        </select><br>
+                                        <select name='taxx[]' id='taxx'
+                                            class=' bg-transparent text-black text-right border-0 taxx' style="width: 85%;" >
+                                            <option value="" selected>select</option>
+
+                                            <option value=0 class="opt2">0% GST/IGST</option>
+                                            <option value=5 class="opt2">5% GST/IGST</option>
+                                            <option value=12 class="opt2">12% GST/IGST</option>
+                                            <option value=18 class="opt2">18% GST/IGST</option>
+                                            <option value=28 class="opt2">28% GST/IGST</option> 
+
+                                        </select>
+                                    </td>
+             <!-- ..................... ................................................................. -->
+
+                
+
+
+
+
+
+
+             <!-- .................................................................................................... -->
                                     <td style="display: none;">
                                         <input type="number" name='taxamount[]' id="taxamount1"
                                             class="form-control bg-transparent border-0 text-black text-right taxamount" />
@@ -359,7 +467,7 @@ function calc() {
         
                         </table>
                         <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30) ;"
-                            id="add-row">Add another line</button>
+                            id="add-row" onclick="cust_mail1()">Add another line</button>
                     </div>
                     
 
@@ -397,7 +505,6 @@ function calc() {
                                 </tr>
                                 <tr style="display: none;font-weight: bold;" id="tr_sgst">
                                     <td>SGST</td>
-                                    <td></td>
                                     <td><center><input type="number" id='sgst' name="sgst" step="any" value="0.00"
                                         class="form-control bg-transparent border-0 text-right sgst" style="width: 50%;"></center></td>
                                 </tr>
@@ -527,6 +634,7 @@ function calc() {
                 </td>
                 <td class='text-right'> <select name='tax[]' id='tax${RowCount}'
                         class="bg-transparent text-black text-right border-0 tax" style="width:85%">
+                        <option value="" selected>select</option>
                         <option value=0>Non Taxable</option>
                         <option value=0>0% GST/IGST</option>
                         <option value=5>5% GST/IGST</option>
@@ -535,7 +643,19 @@ function calc() {
                         <option value=28>28% GST/IGST</option>
                         <option value=0>Out of Scope(0%)</option>
                        
-                    </select></td>
+                    </select><br>
+                                        <select name='taxx[]' id='taxx${RowCount}'
+                                            class=' bg-transparent text-black text-right border-0 taxx' style="width: 85%;" >
+                                            <option value="" selected>select</option>
+
+                                            <option value=0 class="opt2">0% GST/IGST</option>
+                                            <option value=5 class="opt2">5% GST/IGST</option>
+                                            <option value=12 class="opt2">12% GST/IGST</option>
+                                            <option value=18 class="opt2">18% GST/IGST</option>
+                                            <option value=28 class="opt2">28% GST/IGST</option> 
+
+                                        </select>
+                    </td>
                 <td style="display: none;">
                     <input type="text" name='taxamount1' id="taxamount${RowCount}"  class="form-control bg-transparent border-0 text-black text-right taxamount" />
                             </td>
@@ -585,6 +705,24 @@ $('#item_table').on('click', '.clone-row', function () {
 
 
 </script>
+<!-- <script>
+    function tax_dropdown()
+    {
+        var x=document.getElementById("cus_place").value;
+        var y=document.getElementById("state").value;
+        if (x == y)
+        {
+            document.getElementsByClassName("opt1").style.display="block";
+            document.getElementsByClassName("opt2").style.display="none";
+
+        }
+        else
+        {
+            document.getElementsByClassName("opt1").style.display="none";
+            document.getElementsByClassName("opt2").style.display="block";
+        }
+    }
+</script> -->
 
 
 <script>

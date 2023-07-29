@@ -3339,9 +3339,10 @@ def get_cust_mail(request):
     # print(mob)
 
     cust_id=item.id
+    cust_place_supply=item.placeofsupply
 
     
-    return JsonResponse({"status": " not", 'email': email,'ads':ads,'mob':mob,'cust_id':cust_id})
+    return JsonResponse({"status": " not", 'email': email,'ads':ads,'mob':mob,'cust_id':cust_id,'cust_place_supply':cust_place_supply})
     return redirect('/')
     
 def add_customer_edit_challan(request):
