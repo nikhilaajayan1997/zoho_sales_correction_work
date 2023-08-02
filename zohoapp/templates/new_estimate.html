@@ -227,19 +227,19 @@ function calc() {
                     document.getElementById("customer_id").value=data1
                     document.getElementById("cus_place").value=data2
 
-                    var x=document.getElementById("cus_place").value
-                    var y=document.getElementById("state").value
-                                if (x == y)
-                                {
-                                    document.getElementById("tax").style.display="block"
-                                    document.getElementById("taxx").style.display="none"
+                    // var x=document.getElementById("cus_place").value
+                    // var y=document.getElementById("state").value
+                    //             if (x == y)
+                    //             {
+                    //                 document.getElementById("tax").style.display="block"
+                    //                 document.getElementById("taxx").style.display="none"
                         
-                                }
-                                if (x != y)
-                                {
-                                    document.getElementById("tax").style.display="none"
-                                    document.getElementById("taxx").style.display="block"
-                                }
+                    //             }
+                    //             if (x != y)
+                    //             {
+                    //                 document.getElementById("tax").style.display="none"
+                    //                 document.getElementById("taxx").style.display="block"
+                    //             }
                     
                     
                 }
@@ -247,62 +247,7 @@ function calc() {
                                 
     }
 </script>
-<!-- <script>
-     function cust_mail1()
-     {
-        var table = document.getElementById("item_table");
-        var RowCount = table.rows.length;
-        $.ajax({
-                type: "GET",
-                url: "{% url 'get_cust_mail' %}",
-                data: {
-                 
-                    cust: customer
-                },
-                success: function (response) {
-                    console.log(response)
-                    
-                    data2=response.cust_place_supply
-                    
-                    document.getElementById("cus_place").value=data2
 
-                    var x=document.getElementById("cus_place").value
-                    var y=document.getElementById("state").value
-                                if (x == y)
-                                {
-                                    document.getElementById("tax${RowCount}").style.display="block"
-                                    document.getElementById("taxx${RowCount}").style.display="none"
-                        
-                                }
-                                if (x != y)
-                                {
-                                    document.getElementById("tax${RowCount}").style.display="none"
-                                    document.getElementById("taxx${RowCount}").style.display="block"
-                                }
-                    
-                    
-                }
-            });
-     }
-</script>
-<script>
-    function tax_dropdown()
-    {
-        var x=document.getElementById("cus_place").value
-                    var y=document.getElementById("state").value
-                                if (x == y)
-                                {
-                                    document.getElementById("tax1").style.display="block"
-                                    document.getElementById("tax2").style.display="none"
-                        
-                                }
-                                if (x != y)
-                                {
-                                    document.getElementById("tax1").style.display="none"
-                                    document.getElementById("tax2").style.display="block"
-                                }
-    }
-</script> -->
 
 <section>
     <div  style="top: 7rem;">
@@ -364,15 +309,9 @@ function calc() {
                     <div class="col-sm-2"> <input type="date" id="expiry_date" name="expiry_date" class="form-control text-dark"
                             style="width: 100%;height: 35px;"></div>
                 </div>
-<!-- .............................................  TABLE  ..................................................... -->
+<!-- .............................................  TABLE 1  ..................................................... -->
 
-                 <div class="row">
-                    <div class="col">
-                        <h1></h1>
-                    </div>
-                 </div>
-
-
+                  
                 <div class="row">
                     <div class="col-sm-12 col-lg-12 col-md-12">
                         <label for="">Price List</label><br>
@@ -430,7 +369,8 @@ function calc() {
 
                                             
                                             
-                                        </select><br>
+                                        </select>
+                                        <!-- <br>
                                         <select name='taxx[]' id='taxx'
                                             class=' bg-transparent text-black text-right border-0 taxx' style="width: 85%;" >
                                             <option value="" selected>select</option>
@@ -441,18 +381,9 @@ function calc() {
                                             <option value=18 class="opt2">18% GST/IGST</option>
                                             <option value=28 class="opt2">28% GST/IGST</option> 
 
-                                        </select>
+                                        </select> -->
                                     </td>
-             <!-- ..................... ................................................................. -->
 
-                
-
-
-
-
-
-
-             <!-- .................................................................................................... -->
                                     <td style="display: none;">
                                         <input type="number" name='taxamount[]' id="taxamount1"
                                             class="form-control bg-transparent border-0 text-black text-right taxamount" />
@@ -480,7 +411,114 @@ function calc() {
 
 
                 
-<!-- ..................................................   END TABLE   .......................................................... -->
+<!-- ..................................................   END TABLE1   .......................................................... -->
+
+<!-- .............................................  TABLE 2  ..................................................... -->
+
+                  
+<div class="row" style="display: none;">
+    <div class="col-sm-12 col-lg-12 col-md-12">
+        <label for="">Price List</label><br>
+        <div style="width: 100%;">
+            <table class="table  text-black table-bordered " id="item_table" style="background-color: rgba(250, 227, 198, 0.8);table-layout: fixed;width: 100%;background-color: #b6b3b36b;"
+            onchange="calc()">
+            <thead>
+                <tr>
+                    <th class=" text-light">Item Details <a href="{% url 'additem_page_est' %}"><i class="fas fa-plus p-2 rounded"
+                                style="color: white; background-color: rgb(210, 132, 30);"></i></a></th>
+                    <th class="text-right text-light ">Quantity</th>
+                    <th class="text-right text-light">Rate</th>
+                    <th class="text-right text-light">Discount</th>
+                    <th class="text-right text-light" >Tax</th>
+                    <th class="text-right text-light">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr id='row1'>
+                    <td>
+                        <div class='form-group'><select
+                                class=' bg-transparent text-black border-0 item_select itm'
+                                name='item[]' id='item1'>
+                                <option class='text-dark'>Select Items</option>
+                                {% for i in items %}
+                                <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </td>
+                    <td class='text-right'><input type='number' id='qty1'
+                            class='form-control bg-transparent border-0 text-black text-right qty' name='quantity[]'
+                            value='0'>
+                    </td>
+                    <td class='text-right'><input type='number' id='rate1'
+                            class='form-control bg-transparent border-0 text-black text-right rate' name='rate[]'
+                            value='0.00'>
+                    </td>
+                    <td class='text-right'><input type='number' id='discount1'
+                            class='form-control bg-transparent border-0 text-black text-right discount' name='discount[]'
+                            value='0.00'>
+                    </td>
+                    <td class='text-right'> 
+                        <select name='tax[]' id='tax'
+                            class=' bg-transparent text-black text-right border-0 tax' style="width: 85%;" >
+                            <option value="" selected>select</option>
+
+                            <option value=0 class="opt1">Non Taxable</option>
+                            <option value=0 class="opt1">0% GST/IGST</option>
+                            <option value=5 class="opt1">5% GST/IGST</option>
+                            <option value=12 class="opt1">12% GST/IGST</option>
+                            <option value=18 class="opt1">18% GST/IGST</option>
+                            <option value=28 class="opt1">28% GST/IGST</option> 
+
+                            
+                            
+                        </select>
+                        <!-- <br>
+                        <select name='taxx[]' id='taxx'
+                            class=' bg-transparent text-black text-right border-0 taxx' style="width: 85%;" >
+                            <option value="" selected>select</option>
+
+                            <option value=0 class="opt2">0% GST/IGST</option>
+                            <option value=5 class="opt2">5% GST/IGST</option>
+                            <option value=12 class="opt2">12% GST/IGST</option>
+                            <option value=18 class="opt2">18% GST/IGST</option>
+                            <option value=28 class="opt2">28% GST/IGST</option> 
+
+                        </select> -->
+                    </td>
+
+                    <td style="display: none;">
+                        <input type="number" name='taxamount[]' id="taxamount1"
+                            class="form-control bg-transparent border-0 text-black text-right taxamount" />
+                    </td>
+                    <td class='text-right'><input type='number' id='amount1'
+                            class='bg-transparent border-0 text-black text-right amount' name='amount[]'
+                            value='0.00' style="width: 85%;"></td>
+                    <td class='text-center'><button type='button' id='del_btn1'
+                            class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
+                            style='width:30px'><i class='fa fa-times'></i></button>
+                                <button type='button' class='btn btn-transparent text-primary btn-sm btn-outline-primary rounded-circle clone-row' data-row=1 style='width:30px'><i class="fa fa-clone"></i>
+                                </button>
+                              </td>
+                </tr>
+            </tbody>
+
+        </table>
+        <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30) ;"
+            id="add-row" onclick="cust_mail1()">Add another line</button>
+    </div>
+    
+
+</div>
+
+
+
+
+<!-- ..................................................   END TABLE 2   .......................................................... -->
+
+
+
 
                 <div class="row border-bottom pb-5 mt-3">
                     <div class="col-sm-12 col-lg-6 col-md-6">
@@ -647,18 +685,19 @@ function calc() {
                         <option value=28>28% GST/IGST</option>
                         <option value=0>Out of Scope(0%)</option>
                        
-                    </select><br>
-                                        <select name='taxx[]' id='taxx${RowCount}'
-                                            class=' bg-transparent text-black text-right border-0 taxx' style="width: 85%;" >
-                                            <option value="" selected>select</option>
+                    </select>
+                    // <br>
+                    //                     <select name='taxx[]' id='taxx${RowCount}'
+                    //                         class=' bg-transparent text-black text-right border-0 taxx' style="width: 85%;" >
+                    //                         <option value="" selected>select</option>
 
-                                            <option value=0 class="opt2">0% GST/IGST</option>
-                                            <option value=5 class="opt2">5% GST/IGST</option>
-                                            <option value=12 class="opt2">12% GST/IGST</option>
-                                            <option value=18 class="opt2">18% GST/IGST</option>
-                                            <option value=28 class="opt2">28% GST/IGST</option> 
+                    //                         <option value=0 class="opt2">0% GST/IGST</option>
+                    //                         <option value=5 class="opt2">5% GST/IGST</option>
+                    //                         <option value=12 class="opt2">12% GST/IGST</option>
+                    //                         <option value=18 class="opt2">18% GST/IGST</option>
+                    //                         <option value=28 class="opt2">28% GST/IGST</option> 
 
-                                        </select>
+                    //                     </select>
                     </td>
                 <td style="display: none;">
                     <input type="text" name='taxamount1' id="taxamount${RowCount}"  class="form-control bg-transparent border-0 text-black text-right taxamount" />
@@ -709,34 +748,14 @@ $('#item_table').on('click', '.clone-row', function () {
 
 
 </script>
-<!-- <script>
-    function tax_dropdown()
-    {
-        var x=document.getElementById("cus_place").value;
-        var y=document.getElementById("state").value;
-        if (x == y)
-        {
-            document.getElementsByClassName("opt1").style.display="block";
-            document.getElementsByClassName("opt2").style.display="none";
 
-        }
-        else
-        {
-            document.getElementsByClassName("opt1").style.display="none";
-            document.getElementsByClassName("opt2").style.display="block";
-        }
-    }
-</script> -->
 
 
 <script>
     $(document).ready(function () {
-
-
         var roinc = 0
         console.log("ajax");
         // var place = document.getElementById('pos').value;
-
         $(document).on('click', '#item1', function () {
             select = $('#item1').val();
             customer = $('#customer_sel').val();
@@ -763,10 +782,8 @@ $('#item_table').on('click', '.clone-row', function () {
                     }
                     document.getElementById('tigst1').innerHTML = data2 + ' % IGST';
                     document.getElementById('tigst1').value = data2
-
                 }
             });
-
         });
         // console.log('pos:'+place_of_supply);
         $(document).on('click', '#item2', function () {
