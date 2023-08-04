@@ -56,32 +56,18 @@
 
 
 function calc() {
+    var x=document.getElementById("cus_place").value
+    var y=document.getElementById("state").value
+    if ( x == y )
+    {
         $('#item_table tbody tr').each(function () {
-
-            // var pos = $("#customer_sel option:selected").data("pos");
-            // var state = document.getElementById("state").value;
-
-            // if (pos != state) {
-            //     document.getElementById("gst_opt").style.display = "none";
-            // } else {
-            //     document.getElementById("igst_opt").style.display = "none";
-            // }
-
             var html = $(this).html();
-            var x=document.getElementById("cus_place").value
-            var y=document.getElementById("state").value
             if (html != '') {
                 console.log('rows');
                 var qty = $(this).find('.qty').val();
                 var rate = $(this).find('.rate').val();
                 var discount = $(this).find('.discount').val();
-                if (x == y)
-                {
-                    var tax = $(this).find('.tax').val();
-                }
-                else{
-                    var tax = $(this).find('.taxx').val();
-                }
+                var tax = $(this).find('.tax').val();
                 console.log(qty);
                 console.log(rate);
                 console.log(discount);
@@ -91,10 +77,41 @@ function calc() {
                 $(this).find('.amount').val(qty * rate - discount);
 
                 calc_total();
+           
             }
         });
+       }
+       if ( x != y )
+       {
+        $('#item_tablee tbody tr').each(function () {
+
+        var html = $(this).html();
+      if (html != '') {
+    
+
+    console.log('rows');
+    var qtyy = $(this).find('.qtyy').val();
+    var ratee = $(this).find('.ratee').val();
+    var discountt = $(this).find('.discountt').val();
+    var taxx= $(this).find('.taxx').val();
+    console.log(qtyy);
+    console.log(ratee);
+    console.log(discountt);
+    console.log(taxx);
+    $(this).find('.taxamountt').val((qtyy * ratee) * (taxx / 100));
+    var taxamountt = parseFloat($(this).find('.taxamountt').val());
+    $(this).find('.amountt').val(qtyy * ratee - discountt);
+
+    calc_total();
+   }
+});
     }
+}
     function calc_total() {
+        var x=document.getElementById("cus_place").value
+        var y=document.getElementById("state").value
+        if ( x == y )
+        {
         total = 0;
         $('.amount').each(function () {
             total += parseFloat($(this).val()) ;
@@ -113,6 +130,28 @@ function calc() {
         $('#total').val((taxamount + total).toFixed(2));
 
         test();
+       }
+       else
+       {
+        total = 0;
+        $('.amountt').each(function () {
+            total += parseFloat($(this).val()) ;
+            
+        });
+        taxamount = 0;
+        $('.taxamountt').each(function () {
+            taxamount += parseFloat($(this).val()) ;
+
+        });
+       
+       
+        $('#subtotal').val(total.toFixed(2));
+        $('#total_taxamount').val(taxamount.toFixed(2));
+
+        $('#total').val((taxamount + total).toFixed(2));
+
+        test();
+       }
     }
 
     function test() {
@@ -267,14 +306,15 @@ function calc() {
         <div class="row  ml-2">
             <div class="col-md-3 "><a class="text-white" style="font-size: 1.5rem;"><i class="fa-solid fa-plus"></i> New
                     Estimate</a></div>
-            <input type="hidden" id="state" value="{{ company.state }}">
-            <input type="hidden" id="cus_place"  value="">
+            
 
         </div>
          <div>
             <form method="POST" action="" class="p-5" enctype="multipart/form-data" novalidate
                 id="forms">
                 {% csrf_token %}
+                <input type="hidden" id="state" name="hidden_state" value="{{ company.state }}">
+            <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
                     <div class="col-sm-6">
@@ -373,12 +413,12 @@ function calc() {
                                             class=' bg-transparent text-black text-right border-0 tax' style="width: 85%;" >
                                             <option value="" selected>select</option>
 
-                                            <option value=0 class="opt1">Non Taxable</option>
-                                            <option value=0 class="opt1">0% GST/IGST</option>
-                                            <option value=5 class="opt1">5% GST/IGST</option>
-                                            <option value=12 class="opt1">12% GST/IGST</option>
-                                            <option value=18 class="opt1">18% GST/IGST</option>
-                                            <option value=28 class="opt1">28% GST/IGST</option> 
+                                            <option value=0 class="opt1">0% GST</option>
+                                            <option value=3 class="opt1">3% GST</option>
+                                            <option value=5 class="opt1">5% GST</option>
+                                            <option value=12 class="opt1">12% GST</option>
+                                            <option value=18 class="opt1">18% GST</option>
+                                            <option value=28 class="opt1">28% GST</option> 
 
                                             
                                             
@@ -422,7 +462,8 @@ function calc() {
     <div class="col-sm-12 col-lg-12 col-md-12" >
         <label for="" id="label_tab2" class="tab2" style="display: none;">Price List</label><br>
         <div style="width: 100%;">
-            <table class="table  text-black table-bordered tab2" id="item_tablee" style="background-color: rgba(250, 227, 198, 0.8);table-layout: fixed;width: 100%;background-color: #b6b3b36b;display: none;">
+            <table class="table  text-black table-bordered tab2" id="item_tablee" style="background-color: rgba(250, 227, 198, 0.8);table-layout: fixed;width: 100%;background-color: #b6b3b36b;display: none;"
+            onchange="calc()">
             <thead>
                 <tr>
                     <th class=" text-light">Item Details <a href="{% url 'additem_page_est' %}"><i class="fas fa-plus p-2 rounded"
@@ -466,11 +507,12 @@ function calc() {
                             <option value="" selected>select</option>
 
                             <!-- <option value=0 class="opt1">Non Taxable</option> -->
-                            <option value=0 class="opt1">0% GST/IGST</option>
-                            <option value=5 class="opt1">5% GST/IGST</option>
-                            <option value=12 class="opt1">12% GST/IGST</option>
-                            <option value=18 class="opt1">18% GST/IGST</option>
-                            <option value=28 class="opt1">28% GST/IGST</option> 
+                            <option value=0 class="opt1">0% IGST</option>
+                            <option value=3 class="opt1">3% IGST</option>
+                            <option value=5 class="opt1">5% IGST</option>
+                            <option value=12 class="opt1">12% IGST</option>
+                            <option value=18 class="opt1">18% IGST</option>
+                            <option value=28 class="opt1">28% IGST</option> 
 
                             
                             
@@ -681,27 +723,15 @@ function calc() {
                 <td class='text-right'> <select name='tax[]' id='tax${RowCount}'
                         class="bg-transparent text-black text-right border-0 tax" style="width:85%">
                         <option value="" selected>select</option>
-                        <option value=0>Non Taxable</option>
-                        <option value=0>0% GST/IGST</option>
-                        <option value=5>5% GST/IGST</option>
-                        <option value=12>12% GST/IGST</option>
-                        <option value=18>18% GST/IGST</option>
-                        <option value=28>28% GST/IGST</option>
-                        <option value=0>Out of Scope(0%)</option>
+                        <option value=0>0% GST</option>
+                        <option value=3>3% GST</option>
+                        <option value=5>5% GST</option>
+                        <option value=12>12% GST</option>
+                        <option value=18>18% GST</option>
+                        <option value=28>28% GST</option>
                        
                     </select>
-                    // <br>
-                    //                     <select name='taxx[]' id='taxx${RowCount}'
-                    //                         class=' bg-transparent text-black text-right border-0 taxx' style="width: 85%;" >
-                    //                         <option value="" selected>select</option>
-
-                    //                         <option value=0 class="opt2">0% GST/IGST</option>
-                    //                         <option value=5 class="opt2">5% GST/IGST</option>
-                    //                         <option value=12 class="opt2">12% GST/IGST</option>
-                    //                         <option value=18 class="opt2">18% GST/IGST</option>
-                    //                         <option value=28 class="opt2">28% GST/IGST</option> 
-
-                    //                     </select>
+                    
                     </td>
                 <td style="display: none;">
                     <input type="text" name='taxamount1' id="taxamount${RowCount}"  class="form-control bg-transparent border-0 text-black text-right taxamount" />
@@ -725,6 +755,72 @@ function calc() {
     });
 
 
+
+
+    //.......................................................... Add new row TABLE 2 .......................................
+    $(document).ready(function () {
+        $('#add-roww').click(function () {
+            var tablee = document.getElementById("item_tablee");
+            var RowCountt = tablee.rows.length;
+            console.log(RowCountt);
+            var newRoww = $(`
+            <tr id='row${RowCountt}'>
+                <td>
+                    <div class='form-group'>
+                        <select
+                            class='bg-transparent text-black border-0 item_selectt' name='itemm[]'
+                            id='itemm${RowCountt}'>
+                            <option class='text-dark'>Select Items</option>
+                            {% for i in items %}
+                            <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
+                            {% endfor %}
+                        </select></div>
+                </td>
+                <td class='text-right '><input type='number' id='qtyy${RowCountt}'
+                        class='form_control bg-transparent border-0 text-black text-right qtyy' name='quantityy[]' style="width:85%" value='0.00' >
+                </td>
+                <td class='text-right '><input type='number' id='ratee${RowCountt}'
+                        class='form_control bg-transparent border-0 text-black text-right ratee' name='ratee[]' value='0.00' style="width:85%"></td>
+                <td class='text-right'><input type='number' id='discountt${RowCountt}'
+                        class='form_control bg-transparent border-0 text-black text-right discountt' name='discountt[]' value='0.00' style="width:85%">
+                </td>
+                <td class='text-right'> <select name='taxx[]' id='taxx${RowCountt}'
+                        class="bg-transparent text-black text-right border-0 taxx" style="width:85%">
+                        <option value="" selected>select</option>
+                        <option value=0>0% IGST</option>
+                        <option value=3>3% IGST</option>
+
+                        <option value=5>5% IGST</option>
+                        <option value=12>12% IGST</option>
+                        <option value=18>18% IGST</option>
+                        <option value=28>28% IGST</option>
+                       
+                    </select>
+                    
+                    </td>
+                <td style="display: none;">
+                    <input type="text" name='taxamountt1' id="taxamountt${RowCountt}"  class="form-control bg-transparent border-0 text-black text-right taxamountt" />
+                            </td>
+                <td class='text-right'><input type='number' id='amountt${RowCountt}'
+                        class='bg-transparent border-0 text-black text-right amountt' style="width:85%" name='amountt[]' value='0.00'></td>
+                <td class='text-center'><button type='button' id='del_btnn${RowCountt}'
+                        class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-roww'
+                        style='width:30px'><i class='fa fa-times'></i></button>
+                        <button type='button' class='btn btn-transparent text-primary btn-sm btn-outline-primary rounded-circle clone-roww' data-row=1 style='width:30px'><i class="fa fa-clone"></i></button>
+                        </td>
+            </tr>`);
+            $('#item_tablee').append(newRoww);
+        });
+
+        $('#item_tablee').on('click', '.delete-roww', function () {
+            $(this).closest('tr').remove();
+            calc();
+        });
+
+    });
+
+
+
 // Event handler for clone button
 var rowCount = 1;
 $('#item_table').on('click', '.clone-row', function () {
@@ -746,7 +842,30 @@ $('#item_table').on('click', '.clone-row', function () {
   var row = $(this).closest('tr');
   calc();
   calc_total();
-//   test();
+     
+});
+
+//........................... Event handler for clone button  TABLE 2  ...................................
+var rowCountt = 1;
+$('#item_tablee').on('click', '.clone-roww', function () {
+  var roww = $(this).closest('tr');
+  var clonedRoww = roww.clone(); // Clone the current row
+  var newRowIdd = 'row' + rowCountt; // Generate a new ID for the cloned row
+  clonedRoww.attr('id', newRowIdd); // Set the new ID for the cloned row
+
+  // Clone the options for tax, account, and item
+  var currentItemm = roww.find('.item_selectt').val();
+  clonedRoww.find('.item_selectt').val(currentItemm);
+  
+  var currentTaxx = roww.find('.taxx').val();
+  clonedRoww.find('.taxx').val(currentTaxx);
+
+  rowCountt++; // Increment row counter
+
+  $('#item_tablee tbody').append(clonedRoww);
+  var roww = $(this).closest('tr');
+  calc();
+  calc_total();
      
 });
 

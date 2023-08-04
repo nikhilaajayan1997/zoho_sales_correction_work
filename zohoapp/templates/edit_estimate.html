@@ -150,44 +150,50 @@
                 {% csrf_token %}
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
-                    <div class="col-sm-10">
-                        <select class="" id="customer_sel" name="customer_name" style="width: 50%;height: 35px;">
+                    <div class="col-sm-6">
+                        <select class="form-control text-black" id="customer_sel" name="customer_name">
                             <option value="{{estimate.customer_name}}">{{estimate.customer_name}}</option>
                             {% for cust in customers %}
                             <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
                                 {{cust.customerName}}</option>
                             {% endfor %}
                         </select>
-                        <i class="fa-solid fa-magnifying-glass p-2 rounded"
-                            style="color: white; background-color: rgb(210, 132, 30);height: 35px;"></i>
+                        <!-- <i class="fa-solid fa-magnifying-glass p-2 rounded"
+                            style="color: white; background-color: rgb(210, 132, 30);height: 35px;"></i> -->
+                    </div>
+                    <div class="col-sm-4">
+                        <a  href="{% url 'add_customer_for_estimate'  %}"><i class="fa-solid  fa fa-plus p-2 rounded"
+                            style="color: white; background-color: rgb(210, 132, 30);height: 37px;"></i></a>
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-sm-2"><label for="estimate_number">Estimate#*</label></div>
-                    <div class="col-sm-10"><input type="text" id="estimate_number" name="estimate_number" class=""
-                            value="{{estimate.estimate_no}}" style="width: 38%;height: 35px;">
-                        <a class="btn " id="estimate-num" onclick="showPopup()"
+                    <div class="col-sm-6"><input type="text" id="estimate_number" name="estimate_number" class="form-control text-black"
+                            value="{{estimate.estimate_no}}" >
+                        <!-- <a class="btn " id="estimate-num" onclick="showPopup()"
                             style="color: white; background-color: rgb(210, 132, 30);height: 35px;"><i
-                                class="fas fa-cog "></i></a>
+                                class="fas fa-cog "></i></a> -->
                     </div>
                 </div>
                 <div class="row mb-4">
                     <div class="col-sm-2"><label for="reference">Reference#</label></div>
-                    <div class="col-sm-10"> <input type="number" id="reference" name="reference" class=""
-                        value="{{estimate.reference}}" style="width: 38%;height: 35px;"></div>
+                    <div class="col-sm-6"> <input type="number" id="reference" name="reference" class="form-control text-black"
+                        value="{{estimate.reference}}"></div>
                 </div>
                 <div class="row mb-4 border-bottom pb-5">
                     <div class="col-sm-2"><label for="reference">Estimate Date*</label></div>
-                    <div class="col-sm-4"> <input type="date" id="estimate_date" name="estimate_date" class=""
+                    <div class="col-sm-2"> <input type="date" id="estimate_date" name="estimate_date" class="form-control text-black"
                         value="{{estimate.estimate_date|date:'Y-m-d'}}" style="width: 100%;height: 35px;">
                     </div>
                     <div class="col-sm-2 text-right"><label for="reference">Expiry Date</label></div>
-                    <div class="col-sm-4"> <input type="date" id="expiry_date" name="expiry_date" class=""
-                        value="{{estimate.expiry_date|date:'Y-m-d'}}" style="width: 60%;height: 35px;"></div>
+                    <div class="col-sm-2"> <input type="date" id="expiry_date" name="expiry_date" class="form-control text-black"
+                        value="{{estimate.expiry_date|date:'Y-m-d'}}" style="width: 100%;height: 35px;"></div>
                 </div>
 
-                <label for="">Price List</label><br>
-                <table class="table  text-black" id="item_table" style="background-color: rgba(250, 227, 198, 0.8);"
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="">Price List</label><br>
+                <table class="table  text-black table-bordered" id="item_table" style="background-color: rgba(250, 227, 198, 0.8);"
                     onchange="calc()">
                     <thead>
                         <tr>
@@ -256,6 +262,8 @@
                 </table>
                 <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30) ;"
                     id="add-row">Add another line</button>
+                    </div>
+                </div>
 
                 <div class="row border-bottom pb-5">
                     <div class="col-sm-6 d-flex flex-column mt-auto">
