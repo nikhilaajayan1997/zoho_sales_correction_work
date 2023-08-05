@@ -3383,10 +3383,14 @@ def get_cust_mail(request):
     
     return JsonResponse({"status": " not", 'email': email,'ads':ads,'mob':mob,'cust_id':cust_id,'cust_place_supply':cust_place_supply})
     return redirect('/')
+
+# def check_on_pageload(request):
+
     
 def add_customer_edit_challan(request):
    
     return render(request,'create_cust_challan_edit.html')
+
 
 
 
