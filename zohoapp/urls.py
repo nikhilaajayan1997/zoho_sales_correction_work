@@ -67,6 +67,7 @@ urlpatterns = [
     path('updateestimate/<int:pk>',views.updateestimate,name='updateestimate'),
     path('converttoinvoice/<int:est_id>',views.converttoinvoice,name='converttoinvoice'),
     path('emailattachment', EmailAttachementView.as_view(), name='emailattachment'),
+    path('add_est_comment/<int:pk>',views.add_est_comment,name='add_est_comment'),
     path('add_customer_for_estimate/',views.add_customer_for_estimate,name='add_customer_for_estimate'),
     path('entr_custmr_for_estimate/',views.entr_custmr_for_estimate,name='entr_custmr_for_estimate'),
     path('payment_term_for_estimate/',views.payment_term_for_estimate,name='payment_term_for_estimate'),

@@ -1417,9 +1417,12 @@ def estimateslip(request, est_id):
 def editestimate(request,est_id):
     user = request.user
     company = company_details.objects.get(user=user)
+    comp=company.state
     customers = customer.objects.filter(user_id=user.id)
     items = AddItem.objects.filter(user_id=user.id)
     estimate = Estimates.objects.get(id=est_id)
+    cust=estimate.customer.placeofsupply
+
     est_items = EstimateItems.objects.filter(estimate=estimate)
     context = {
         'company': company,
@@ -1427,6 +1430,8 @@ def editestimate(request,est_id):
         'customers': customers,
         'items': items,
         'est_items': est_items,
+        'comp':comp,
+        'cust':cust,
     }
     return render(request, 'edit_estimate.html', context)
 
@@ -1435,6 +1440,9 @@ def updateestimate(request,pk):
     user = User.objects.get(id=cur_user.id)
 
     if request.method == 'POST':
+        x=request.POST["hidden_state"]
+        y=request.POST["hidden_cus_place"]
+
         estimate = Estimates.objects.get(id=pk)
         estimate.user = user
         estimate.customer_name = request.POST['customer_name']
@@ -1461,34 +1469,49 @@ def updateestimate(request,pk):
 
         estimate.save()
 
-        item = request.POST.getlist('item[]')
-        quantity1 = request.POST.getlist('quantity[]')
-        quantity = [float(x) for x in quantity1]
-        rate1 = request.POST.getlist('rate[]')
-        rate = [float(x) for x in rate1]
-        discount1 = request.POST.getlist('discount[]')
-        discount = [float(x) for x in discount1]
-        tax1 = request.POST.getlist('tax[]')
-        tax = [float(x) for x in tax1]
-        amount1 = request.POST.getlist('amount[]')
-        amount = [float(x) for x in amount1]
-        # print(item)
-        # print(quantity)
-        # print(rate)
-        # print(discount)
-        # print(tax)
-        # print(amount)
+        if x == y:
+          item = request.POST.getlist('item[]')
+          quantity1 = request.POST.getlist('quantity[]')
+          quantity = [float(x) for x in quantity1]
+          rate1 = request.POST.getlist('rate[]')
+          rate = [float(x) for x in rate1]
+          discount1 = request.POST.getlist('discount[]')
+          discount = [float(x) for x in discount1]
+          tax1 = request.POST.getlist('tax[]')
+          tax = [float(x) for x in tax1]
+          amount1 = request.POST.getlist('amount[]')
+          amount = [float(x) for x in amount1]
+        else:
+          itemm = request.POST.getlist('itemm[]')
+          quantityy1 = request.POST.getlist('quantityy[]')
+          quantityy = [float(x) for x in quantityy1]
+          ratee1 = request.POST.getlist('ratee[]')
+          ratee = [float(x) for x in ratee1]
+          discountt1 = request.POST.getlist('discountt[]')
+          discountt = [float(x) for x in discountt1]
+          taxx1 = request.POST.getlist('taxx[]')
+          taxx = [float(x) for x in taxx1]
+          amountt1 = request.POST.getlist('amountt[]')
+          amountt = [float(x) for x in amountt1]
 
         objects_to_delete = EstimateItems.objects.filter(estimate_id=estimate.id)
         objects_to_delete.delete()
 
-        
-        if len(item) == len(quantity) == len(rate) == len(discount) == len(tax) == len(amount):
-            mapped = zip(item, quantity, rate, discount, tax, amount)
-            mapped = list(mapped)
-            for element in mapped:
+        if x == y:
+           if len(item) == len(quantity) == len(rate) == len(discount) == len(tax) == len(amount):
+              mapped = zip(item, quantity, rate, discount, tax, amount)
+              mapped = list(mapped)
+              for element in mapped:
                 created = EstimateItems.objects.get_or_create(
                     estimate=estimate, item_name=element[0], quantity=element[1], rate=element[2], discount=element[3], tax_percentage=element[4], amount=element[5])
+        else:
+           if len(itemm) == len(quantityy) == len(ratee) == len(discountt) == len(taxx) == len(amountt):
+              mapped = zip(itemm, quantityy, ratee, discountt, taxx, amountt)
+              mapped = list(mapped)
+              for element in mapped:
+                created = EstimateItems.objects.get_or_create(
+                    estimate=estimate, item_name=element[0], quantity=element[1], rate=element[2], discount=element[3], tax_percentage=element[4], amount=element[5])
+
     return redirect('allestimates')
 
 def converttoinvoice(request,est_id):
@@ -1540,6 +1563,32 @@ class EmailAttachementView(View):
                 return render(request, self.template_name, {'email_form': form, 'error_message': 'Either the attachment is too big or corrupt'})
 
         return render(request, self.template_name, {'email_form': form, 'error_message': 'Unable to send email. Please try again later'})
+
+
+def add_est_comment(request,pk):
+    if request.method=="POST":
+        user=request.user
+        company = company_details.objects.get(user=user)
+        all_estimates = Estimates.objects.filter(user=user)
+        estimate=Estimates.objects.get(id=pk)
+        items = EstimateItems.objects.filter(estimate=estimate.id)
+        cust1=estimate.customer.id
+        cust=customer.objects.get(id=cust1)
+        comment=estimate_comments()
+        comment.user=user
+        comment.estimate=estimate
+        comment.customer=cust
+        comment.comments=request.POST.get('comments')
+        context = {
+        'company': company,
+        'all_estimates':all_estimates,
+        'estimate': estimate,
+        'items': items,
+        }
+        comment.save()
+    return render(request, 'estimate_slip.html', context)
+
+
 
 
 

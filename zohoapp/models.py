@@ -222,7 +222,14 @@ class Estimates(models.Model):
     status = models.CharField(max_length=100,null=True,blank=True)
     customer_notes = models.CharField(max_length=250,null=True,blank=True)
     terms_conditions = models.CharField(max_length=250,null=True,blank=True)
-    attachment = models.ImageField(upload_to="image/", null=True)  
+    attachment = models.ImageField(upload_to="image/", null=True) 
+
+class estimate_comments(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    customer=models.ForeignKey(customer,on_delete=models.CASCADE,null=True,blank=True)
+    estimate=models.ForeignKey(Estimates,on_delete=models.CASCADE,null=True,blank=True)
+    comments=models.CharField(max_length=500,null=True,blank=True)
+
 
 class EstimateItems(models.Model):
     estimate = models.ForeignKey(Estimates,on_delete=models.CASCADE,null=True,blank=True)

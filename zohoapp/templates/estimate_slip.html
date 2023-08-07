@@ -309,9 +309,9 @@
                         <a href="{% url 'emailattachment' %}" class="btn btn-sm text-white"
                             style="background-color:  rgb(86, 86, 85);" data-toggle="tooltip" title="Email">
                             <i class="fas fa-envelope"></i></a>
-                        <a href="{% url 'emailattachment' %}" class="btn btn-sm text-white"
-                            style="background-color:  rgb(86, 86, 85);" data-toggle="tooltip" title="Comments">
-                            <i class="fas fa-comment-dots"></i></a>
+                        <button  class="btn btn-sm text-white"
+                            style="background-color:  rgb(86, 86, 85);" data-toggle="tooltip" title="Comments" onclick="add_comments()">
+                            <i class="fas fa-comment-dots"></i></button>
                         
                     </div>
                     <!-- <a href="{% url 'converttoinvoice' estimate.id %}" class="btn btn-sm text-white "
@@ -325,7 +325,7 @@
                 </div>
             </div>
 
-            <div class="mx-2 my-4 p-5 "
+            <div id="div_estimate" class="mx-2 my-4 p-5 "
                 style="background-color: rgba(124, 124, 123, 0.507); height: 600px; overflow-y: scroll;">
                 <div class="slip p-5 convert_to_pdf bg-light" id="whatToPrint"
                     style="box-shadow: 5px 5px 10px rgb(45, 45, 45);">
@@ -437,6 +437,31 @@
                 <h4 class="text-light pt-5">More Information</h4>
                 <h6 class="text-light">Sales Person: Xyz</h6>
             </div>
+            <fieldset1 id="comments_fieldset" style="display: none;">
+                <div class="mx-2 my-4 p-5 "
+                style="background-color: rgba(124, 124, 123, 0.507); height: 400px; ">
+                <form action="{% url 'add_est_comment' estimate.id %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <textarea class="text-black" name="comments" id=""  rows="8" cols="60"  placeholder="type here............" style="border-radius: 10px;"> 
+    
+                            </textarea>                    
+    
+    
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-md-3 col-lg-3">
+                            <button class="btn" style="background-color: rgb(202, 133, 3);color: white;">Add Comment</button>
+                        </div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                        <div class="col"></div>
+                    </div>
+                </form>
+                </div>
+            </fieldset>
         </div>
     </div>
 
@@ -546,6 +571,13 @@
         }).show();
     });
   
+  </script>
+  <script>
+    function add_comments()
+    {
+        document.getElementById("div_estimate").style.display="none";
+        document.getElementById("comments_fieldset").style.display="block";
+    }
   </script>
 
 {% endblock %}
