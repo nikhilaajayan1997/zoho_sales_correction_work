@@ -310,7 +310,7 @@
                             style="background-color:  rgb(86, 86, 85);" data-toggle="tooltip" title="Email">
                             <i class="fas fa-envelope"></i></a>
                         <button  class="btn btn-sm text-white"
-                            style="background-color:  rgb(86, 86, 85);" data-toggle="tooltip" title="Comments" onclick="add_comments()">
+                            style="background-color:  rgb(86, 86, 85);" data-toggle="tooltip" title="Comments" onclick="comment_list()">
                             <i class="fas fa-comment-dots"></i></button>
                         
                     </div>
@@ -376,43 +376,35 @@
                         <div class="col-sm-12 col-md-12 col-lg-12">
                             <table class="table  mt-2">
                                 <tr>
-        
                                     <td class=" text-dark" style="font-weight: bold;">Sub-Total:</td>
-                                    <!-- <td class="text-right text-dark"></td>
-                                    <td class="text-right text-dark"></td>
-                                    <td class="text-right text-dark"></td> -->
-        
                                     <td class="text-right" style="text-align: end;">{{ estimate.sub_total|floatformat:3}}</td>
                                 </tr>
                                 {% if estimate.cgst != 0 %}
                                 <tr>
                                     <td class="text-right text-dark">CGST:</td>
-                                    <td class="text-right">{{ estimate.cgst|floatformat:3}}</td>
+                                    <td class="text-right" style="text-align: end;">{{ estimate.cgst|floatformat:3}}</td>
                                 </tr>
                                 {% endif %}
                                 {% if estimate.sgst != 0 %}
                                 <tr>
                                     <td class="text-right text-dark">SGST:</td>
-                                    <td class="text-right">{{ estimate.sgst|floatformat:3}}</td>
+                                    <td class="text-right" style="text-align: end;">{{ estimate.sgst|floatformat:3}}</td>
                                 </tr>
                                 {% endif %}
                                 {% if estimate.igst != 0 %}
                                 <tr>
-        
                                     <td class="text-right text-dark">IGST:</td>
-                                    <td class="text-right">{{ estimate.igst|floatformat:3}}</td>
+                                    <td class="text-right" style="text-align: end;">{{ estimate.igst|floatformat:3}}</td>
                                 </tr>
                                 {% endif %}
                                 {% if estimate.shipping_charge != 0 %}
                                 <tr>
-        
                                     <td class="text-right text-dark">Shipping Charge:</td>
                                     <td class="text-right">{{ estimate.shipping_charge|floatformat:3}}</td>
                                 </tr>
                                 {% endif %}
                                 {% if estimate.adjustment != 0 %}
                                 <tr>
-        
                                     <td class="text-right text-dark">Adjustment:</td>
                                     <td class="text-right">{{ estimate.adjustment|floatformat:3}}</td>
                                 </tr>
@@ -461,7 +453,94 @@
                     </div>
                 </form>
                 </div>
-            </fieldset>
+            </fieldset1>
+
+            <fieldset2 id="comments_fieldset1" style="display: none;">
+                
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="mx-2 my-4 ps-5 pb-5 pe-5 pt-3" style="background-color: rgba(124, 124, 123, 0.507); height: 400px; ">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-4 col-lg-3"></div>
+                                <div class="col-sm-12 col-md-4 col-lg-3"></div>
+                                <div class="col-sm-12 col-md-4 col-lg-3"></div>
+                                <div class="col-sm-12 col-md-4 col-lg-3">
+                                    <button  class="btn ms-5"  style="background-color: rgb(206, 135, 3);color: white;" onclick="create_comment()">New</button>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="p-5" style="background-color: white;height: 300px;overflow-y: scroll;">
+                                        <table class="table table-bordered" style="table-layout: fixed;">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center" style="background-color:rgb(218, 143, 3) ;color: white;">Comments</th>
+                                                </tr>
+                                            </thead>
+                                            {% for comt in est_comments %}
+                                            <tbody>
+                                                <tr>
+                                                    <!-- <td><input type="text" value="{{ comt.comments }}" style="width: 100%;height: 20px;"></td> -->
+                                                    <td><textarea name="" id="" cols="50" rows="3" style="border: none;">{{ comt.comments }}</textarea></td>
+                                                </tr>
+                                            </tbody>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset2>
+
+
+            <!-- <form action="{% url 'add_est_comment' estimate.id %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token%}
+                <div class="modal" id="create_comment">
+                  <div class="modal-dialog modal-dialog-centered " role="document" style="max-width: 600px;">
+                    <div class="modal-content p-3" style="background-color: #000000;">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-info">Document Upload</h5>
+                        <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
+                          style="font-size: 20px;background-color: #000000;border:none;">
+                          <span aria-hidden="true">&times;</span> 
+                        </button>
+                      </div>
+              
+                      <div class="row mt-4">
+                        <div class="col-sm-8">
+                          
+                         
+                          <div class="row mt-3">
+                            <div class="col-sm-4">
+                              <label for="">Comments:</label>
+                            </div>
+                            <div class="col-sm-8">
+                              <textarea name="description" rows="3" cols="30" class="text-dark bg-light" id="description" placeholder="Max. 500 characters"></textarea>
+                            </div>
+                          </div>
+                          
+                          
+              
+                        </div>
+                         
+                      </div>
+                      <div class="row mt-3">
+                        <div class="col-sm-12">
+                          <input class="btn btn-success" type="submit" value="Save">
+                        
+                          <input class="btn btn-light ml-3" type="reset" value="Cancel">
+                        </div>
+                      </div>
+                      
+              
+                    </div>
+                  </div>
+                </div>
+              </form> -->
+
+
         </div>
     </div>
 
@@ -573,11 +652,18 @@
   
   </script>
   <script>
-    function add_comments()
+    function comment_list()
+    {
+        document.getElementById("div_estimate").style.display="none";
+        document.getElementById("comments_fieldset1").style.display="block";
+        document.getElementById("comments_fieldset").style.display="none";
+
+    }
+    function create_comment()
     {
         document.getElementById("div_estimate").style.display="none";
         document.getElementById("comments_fieldset").style.display="block";
+        document.getElementById("comments_fieldset1").style.display="none";
     }
   </script>
-
 {% endblock %}

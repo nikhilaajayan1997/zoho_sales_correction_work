@@ -1402,12 +1402,15 @@ def estimateslip(request, est_id):
     company = company_details.objects.get(user=user)
     all_estimates = Estimates.objects.filter(user=user)
     estimate = Estimates.objects.get(id=est_id)
+    
     items = EstimateItems.objects.filter(estimate=estimate)
+    est_comments=estimate_comments.objects.filter(estimate=estimate.id,user=user)
     context = {
         'company': company,
         'all_estimates':all_estimates,
         'estimate': estimate,
         'items': items,
+        'est_comments':est_comments,
     }
     return render(request, 'estimate_slip.html', context)
 
@@ -1422,6 +1425,7 @@ def editestimate(request,est_id):
     items = AddItem.objects.filter(user_id=user.id)
     estimate = Estimates.objects.get(id=est_id)
     cust=estimate.customer.placeofsupply
+    cust_id=estimate.customer.id
 
     est_items = EstimateItems.objects.filter(estimate=estimate)
     context = {
@@ -1432,8 +1436,9 @@ def editestimate(request,est_id):
         'est_items': est_items,
         'comp':comp,
         'cust':cust,
+        'cust_id':cust_id,
     }
-    return render(request, 'edit_estimate.html', context)
+    return render(request,'edit_estimate.html', context)
 
 def updateestimate(request,pk):
     cur_user = request.user
@@ -1446,6 +1451,9 @@ def updateestimate(request,pk):
         estimate = Estimates.objects.get(id=pk)
         estimate.user = user
         estimate.customer_name = request.POST['customer_name']
+        custr=request.POST['customer_id']
+        customer_id=customer.objects.get(id=custr)
+        estimate.customer=customer_id
         estimate.estimate_no = request.POST['estimate_number']
         estimate.reference = request.POST['reference']
         estimate.estimate_date = request.POST['estimate_date']
@@ -1453,6 +1461,9 @@ def updateestimate(request,pk):
 
         estimate.customer_notes = request.POST['customer_note']
         estimate.sub_total = float(request.POST['subtotal'])
+        estimate.igst = float(request.POST['igst'])
+        estimate.sgst = float(request.POST['sgst'])
+        estimate.cgst = float(request.POST['cgst'])
         estimate.tax_amount = float(request.POST['total_taxamount'])
         estimate.shipping_charge = float(request.POST['shipping_charge'])
         estimate.adjustment = float(request.POST['adjustment_charge'])
@@ -1567,26 +1578,16 @@ class EmailAttachementView(View):
 
 def add_est_comment(request,pk):
     if request.method=="POST":
-        user=request.user
-        company = company_details.objects.get(user=user)
-        all_estimates = Estimates.objects.filter(user=user)
+        user=request.user      
         estimate=Estimates.objects.get(id=pk)
-        items = EstimateItems.objects.filter(estimate=estimate.id)
-        cust1=estimate.customer.id
-        cust=customer.objects.get(id=cust1)
+       
         comment=estimate_comments()
         comment.user=user
         comment.estimate=estimate
-        comment.customer=cust
         comment.comments=request.POST.get('comments')
-        context = {
-        'company': company,
-        'all_estimates':all_estimates,
-        'estimate': estimate,
-        'items': items,
-        }
+       
         comment.save()
-    return render(request, 'estimate_slip.html', context)
+    return redirect('estimateslip',estimate.id)
 
 
 

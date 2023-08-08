@@ -41,6 +41,7 @@
         var x="{{ comp }}";
         var y="{{ cust }}";
         document.getElementById("cus_place").value="{{ cust }}";
+        document.getElementById("customer_id").value="{{ cust_id }}";
         if ( x == y )
                                 {
                                    document.getElementById("item_table").style.display="block"
@@ -49,8 +50,6 @@
                                    document.getElementById("label_tab2").style.display="none"
                                    document.getElementById("add-row").style.display="block"
                                    document.getElementById("add-roww").style.display="none"
-
-
                                     
                         
                                 }
@@ -62,8 +61,6 @@
                                    document.getElementById("label_tab2").style.display="block"
                                    document.getElementById("add-row").style.display="none"
                                    document.getElementById("add-roww").style.display="block"
-                                    
-                                    
                                 }
                     
     }
@@ -117,7 +114,8 @@ function calc(){
                 var qty = $(this).find('.qty').val();
                 var rate = $(this).find('.rate').val();
                 var discount = $(this).find('.discount').val();
-                var tax = $(this).find('.tax').val();
+                var ttax = $(this).find('.tax').val();
+                var tax=parseInt(ttax);
                 console.log(qty);
                 console.log(rate);
                 console.log(discount);
@@ -139,7 +137,8 @@ function calc(){
                 var qtyy = $(this).find('.qtyy').val();
                 var ratee = $(this).find('.ratee').val();
                 var discountt = $(this).find('.discountt').val();
-                var taxx = $(this).find('.taxx').val();
+                var ttaxx = $(this).find('.taxx').val();
+                var taxx=parseInt(ttaxx);
                 
                 $(this).find('.taxamountt').val((qtyy * ratee) * (taxx / 100));
                 var taxamountt = parseFloat($(this).find('.taxamountt').val());
@@ -245,7 +244,7 @@ function calc(){
                     data1=response.cust_id
                     data2=response.cust_place_supply
                     // document.getElementById("customer_mail").value = data
-                    // document.getElementById("customer_id").value=data1
+                    document.getElementById("customer_id").value=data1
                     document.getElementById("cus_place").value=data2
 
                     var x=document.getElementById("cus_place").value
@@ -258,7 +257,6 @@ function calc(){
                                    document.getElementById("label_tab2").style.display="none"
                                    document.getElementById("add-row").style.display="block"
                                    document.getElementById("add-roww").style.display="none"
-
 
                                     
                         
@@ -309,6 +307,8 @@ function calc(){
                 {% csrf_token %}
                 <input type="hidden" id="state" name="hidden_state" value="{{ company.state }}">
             <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
+            <input type="number" id="customer_id" name="customer_id"   readonly>
+
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
                     <div class="col-sm-6">
@@ -530,17 +530,17 @@ function calc(){
                                 </tr>
                                 <tr style="display: none;font-weight: bold;" id="tr_igst" style="width: 50%;">
                                     <td>IGST</td>
-                                    <td><input type="number" id='igst' name="igst" step="any"
+                                    <td><input type="number" id='igst' name="igst" value="{{ estimate.igst }}" step="any"
                                             class=" form-control border-0 text-right text-light bg-transparent" style="width: 50%;"></td>
                                 </tr>
                                 <tr style="display: none;font-weight: bold;" id="tr_cgst">
                                     <td>CGST</td>
-                                    <td><input type="number" id='cgst' name="cgst" step="any"
+                                    <td><input type="number" id='cgst' name="cgst" value="{{ estimate.cgst }}" step="any"
                                             class="form-control bg-transparent border-0 text-right text-light" style="width: 50%;"></td>
                                 </tr>
                                 <tr style="display: none;font-weight: bold;" id="tr_sgst">
                                     <td>SGST</td>
-                                    <td><input type="number" id='sgst' name="sgst" step="any"
+                                    <td><input type="number" id='sgst' name="sgst" value="{{ estimate.sgst }}" step="any"
                                             class="form-control bg-transparent border-0 text-right text-light" style="width: 50%;"></td>
                                 </tr>
                                 <tr style="font-weight: bold;">
@@ -591,7 +591,7 @@ function calc(){
                     <div class="col-md-6 col-lg-6 col-sm-12 py-5">
                         <label for="">Terms & Conditions</label>
                         <textarea class="form-control text-dark" style="height: 100%;" rows="6"  name="terms_conditions" id="" 
-                            placeholder=" Enter the terms & conditions of your business to be displayed in your transaction."></textarea>
+                            placeholder=" Enter the terms & conditions of your business to be displayed in your transaction.">{{ estimate.terms_conditions }}</textarea>
                     </div>
                     <div class="col-md-6 col-lg-6 col-sm-12 py-5 text-center rounded mt-4" >
                         <div  style="width: 100%;background-color: rgba(153, 152, 152, 0.507);height: 120px;">

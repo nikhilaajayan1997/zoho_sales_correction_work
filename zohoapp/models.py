@@ -226,7 +226,6 @@ class Estimates(models.Model):
 
 class estimate_comments(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
-    customer=models.ForeignKey(customer,on_delete=models.CASCADE,null=True,blank=True)
     estimate=models.ForeignKey(Estimates,on_delete=models.CASCADE,null=True,blank=True)
     comments=models.CharField(max_length=500,null=True,blank=True)
 
