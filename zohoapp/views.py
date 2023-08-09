@@ -1178,7 +1178,6 @@ def filter_by_draft_estimate_view(request,pk):
         'all_estimates':all_estimates,
         'estimate': estimate,
         'items': items,
-        # 'estimates':estimates
     }
     return render(request, 'estimate_slip.html', context)
 
