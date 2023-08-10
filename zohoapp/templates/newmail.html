@@ -21,7 +21,7 @@
                 {% endif %}
                 
                 {% if email_form %}
-                <form method="POST" action ="" enctype="multipart/form-data" style="width: 90%;" >
+                <form method="POST" action ="" enctype="multipart/form-data" class="text-white"  style="width: 90%;">
                   {% csrf_token %}
                   {{email_form|crispy}}
                 <button style="margin-bottom: 15rem;" type="submit" class="btn btn-primary">Send Email</button>

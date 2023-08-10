@@ -197,7 +197,8 @@ function calc(){
     function test() {
         console.log('test');
         d = 0;
-        var pos = $("#customer_sel option:selected").data("pos");
+        // var pos = $("#customer_sel option:selected").data("pos");
+        var pos=document.getElementById("cus_place").value;
         var state = document.getElementById("state").value;
 
         if (pos == state) {
@@ -307,7 +308,7 @@ function calc(){
                 {% csrf_token %}
                 <input type="hidden" id="state" name="hidden_state" value="{{ company.state }}">
             <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
-            <input type="number" id="customer_id" name="customer_id" style="display: none;"   readonly>
+            <input type="number" id="customer_id" name="customer_id" style="display: none;" readonly>
 
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
