@@ -1204,12 +1204,19 @@ def newestimate(request):
     company = company_details.objects.get(user=user)
     items = AddItem.objects.filter(user_id=user.id)
     customers = customer.objects.filter(user_id=user.id)
+    # item=AddItem.objects.all()
+    unit=Unit.objects.all()
+    sales=Sales.objects.all()
+    purchase=Purchase.objects.all()
     estimates_count = Estimates.objects.count()
     next_count = estimates_count+1
     context = {'company': company,
                'items': items,
                'customers': customers,
                'count': next_count,
+               'units':unit,
+               'sales':sales,
+               'purchase':purchase,
                }
 
     return render(request,'new_estimate.html',context)
@@ -5491,8 +5498,8 @@ def purchase_order(request):
     vendor=vendor_table.objects.all()
     cust=customer.objects.filter(user = request.user)
     payment=payment_terms.objects.all()
-    item=AddItem.objects.all()
     account=Account.objects.all()
+    item=AddItem.objects.all()
     unit=Unit.objects.all()
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
