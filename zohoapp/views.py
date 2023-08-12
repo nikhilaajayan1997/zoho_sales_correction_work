@@ -1208,6 +1208,7 @@ def newestimate(request):
     unit=Unit.objects.all()
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
+    payments = payment_terms.objects.filter(user = request.user)
     estimates_count = Estimates.objects.count()
     next_count = estimates_count+1
     context = {'company': company,
@@ -1217,9 +1218,99 @@ def newestimate(request):
                'units':unit,
                'sales':sales,
                'purchase':purchase,
+               'payments':payments,
                }
 
     return render(request,'new_estimate.html',context)
+
+@login_required(login_url='login')
+
+def get_estimate_customerdet(request):
+    # company= company_details.objects.get(user = request.user)
+    # name = request.POST.get('name')
+    # id = request.POST.get('id')
+    cur_user = request.user
+    user = User.objects.get(id=cur_user.id)
+    company = company_details.objects.get(user=user)
+    cust = request.GET.get('cust')
+    item = customer.objects.get(customerName=cust, user=user)
+    email = item.customerEmail
+    cust_id=item.id
+    cust_place_supply=item.placeofsupply
+
+    # cust = customer.objects.get(user=company.user_id,id= id)
+    # email = cust.customerEmail
+    # gstin = 0
+    # gsttr = cust.GSTTreatment
+    # cstate = cust.placeofsupply.split("] ")[1:]
+    # print(email)
+    # print(gstin)
+    # state = 'Not Specified' if cstate == "" else cstate
+    return JsonResponse({'email': email,'cust_id':cust_id,'cust_place_supply':cust_place_supply},safe=False)
+
+@login_required(login_url='login')
+def create_estimate_customer(request):
+    if request.user.is_authenticated:
+        if request.method=='POST':
+            tax=request.POST.get('tax')
+            type=request.POST.get('title')
+            first=request.POST['firstname']
+            last=request.POST['lastname']
+            txtFullName= request.POST['display_name']
+            
+            itemtype=request.POST.get('itemtype')
+            cpname=request.POST['company_name']
+            
+            email=request.POST.get('email')
+            wphone=request.POST.get('work_mobile')
+            mobile=request.POST.get('pers_mobile')
+            skname=request.POST.get('skype')
+            desg=request.POST.get('desg')      
+            dept=request.POST.get('dpt')
+            wbsite=request.POST.get('website')
+
+            gstt=request.POST.get('gsttype')
+            posply=request.POST.get('placesupply')
+            crncy=request.POST.get('currency')
+            obal=request.POST.get('openingbalance')
+
+           
+            pterms=request.POST.get('paymentterms')
+
+            plst=request.POST.get('plst')
+            plang=request.POST.get('plang')
+            fbk=request.POST.get('facebook')
+            twtr=request.POST.get('twitter')
+        
+            ctry=request.POST.get('country')
+            
+            street=request.POST.get('street')
+            shipstate=request.POST.get('shipstate')
+            shipcity=request.POST.get('shipcity')
+            bzip=request.POST.get('shippincode')
+            shipfax=request.POST.get('shipfax')
+
+            sal=request.POST.get('title')
+            addres=street +','+ shipcity+',' + shipstate+',' + bzip
+            adress2=addres
+            u = User.objects.get(id = request.user.id)
+
+            print(tax)
+            ctmr=customer(customerName=txtFullName,customerType=itemtype,
+                        companyName=cpname,customerEmail=email,customerWorkPhone=wphone,
+                         customerMobile=mobile,skype=skname,designation=desg,department=dept,
+                           website=wbsite,GSTTreatment=gstt,placeofsupply=posply, Taxpreference=tax,
+                             currency=crncy,OpeningBalance=obal,PaymentTerms=pterms,
+                                PriceList=plst,PortalLanguage=plang,Facebook=fbk,Twitter=twtr
+                                 ,country=ctry,Address1=addres,Address2=adress2,
+                                  city=shipcity,state=shipstate,zipcode=bzip,phone1=wphone,
+                                   fax=shipfax,CPsalutation=sal,Firstname=first,
+                                    Lastname=last,CPemail=email,CPphone=mobile,
+                                    CPmobile= wphone,CPskype=skname,CPdesignation=desg,
+                                     CPdepartment=dept,user=u)
+            ctmr.save()
+
+        return HttpResponse({"message": "success"})
 
 
 def itemdata_est(request):
@@ -4684,14 +4775,12 @@ def get_vendordet(request):
     return JsonResponse({'vendor_email' :vemail, 'gst_number' : gstnum,'gst_treatment':gsttr},safe=False)
 
 @login_required(login_url='login')
+
 def get_customerdet(request):
-
     company= company_details.objects.get(user = request.user)
-
     name = request.POST.get('name')
     id = request.POST.get('id')
     # print(name)
-
     cust = customer.objects.get(user=company.user_id,id= id)
     email = cust.customerEmail
     gstin = 0
@@ -4700,7 +4789,6 @@ def get_customerdet(request):
     print(email)
     print(gstin)
     state = 'Not Specified' if cstate == "" else cstate
-
     return JsonResponse({'customer_email' :email, 'gst_treatment':gsttr, 'gstin': gstin , 'state' : state},safe=False)
 
 @login_required(login_url='login')
