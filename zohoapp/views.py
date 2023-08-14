@@ -1227,8 +1227,7 @@ def newestimate(request):
 
 def get_estimate_customerdet(request):
     # company= company_details.objects.get(user = request.user)
-    # name = request.POST.get('name')
-    # id = request.POST.get('id')
+    # id = request.POST.get('cust')
     cur_user = request.user
     user = User.objects.get(id=cur_user.id)
     company = company_details.objects.get(user=user)
@@ -1240,12 +1239,7 @@ def get_estimate_customerdet(request):
 
     # cust = customer.objects.get(user=company.user_id,id= id)
     # email = cust.customerEmail
-    # gstin = 0
-    # gsttr = cust.GSTTreatment
-    # cstate = cust.placeofsupply.split("] ")[1:]
-    # print(email)
-    # print(gstin)
-    # state = 'Not Specified' if cstate == "" else cstate
+    
     return JsonResponse({'email': email,'cust_id':cust_id,'cust_place_supply':cust_place_supply},safe=False)
 
 @login_required(login_url='login')

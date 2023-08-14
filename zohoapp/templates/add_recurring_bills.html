@@ -646,7 +646,14 @@
       </div>
     </form>
 
-    <div class="modal fade" id="newvendor">
+
+
+
+
+    <!-- .........................................................  vendor  ............................ -->
+
+
+    <!-- <div class="modal fade" id="newvendor">
       <div class="modal-dialog modal-xl">
         <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
           <div class="modal-header " style="background: rgb(32, 35, 37);">
@@ -1152,18 +1159,24 @@
                     </div>
                   </div>
                   <div class="col-md-6"></div>
-                  <!-- <div class="col-md-4"></div> -->
                 </div>
               </form>
                   </div>
               </div>
           </div>
       </div>  
-    </div>  
+    </div>   -->
+
+
+
+
 
     <!-- payment modal -->
 
 
+
+
+<!-- 
     <div class="modal fade" id="newpayment">
       <div class="modal-dialog modal-xl">
         <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
@@ -1225,12 +1238,12 @@
           </div>
         </div>
       </div>  
-    </div>  
+    </div>   -->
 
     <!-- customer modal -->
 
 
-    <div class="modal fade" id="newcustomer">
+    <!-- <div class="modal fade" id="newcustomer">
       <div class="modal-dialog modal-xl">
         <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
           <div class="modal-header " style="background: rgb(32, 35, 37);">
@@ -1396,25 +1409,7 @@
                   </div>       
                 </div>
 
-                <!-- <div class="row gstrow d-none">
-                  <div class="col-md-3 mt-2">
-                    <label id="glbl" style="color:rgb(190, 88, 88);">GSTIN/UIN *</label>
-                  </div>
-                  <div class="col-md-6 mt-2">
-                    <input type="text" class="form-control" id="v_gstin" name="v_gstin" placeholder="29APPCK7465F1Z1">
-                    <label id="gst_label"></label>
-                  </div>       
-                </div>
-
-                <div class="row">
-                  <div class="col-md-3 mt-2">
-                    <label for="v_pan">PAN Number</label>
-                  </div>
-                  <div class="col-md-6 mt-2">
-                    <input type="text" class="form-control" id="v_pan" name="v_pan" placeholder="APPCK7465F">
-                    <label id="pan_label"></label>
-                  </div>       
-                </div> -->
+                
 
                 <div class="row mt-2">
                   <div class="col-md-3 mt-2">
@@ -1812,9 +1807,14 @@
               </div>
           </div>
       </div>  
-    </div>  
+    </div>   -->
+
+
+
+
 
     <!-- item modal -->
+
 
     <div class="modal fade" id="newitem">
       <div class="modal-dialog modal-xl">
@@ -2225,14 +2225,12 @@ $(document).ready(function() {
     $('#vendor').change(function() {
         var name = $("#vendor").val();
         var na = name.split(' ')[0];
-        // console.log(name);
         $.ajax({
 
             url: "{% url 'get_vendordet' %}", 
 
             data: { 
-                    // fname : na[0],
-                    // lname : na[1],
+                   
                     id :na,
                     csrfmiddlewaretoken: '{{ csrf_token }}' 
                 },
@@ -2256,6 +2254,9 @@ $(document).ready(function() {
     
     });
 });
+
+
+
 
 $(document).ready(function() {
     $('#customer').change(function() {
