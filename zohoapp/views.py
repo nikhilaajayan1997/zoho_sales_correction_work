@@ -1226,21 +1226,13 @@ def newestimate(request):
 @login_required(login_url='login')
 
 def get_estimate_customerdet(request):
-    # company= company_details.objects.get(user = request.user)
-    # id = request.POST.get('cust')
-    cur_user = request.user
-    user = User.objects.get(id=cur_user.id)
-    company = company_details.objects.get(user=user)
-    cust = request.GET.get('cust')
-    item = customer.objects.get(customerName=cust, user=user)
-    email = item.customerEmail
-    cust_id=item.id
-    cust_place_supply=item.placeofsupply
-
-    # cust = customer.objects.get(user=company.user_id,id= id)
-    # email = cust.customerEmail
-    
-    return JsonResponse({'email': email,'cust_id':cust_id,'cust_place_supply':cust_place_supply},safe=False)
+    company= company_details.objects.get(user = request.user)
+    id = request.POST.get('id')
+    cust = customer.objects.get(user=company.user_id,id= id)
+    email = cust.customerEmail
+    cust_id=cust.id
+    cust_place_supply=cust.placeofsupply
+    return JsonResponse({'customer_email': email,'cust_id':cust_id,'cust_place_supply':cust_place_supply},safe=False)
 
 @login_required(login_url='login')
 def create_estimate_customer(request):
@@ -1335,7 +1327,9 @@ def createestimate(request):
         x=request.POST["hidden_state"]
         y=request.POST["hidden_cus_place"]
 
-        cust_name = request.POST['customer_name']
+        cust_idd = request.POST['customer_name'].split(" ")[0]
+        cust_name2=customer.objects.get(id=cust_idd)
+        cust_name=cust_name2.customerName
         customer_id=request.POST['customer_id']
         customer_id1=customer.objects.get(id=customer_id)
         est_number = request.POST['estimate_number']
@@ -1408,7 +1402,9 @@ def create_and_send_estimate(request):
         x=request.POST["hidden_state"]
         y=request.POST["hidden_cus_place"]
 
-        cust_name = request.POST['customer_name']
+        cust_idd = request.POST['customer_name'].split(" ")[0]
+        cust_name2=customer.objects.get(id=cust_idd)
+        cust_name=cust_name2.customerName
         customer_id=request.POST['customer_id']
         customer_id1=customer.objects.get(id=customer_id)
         est_number = request.POST['estimate_number']
@@ -4774,16 +4770,18 @@ def get_customerdet(request):
     company= company_details.objects.get(user = request.user)
     name = request.POST.get('name')
     id = request.POST.get('id')
-    # print(name)
-    cust = customer.objects.get(user=company.user_id,id= id)
+    cust = customer.objects.get(user=company.user_id,id=id)
     email = cust.customerEmail
+    cust_id=id
+    cust_place_supply=cust.placeofsupply
     gstin = 0
     gsttr = cust.GSTTreatment
     cstate = cust.placeofsupply.split("] ")[1:]
     print(email)
     print(gstin)
+    print(id)
     state = 'Not Specified' if cstate == "" else cstate
-    return JsonResponse({'customer_email' :email, 'gst_treatment':gsttr, 'gstin': gstin , 'state' : state},safe=False)
+    return JsonResponse({'customer_email' :email, 'gst_treatment':gsttr, 'gstin': gstin , 'state' : state,'cust_id':cust_id,'cust_place_supply':cust_place_supply},safe=False)
 
 @login_required(login_url='login')
 def recurbills_vendor(request):
