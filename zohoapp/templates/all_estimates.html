@@ -24,6 +24,9 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+  #tr_data:hover{
+    background-color: #757575;
+  }
 </style>
 
 
@@ -68,7 +71,7 @@
     </div>
 
     <div class="col-sm-12 mt-5">
-      <table id="estimates-table" class="table  text-white text-center">
+      <table id="estimates-table" class="table  text-white text-center" style="cursor: pointer;">
         <thead>
           <tr>
             <th>DATE</th>
@@ -82,7 +85,7 @@
         </thead>
         <tbody id="table">
           {% for estimate in estimates %}
-          <tr class="clickable-row" data-href="{% url 'estimateslip' estimate.id %}">
+          <tr id="tr_data" class="clickable-row" data-href="{% url 'estimateslip' estimate.id %}">
             <td>{{estimate.estimate_date}}</td>
             <td>{{estimate.estimate_no}}</td>
             <td>{{estimate.reference}}</td>

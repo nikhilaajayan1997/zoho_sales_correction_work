@@ -1513,6 +1513,9 @@ def editestimate(request,est_id):
     estimate = Estimates.objects.get(id=est_id)
     cust=estimate.customer.placeofsupply
     cust_id=estimate.customer.id
+    unit=Unit.objects.all()
+    sales=Sales.objects.all()
+    purchase=Purchase.objects.all()
 
     est_items = EstimateItems.objects.filter(estimate=estimate)
     context = {
@@ -1524,6 +1527,9 @@ def editestimate(request,est_id):
         'comp':comp,
         'cust':cust,
         'cust_id':cust_id,
+        'units':unit,
+        'sales':sales,
+        'purchase':purchase,
     }
     return render(request,'edit_estimate.html', context)
 

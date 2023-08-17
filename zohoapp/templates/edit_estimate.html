@@ -231,59 +231,6 @@ function calc(){
     }
 </script>
 
-<script>
-    function cust_mail(){
-        var customer= document.getElementById("customer_sel").value
-        var table = document.getElementById("item_table");
-        
-        $.ajax({
-                type: "GET",
-                url: "{% url 'get_cust_mail' %}",
-                data: {
-                 
-                    cust: customer
-                },
-                success: function (response) {
-                    console.log(response)
-                    data = response.email
-                    data1=response.cust_id
-                    data2=response.cust_place_supply
-                    // document.getElementById("customer_mail").value = data
-                    document.getElementById("customer_id").value=data1
-                    document.getElementById("cus_place").value=data2
-
-                    var x=document.getElementById("cus_place").value
-                    var y=document.getElementById("state").value
-                                if ( x == y )
-                                {
-                                   document.getElementById("item_table").style.display="block"
-                                   document.getElementById("item_tablee").style.display="none"
-                                   document.getElementById("label_tab1").style.display="block"
-                                   document.getElementById("label_tab2").style.display="none"
-                                   document.getElementById("add-row").style.display="block"
-                                   document.getElementById("add-roww").style.display="none"
-
-                                    
-                        
-                                }
-                                else
-                                {
-                                   document.getElementById("item_table").style.display="none"
-                                   document.getElementById("item_tablee").style.display="block"
-                                   document.getElementById("label_tab1").style.display="none"
-                                   document.getElementById("label_tab2").style.display="block"
-                                   document.getElementById("add-row").style.display="none"
-                                   document.getElementById("add-roww").style.display="block"
-                                    
-                                    
-                                }
-                    
-                    
-                }
-            });
-                                
-    }
-</script>
 
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -310,22 +257,22 @@ function calc(){
             <form method="post" action="{% url 'updateestimate' estimate.id %}" class="p-5" enctype="multipart/form-data" novalidate
                 id="forms">
                 {% csrf_token %}
-                <input type="text" id="state" name="hidden_state" value="{{ company.state }}">
-            <input type="text" id="cus_place" name="hidden_cus_place"  value="">
-            <input type="number" id="customer_id" name="customer_id"  readonly>
+                <input type="hidden" id="state" name="hidden_state" value="{{ company.state }}">
+            <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
+            <input type="number" id="customer_id" name="customer_id" style="display: none;"  readonly>
 
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
                     <div class="col-sm-6">
-                        <select class="form-control text-black" id="customer_sel" name="customer_name" onchange="cust_mail()">
+                        <select class="form-control text-black" id="customer_sel" name="customer_name" >
                             <option value="{{estimate.customer_name}}">{{estimate.customer_name}}</option>
                             {% for cust in customers %}
-                            <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
+                            <option value="{{cust.id}} {{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
                                 {{cust.customerName}}</option>
                             {% endfor %}
                         </select>
                        
-                    </div>
+                    </div> 
                     <div class="col-sm-4">
                         <a  href="" data-toggle="modal" data-target="#newcustomer"><i class="fa-solid  fa fa-plus p-2 rounded"
                             style="color: white; background-color: rgb(210, 132, 30);height: 37px;"></i></a>
@@ -356,7 +303,7 @@ function calc(){
 <!-- ...........................................................  TABLE 1    ....................................... -->
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12">
-                        <label for="">Price List</label><br>
+                        <label for="" id="label_tab1">Price List</label><br>
                    <table class="table  text-black table-bordered" id="item_table" style="background-color: rgba(250, 227, 198, 0.8);table-layout: fixed;width: 100%;background-color: #b6b3b36b;"
                     onchange="calc()">
                     <thead>
@@ -438,7 +385,7 @@ function calc(){
 
 <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
-        <label for="" style="display: none;">Price List</label><br>
+        <label for="" id="label_tab2" style="display: none;">Price List</label><br>
    <table class="table  text-black table-bordered" id="item_tablee" style="background-color: rgba(250, 227, 198, 0.8);table-layout: fixed;width: 100%;background-color: #b6b3b36b;display: none;"
     onchange="calc()">
     <thead>
@@ -1668,6 +1615,69 @@ $.ajax({
 }
 
 
+$(document).ready(function() {
+    $('#customer_sel').change(function() {
+
+        var name = $("#customer_sel").val();
+        var na = name.split(' ')[0];
+        var table = document.getElementById("item_table");
+        $.ajax({
+
+            url: "{% url 'get_customerdet' %}", 
+
+            data: { 
+                    id : na,
+                    csrfmiddlewaretoken: '{{ csrf_token }}' 
+                },
+
+            type : 'POST',
+
+            success: function(data) {
+
+              $("#cemail_row").removeClass('d-none');
+              $("#cemail_row").addClass('d-flex');
+              
+              
+              $('#customer_mail').val(' '+ data.customer_email);
+              $('#cus_place').val(data.cust_place_supply);
+              $('#customer_id').val(data.cust_id);
+              var x=document.getElementById("cus_place").value
+              
+              var y=document.getElementById("state").value
+                                if ( x == y )
+                                {
+                                   document.getElementById("item_table").style.display="block"
+                                   document.getElementById("item_tablee").style.display="none"
+                                   document.getElementById("label_tab1").style.display="block"
+                                   document.getElementById("label_tab2").style.display="none"
+                                   document.getElementById("add-row").style.display="block"
+                                   document.getElementById("add-roww").style.display="none"
+                                  
+
+
+                                    
+                        
+                                }
+                                else
+                                {
+                                   document.getElementById("item_table").style.display="none"
+                                   document.getElementById("item_tablee").style.display="block"
+                                   document.getElementById("label_tab1").style.display="none"
+                                   document.getElementById("label_tab2").style.display="block"
+                                   document.getElementById("add-row").style.display="none"
+                                   document.getElementById("add-roww").style.display="block"
+                                    
+                                    
+                                }
+                    
+              
+            }
+           
+        });
+    });
+});
+
+
 //--------payment terms modal-----------
 
 $(document).on("click","#paySave",function(){
@@ -2098,7 +2108,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2130,7 +2140,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2162,7 +2172,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2194,7 +2204,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2226,7 +2236,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2258,7 +2268,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2290,7 +2300,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2322,7 +2332,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2354,7 +2364,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2386,7 +2396,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2418,7 +2428,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2450,7 +2460,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2482,7 +2492,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2514,7 +2524,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2546,7 +2556,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2578,7 +2588,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2610,7 +2620,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2642,7 +2652,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2674,7 +2684,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2706,7 +2716,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2738,7 +2748,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2791,7 +2801,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2823,7 +2833,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2855,7 +2865,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2887,7 +2897,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2919,7 +2929,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2951,7 +2961,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -2983,7 +2993,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3015,7 +3025,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3047,7 +3057,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3079,7 +3089,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3111,7 +3121,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3143,7 +3153,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3175,7 +3185,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3207,7 +3217,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3239,7 +3249,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3271,7 +3281,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3303,7 +3313,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3335,7 +3345,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3367,7 +3377,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3399,7 +3409,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer
@@ -3431,7 +3441,7 @@ $('#item_tablee').on('click', '.clone-roww', function () {
     console.log(customer);
     $.ajax({
         type: "GET",
-    url: "{% url 'itemdata_est' %}",
+    url: "{% url 'itemdata_challan' %}",
     data: {
         id: select,
     cust: customer

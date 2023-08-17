@@ -342,7 +342,7 @@ function calc() {
                     <div class="col-sm-2"><label for="estimate_number">Customer Mail ID</label></div>
                     <div class="col-sm-6"><input type="text" id="customer_mail" name="customer_mail" class="form-control text-dark"
                             value="" readonly>
-                           <input type="text" id="customer_id" name="customer_id" style="display: none;"   readonly>
+                           <input type="text" id="customer_id" name="customer_id" style="display: none;" readonly>
                         
                     </div>
                 </div>
@@ -1913,7 +1913,7 @@ $(document).ready(function() {
               
               $('#customer_mail').val(' '+ data.customer_email);
               $('#cus_place').val(data.cust_place_supply);
-              $('#customer_id').val(' '+ data.cust_id);
+              $('#customer_id').val(data.cust_id);
               var x=document.getElementById("cus_place").value
               
               var y=document.getElementById("state").value

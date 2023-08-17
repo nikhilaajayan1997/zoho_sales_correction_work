@@ -18,15 +18,19 @@
     crossorigin="anonymous"></script>
 
 <style>
+
+    .modal{
+      z-index: 9999;
+      overflow: scroll;
+    }
+
     /* width */
     ::-webkit-scrollbar {
         width: 10px;
     }
-
     /* Track */
     ::-webkit-scrollbar-track {
         background: rgb(252, 236, 217);
-
     }
 
     /* Handle */
@@ -38,6 +42,9 @@
     ::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
+    #tr_data:hover{
+    background-color: #757575;
+  }
 </style>
 
 <!-- <script>
@@ -238,11 +245,11 @@
                       </div>
                 </div>
             </div>
-            <div class="pt-3" style="height: 600px; overflow-y: scroll;overflow-x: hidden;">
-                <table class="text-white" style="width: 100%;">
+            <div class="pt-3 ps-2 " style="height: 600px; overflow-y: scroll;overflow-x: hidden;">
+                <table class="text-white" style="width: 100%; ">
                     {% for estimate in all_estimates %}
                     <tbody id="table">
-                    <tr class="clickable-row border-bottom " style="cursor: pointer;" data-href="{% url 'estimateslip' estimate.id %}">
+                    <tr id="tr_data" class="clickable-row border-bottom" style="cursor: pointer;" data-href="{% url 'estimateslip' estimate.id %}">
                         <td>
                             <div class="row">
                                 <div class="col-md-6">
@@ -294,9 +301,26 @@
                         <a href="{% url 'emailattachment' %}" class="btn btn-sm text-white ms-1"
                         style="background-color:  rgb(212, 139, 3);border-radius: 5px;" data-toggle="tooltip" title="Email">
                             <i class="fas fa-envelope"></i></a>
-                        <button  class="btn btn-sm text-white ms-1"
+                        <!-- <a href="" class="btn btn-sm text-white ms-1" data-toggle="tooltip" data-toggle="modal" data-target="#cmnts"><i class="fas fa-comment-dots"></i></a> -->
+
+
+                        <div class="dropdown m-0 p-0 ms-1" title="comments" style="background-color:  rgb(212, 139, 3);border-radius: 5px;">
+                            <a href=" " class=" fas fa-comment-dots dropdown-toggle  btn-sm text-white ms-1"  
+                                data-bs-toggle="dropdown" id="attachmentDropdown" aria-haspopup="true" aria-expanded="false"> 
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="attachmentDropdown">
+                                <a class="dropdown-item" style="cursor: pointer;" data-toggle="modal"
+                                 data-target="#cmnts"><i class="fa-solid fa fa-plus"></i>Add</a>
+                                <a class="dropdown-item" style="cursor: pointer;" data-toggle="modal"
+                                data-target="#cmt_list"><i class="fas fa-list"></i>&nbsp;View List</a>
+                                        
+                            </div>
+                        </div>
+                        
+                        <!-- <button  class="btn btn-sm text-white ms-1"
                         style="background-color:  rgb(212, 139, 3);border-radius: 5px;" data-toggle="tooltip" title="Comments" onclick="comment_list()">
-                            <i class="fas fa-comment-dots"></i></button>
+                            <i class="fas fa-comment-dots"></i></button> -->
                         
                     </div>
                     <!-- <a href="{% url 'converttoinvoice' estimate.id %}" class="btn btn-sm text-white "
@@ -419,116 +443,102 @@
                 <h4 class="text-light pt-5">More Information</h4>
                 <h6 class="text-light">Sales Person: Xyz</h6>
             </div>
-            <fieldset1 id="comments_fieldset" style="display: none;">
-                <div class="mx-2 my-4 p-5 "
-                style="background-color: rgba(124, 124, 123, 0.507); height: 400px; ">
-                <form action="{% url 'add_est_comment' estimate.id %}" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
-                            <textarea class="text-black" name="comments" id=""  rows="8" cols="60"  placeholder="type here............" style="border-radius: 10px;"> 
-    
-                            </textarea>                    
-    
-    
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6 col-md-3 col-lg-3">
-                            <button class="btn" style="background-color: rgb(202, 133, 3);color: white;">Add Comment</button>
-                        </div>
-                        <div class="col"></div>
-                        <div class="col"></div>
-                        <div class="col"></div>
-                    </div>
-                </form>
-                </div>
-            </fieldset1>
+            
 
-            <fieldset2 id="comments_fieldset1" style="display: none;">
-                
-                <div class="row">
+
+           
+    <!-- comment modal -->
+
+    <div class="modal fade " id="cmnts"
+    style="width: 750px; margin-left: 350px; justify-content: center; overflow: hidden;">
+    <div class="modal-dialog modal-xl m-5 p-5">
+        <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+            <div class="modal-header " style="background: rgb(32, 35, 37);">
+                <h5 class="m-3 text-uppercase text-light">Enter Comment</h5>
+                <button type="button" class="close text-dark bg-none" data-dismiss="modal"
+                    aria-label="Close">&times;</button>
+
+            </div>
+            <div class="modal-body" style="background: rgb(32, 35, 37); justify-content: center; overflow: hidden;">
+                <div class="card p-0 m-0">
+                    <form action="{% url 'add_est_comment' estimate.id %}" method="post" class="needs-validation" novalidate autocomplete="off"
+                        id="modalComment">
+                        {% csrf_token %}
+                        <div class="row mt-2">
+                            <div class="col-md-6 mt-2">
+                                <textarea class="form-control text-dark bg-light" id="comment" name="comments" required
+                                    style="height: 200px; width: 520px;"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mt-5">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4">
+                                <div class="d-flex">
+                                    <button class="btn save_btn rounded-pill text-grey w-50 my-4 mx-3" type="submit">Save </button>
+                                    <button type="button"
+                                        class="close btn save_btn rounded-pill text-grey w-50 my-4"
+                                        data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">Cancel</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ....................................  comment list modal ................ -->
+
+<div class="modal fade " id="cmt_list"
+style="width: 750px; margin-left: 350px; justify-content: center; overflow: hidden;">
+<div class="modal-dialog modal-dialog-scrollable modal-xl m-5 p-5">
+    <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+        <div class="modal-header " style="background: rgb(32, 35, 37);">
+            <h5 class="m-3 text-uppercase text-light">LIST</h5>
+            <button type="button" class="close text-dark bg-none" data-dismiss="modal"
+                aria-label="Close">&times;</button>
+
+        </div>
+        <div class="modal-body" style="background: rgb(32, 35, 37); justify-content: center; overflow-x: hidden;">
+            <div class="card p-0 m-0">
+
+                <div class="row mt-3">
                     <div class="col-sm-12 col-md-12 col-lg-12">
-                        <div class="mx-2 my-4 ps-5 pb-5 pe-5 pt-3" style="background-color: rgba(124, 124, 123, 0.507); height: 400px; ">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-4 col-lg-3"></div>
-                                <div class="col-sm-12 col-md-4 col-lg-3"></div>
-                                <div class="col-sm-12 col-md-4 col-lg-3"></div>
-                                <div class="col-sm-12 col-md-4 col-lg-3">
-                                    <button  class="btn ms-5"  style="background-color: rgb(206, 135, 3);color: white;" onclick="create_comment()">New</button>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-sm-12 col-md-12 col-lg-12">
-                                    <div class="p-5" style="background-color: white;height: 300px;overflow-y: scroll;">
-                                        <table class="table table-bordered" style="table-layout: fixed;">
-                                            <thead>
-                                                <tr>
-                                                    <th class="text-center" style="background-color:rgb(218, 143, 3) ;color: white;">Comments</th>
-                                                </tr>
-                                            </thead>
-                                            {% for comt in est_comments %}
-                                            <tbody>
-                                                <tr>
-                                                    <!-- <td><input type="text" value="{{ comt.comments }}" style="width: 100%;height: 20px;"></td> -->
-                                                    <td><textarea name="" id="" cols="50" rows="3" style="border: none;">{{ comt.comments }}</textarea></td>
-                                                </tr>
-                                            </tbody>
-                                            {% endfor %}
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="p-2">
+                            <table class="table table-bordered" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="background-color:rgb(218, 143, 3) ;color: white;">Comments</th>
+                                    </tr>
+                                </thead>
+                                {% for comt in est_comments %}
+                                <tbody>
+                                    <tr>
+                                        <!-- <td><input type="text" value="{{ comt.comments }}" style="width: 100%;height: 20px;"></td> -->
+                                        <td><textarea name="" id="" cols="80" rows="5" style="border: none;background-color:transparent ;color: white;">{{ comt.comments }}</textarea></td>
+                                    </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
                         </div>
                     </div>
                 </div>
-            </fieldset2>
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
 
 
-            <!-- <form action="{% url 'add_est_comment' estimate.id %}" method="POST" enctype="multipart/form-data">
-                {% csrf_token%}
-                <div class="modal" id="create_comment">
-                  <div class="modal-dialog modal-dialog-centered " role="document" style="max-width: 600px;">
-                    <div class="modal-content p-3" style="background-color: #000000;">
-                      <div class="modal-header">
-                        <h5 class="modal-title text-info">Document Upload</h5>
-                        <button type="button" class="close text-light" data-dismiss="modal" aria-label=""
-                          style="font-size: 20px;background-color: #000000;border:none;">
-                          <span aria-hidden="true">&times;</span> 
-                        </button>
-                      </div>
-              
-                      <div class="row mt-4">
-                        <div class="col-sm-8">
-                          
-                         
-                          <div class="row mt-3">
-                            <div class="col-sm-4">
-                              <label for="">Comments:</label>
-                            </div>
-                            <div class="col-sm-8">
-                              <textarea name="description" rows="3" cols="30" class="text-dark bg-light" id="description" placeholder="Max. 500 characters"></textarea>
-                            </div>
-                          </div>
-                          
-                          
-              
-                        </div>
-                         
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-sm-12">
-                          <input class="btn btn-success" type="submit" value="Save">
-                        
-                          <input class="btn btn-light ml-3" type="reset" value="Cancel">
-                        </div>
-                      </div>
-                      
-              
-                    </div>
-                  </div>
-                </div>
-              </form> -->
 
 
         </div>
