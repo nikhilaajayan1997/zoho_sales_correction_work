@@ -1160,11 +1160,13 @@ def allestimates(request):
     return render(request, 'all_estimates.html', context)
 
 def filter_by_draft(request):
-    estimates=Estimates.objects.filter(status='draft')
+    user = request.user
+    estimates=Estimates.objects.filter(status='draft',user=user)
     return render(request, 'all_estimates.html', {'estimates':estimates})
 
 def filter_by_sent(request):
-    estimates=Estimates.objects.filter(status='sent')
+    user = request.user
+    estimates=Estimates.objects.filter(status='sent',user=user)
     return render(request, 'all_estimates.html', {'estimates':estimates})
 
 def filter_by_draft_estimate_view(request,pk):
@@ -1543,7 +1545,10 @@ def updateestimate(request,pk):
 
         estimate = Estimates.objects.get(id=pk)
         estimate.user = user
-        estimate.customer_name = request.POST['customer_name']
+        cust_idd = request.POST['customer_name'].split(" ")[0]
+        cust_name2=customer.objects.get(id=cust_idd)
+        cust_name=cust_name2.customerName
+        estimate.customer_name=cust_name
         custr=request.POST['customer_id']
         customer_id=customer.objects.get(id=custr)
         estimate.customer=customer_id

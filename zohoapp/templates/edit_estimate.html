@@ -265,7 +265,7 @@ function calc(){
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
                     <div class="col-sm-6">
                         <select class="form-control text-black" id="customer_sel" name="customer_name" >
-                            <option value="{{estimate.customer_name}}">{{estimate.customer_name}}</option>
+                            <option value="{{estimate.customer.id}} {{estimate.customer_name}}">{{estimate.customer_name}}</option>
                             {% for cust in customers %}
                             <option value="{{cust.id}} {{cust.customerName}}" data-pos="{{cust.placeofsupply}}">
                                 {{cust.customerName}}</option>
