@@ -260,6 +260,9 @@ function calc(){
                 <input type="hidden" id="state" name="hidden_state" value="{{ company.state }}">
             <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
             <input type="number" id="customer_id" name="customer_id" style="display: none;"  readonly>
+            <!-- <div>
+
+            </div> -->
 
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
@@ -271,6 +274,7 @@ function calc(){
                                 {{cust.customerName}}</option>
                             {% endfor %}
                         </select>
+
                        
                     </div> 
                     <div class="col-sm-4">
