@@ -5315,7 +5315,7 @@ def customer_dropdown(request):
     user = User.objects.get(id=request.user.id)
 
     options = {}
-    option_objects = customer.objects.filter(user = user)
+    option_objects = customer.objects.filter(user=user)
     for option in option_objects:
         options[option.id] = [option.id , option.customerName]
 
@@ -5874,7 +5874,7 @@ def purchase_item_dropdown(request):
     user = User.objects.get(id=request.user.id)
 
     options = {}
-    option_objects = AddItem.objects.all()
+    option_objects = AddItem.objects.get(user=user)
     for option in option_objects:
         options[option.id] = option.Name
 

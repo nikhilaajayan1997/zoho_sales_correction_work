@@ -258,12 +258,9 @@ function calc(){
                 id="forms">
                 {% csrf_token %}
                 <input type="hidden" id="state" name="hidden_state" value="{{ company.state }}">
-            <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
-            <input type="number" id="customer_id" name="customer_id" style="display: none;"  readonly>
-            <!-- <div>
-
-            </div> -->
-
+                <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
+                <input type="number" id="customer_id" name="customer_id" style="display: none;"  readonly>
+          
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
                     <div class="col-sm-6">
@@ -308,17 +305,17 @@ function calc(){
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-12">
                         <label for="" id="label_tab1">Price List</label><br>
-                   <table class="table  text-black table-bordered" id="item_table" style="background-color: rgba(250, 227, 198, 0.8);table-layout: fixed;width: 100%;background-color: #b6b3b36b;"
+                   <table class="table text-black table-bordered" id="item_table" style="background-color: rgba(250, 227, 198, 0.8);table-layout: fixed;width: 100%;background-color: #b6b3b36b;"
                     onchange="calc()">
                     <thead>
                         <tr>
-                            <th class="text-light">Item Details <a href="" data-toggle="modal" data-target="#newitem"><i class="fas fa-plus p-2 rounded"
+                            <th class="" style="font-weight: bold;color: rgb(245, 154, 36);">Item Details <a href="" data-toggle="modal" data-target="#newitem"><i class="fas fa-plus p-2 rounded"
                                 style="color: white; background-color: rgb(210, 132, 30);"></i></a></th>
-                            <th class="text-right text-light">Quantity</th>
-                            <th class="text-right text-light">Rate</th>
-                            <th class="text-right text-light">Discount</th>
-                            <th class="text-right text-light">Tax</th>
-                            <th class="text-right text-light">Amount</th>
+                            <th class="text-right " style="font-weight: bold;color: rgb(245, 154, 36);">Quantity</th>
+                            <th class="text-right " style="font-weight: bold;color: rgb(245, 154, 36);">Rate</th>
+                            <th class="text-right " style="font-weight: bold;color: rgb(245, 154, 36);">Discount</th>
+                            <th class="text-right " style="font-weight: bold;color: rgb(245, 154, 36);">Tax</th>
+                            <th class="text-right " style="font-weight: bold;color: rgb(245, 154, 36);">Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -326,7 +323,7 @@ function calc(){
                         <tr id='row{{ forloop.counter }}'>
                             <td>
                                 <div class='form-group'><select
-                                        class='form-control bg-transparent text-black border-0 item_select itm'
+                                        class='form-control bg-transparent text-light border-0 item_select itm'
                                         name='item[]' id='item{{ forloop.counter }}'>
                                         <option class='text-dark' value="{{item.item_name}}">{{item.item_name}}</option>
                                         {% for i in items %}
@@ -336,27 +333,27 @@ function calc(){
                             </td>
                             <td class='text-right'><input type='number' id='qty{{ forloop.counter }}'
                                     class='
-                                   form-control bg-transparent border-0 text-black text-right qty' name='quantity[]'
+                                   form-control bg-transparent border-0 text-light text-right qty' name='quantity[]'
                                     value='{{item.quantity}}'>
                             </td>
                             <td class='text-right'><input type='number' id='rate{{ forloop.counter }}'
-                                    class='form-control bg-transparent border-0 text-black text-right rate' name='rate[]'
+                                    class='form-control bg-transparent border-0 text-light text-right rate' name='rate[]'
                                     value='{{item.rate}}'>
                             </td>
                             <td class='text-right'><input type='number' id='discount{{ forloop.counter }}'
-                                    class='form-control bg-transparent border-0 text-black text-right discount' name='discount[]'
+                                    class='form-control bg-transparent border-0 text-light text-right discount' name='discount[]'
                                     value='{{item.discount}}'>
                             </td>
                             <td class='text-right'> 
                                 <select name='tax[]' id='tax{{ forloop.counter }}'
-                                    class='form-control bg-transparent text-black text-right border-0 tax'>
-                                    <option value='{{item.tax_percentage}}'>{{item.tax_percentage}} %</option>
-                                    <option value=0>0% GST</option>
-                                    <option value=3>3% GST</option>
-                                    <option value=5>5% GST</option>
-                                    <option value=12>12% GST</option>
-                                    <option value=18>18% GST</option>
-                                    <option value=28>28% GST</option> 
+                                    class='form-control bg-transparent text-light text-right border-0 tax'>
+                                    <option value='{{item.tax_percentage}}' class="text-dark">{{item.tax_percentage}} %</option>
+                                    <option value=0 class="text-dark">0% GST</option>
+                                    <option value=3 class="text-dark">3% GST</option>
+                                    <option value=5 class="text-dark">5% GST</option>
+                                    <option value=12 class="text-dark">12% GST</option>
+                                    <option value=18 class="text-dark">18% GST</option>
+                                    <option value=28 class="text-dark">28% GST</option> 
                                 </select>
                             </td>
                             <td style="display: none;">
@@ -364,7 +361,7 @@ function calc(){
                                     class="form-control taxamount" />
                             </td>
                             <td class='text-right'><input type='number' id='amount{{ forloop.counter }}'
-                                    class='form-control bg-transparent border-0 text-black text-right  amount ' name='amount[]'
+                                    class='form-control bg-transparent border-0 text-light text-right  amount ' name='amount[]'
                                     value='{{item.amount}}'  readonly></td>
                             <td class='text-center'><button type='button' id='del_btn{{ forloop.counter }}'
                                     class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
@@ -379,7 +376,8 @@ function calc(){
 
                 </table>
                 <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30) ;"
-                    id="add-row">Add another line</button>
+                    id="add-row"><i class="fa-solid  fa fa-plus rounded"
+                    style="color: white; background-color: rgb(210, 132, 30);height: 20px;"></i></button>
                     </div>
                 </div>
 
@@ -394,13 +392,13 @@ function calc(){
     onchange="calc()">
     <thead>
         <tr>
-            <th class="text-light">Item Details <a href="" data-toggle="modal" data-target="#newitem"><i class="fas fa-plus p-2 rounded"
+            <th class="" style="color: rgb(245, 154, 36);font-weight: bold;">Item Details <a href="" data-toggle="modal" data-target="#newitem"><i class="fas fa-plus p-2 rounded"
                 style="color: white; background-color: rgb(210, 132, 30);"></i></a></th>
-            <th class="text-right text-light">Quantity</th>
-            <th class="text-right text-light">Rate</th>
-            <th class="text-right text-light">Discount</th>
-            <th class="text-right text-light">Tax</th>
-            <th class="text-right text-light">Amount</th>
+            <th class="text-right " style="color: rgb(245, 154, 36);font-weight: bold;">Quantity</th>
+            <th class="text-right " style="color: rgb(245, 154, 36);font-weight: bold;">Rate</th>
+            <th class="text-right " style="color: rgb(245, 154, 36);font-weight: bold;">Discount</th>
+            <th class="text-right " style="color: rgb(245, 154, 36);font-weight: bold;">Tax</th>
+            <th class="text-right " style="color: rgb(245, 154, 36);font-weight: bold;">Amount</th>
         </tr>
     </thead>
     <tbody>
@@ -408,7 +406,7 @@ function calc(){
         <tr id='row{{ forloop.counter }}'>
             <td>
                 <div class='form-group'><select
-                        class='form-control bg-transparent text-black border-0 item_selectt itmm'
+                        class='form-control bg-transparent text-light border-0 item_selectt itmm'
                         name='itemm[]' id='itemm{{ forloop.counter }}'>
                         <option class='text-dark' value="{{item.item_name}}">{{item.item_name}}</option>
                         {% for i in items %}
@@ -417,27 +415,27 @@ function calc(){
                     </select></div>
             </td>
             <td class='text-right'><input type='number' id='qtyy{{ forloop.counter }}'
-                    class='form-control bg-transparent border-0 text-black text-right qtyy' name='quantityy[]'
+                    class='form-control bg-transparent border-0 text-light text-right qtyy' name='quantityy[]'
                     value='{{item.quantity}}'>
             </td>
             <td class='text-right'><input type='number' id='ratee{{ forloop.counter }}'
-                    class='form-control bg-transparent border-0 text-black text-right ratee' name='ratee[]'
+                    class='form-control bg-transparent border-0 text-light text-right ratee' name='ratee[]'
                     value='{{item.rate}}'>
             </td>
             <td class='text-right'><input type='number' id='discountt{{ forloop.counter }}'
-                    class='form-control bg-transparent border-0 text-black text-right discountt' name='discountt[]'
+                    class='form-control bg-transparent border-0 text-light text-right discountt' name='discountt[]'
                     value='{{item.discount}}'>
             </td>
             <td class='text-right'> 
                 <select name='taxx[]' id='taxx{{ forloop.counter }}'
-                    class='form-control bg-transparent text-black text-right border-0 taxx'>
+                    class='form-control bg-transparent text-light text-right border-0 taxx'>
                     <option value='{{item.tax_percentage}}'>{{item.tax_percentage}} %</option>
-                    <option value=0>0% IGST</option>
-                    <option value=3>3% IGST</option>
-                    <option value=5>5% IGST</option>
-                    <option value=12>12% IGST</option>
-                    <option value=18>18% IGST</option>
-                    <option value=28>28% IGST</option> 
+                    <option value=0 class="text-dark">0% IGST</option>
+                    <option value=3 class="text-dark">3% IGST</option>
+                    <option value=5 class="text-dark">5% IGST</option>
+                    <option value=12 class="text-dark">12% IGST</option>
+                    <option value=18 class="text-dark">18% IGST</option>
+                    <option value=28 class="text-dark">28% IGST</option> 
                 </select>
             </td>
             <td style="display: none;">
@@ -445,7 +443,7 @@ function calc(){
                     class="form-control taxamountt" />
             </td>
             <td class='text-right'><input type='number' id='amountt{{ forloop.counter }}'
-                    class='form-control bg-transparent border-0 text-black text-right amountt' name='amountt[]'
+                    class='form-control bg-transparent border-0 text-light text-right amountt' name='amountt[]'
                     value='{{item.amount}}' readonly></td>
             <td class='text-center'><button type='button' id='del_btnn{{ forloop.counter }}'
                     class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-roww'
@@ -460,7 +458,8 @@ function calc(){
 
 </table>
 <button type="button" class="btn btn-sm text-white" style="background-color: rgb(210, 132, 30) ;display: none;"
-    id="add-roww">Add another line</button>
+    id="add-roww"><i class="fa-solid  fa fa-plus rounded"
+    style="color: white; background-color: rgb(210, 132, 30);height: 20px;"></i></button>
     </div>
 </div>
 
@@ -1917,7 +1916,7 @@ function reloadUnit() {
                 <td>
                     <div class='form-group'>
                         <select
-                            class='form-control bg-transparent text-black border-0 item_select' name='item[]'
+                            class='form-control bg-transparent text-light border-0 item_select' name='item[]'
                             id='item${RowCount}'>
                             <option class='text-dark'>Select Items</option>
                             {% for i in items %}
@@ -1926,28 +1925,28 @@ function reloadUnit() {
                         </select></div>
                 </td>
                 <td class='text-right'><input type='number' id='qty${RowCount}'
-                        class='form-control bg-transparent border-0 text-black text-right qty' name='quantity[]' value='0.00' >
+                        class='form-control bg-transparent border-0 text-light text-right qty' name='quantity[]' value='0.00' >
                 </td>
                 <td class='text-right'><input type='number' id='rate${RowCount}'
-                        class='form-control bg-transparent border-0 text-black text-right rate' name='rate[]' value='0.00'
+                        class='form-control bg-transparent border-0 text-light text-right rate' name='rate[]' value='0.00'
                         ></td>
                 <td class='text-right'><input type='number' id='discount${RowCount}'
-                        class='form-control bg-transparent border-0 text-black text-right discount' name='discount[]' value='0.00'>
+                        class='form-control bg-transparent border-0 text-light text-right discount' name='discount[]' value='0.00'>
                 </td>
                 <td class='text-right'> <select name='tax[]' id='tax${RowCount}'
-                        class="form-control bg-transparent text-black text-right border-0 tax">
+                        class="form-control bg-transparent text-light text-right border-0 tax">
                         <option value=0>0% GST</option>
-                                    <option value=3>3% GST</option>
-                                    <option value=5>5% GST</option>
-                                    <option value=12>12% GST</option>
-                                    <option value=18>18% GST</option>
-                                    <option value=28>28% GST</option> 
+                                    <option value=3 class="text-dark">3% GST</option>
+                                    <option value=5 class="text-dark">5% GST</option>
+                                    <option value=12 class="text-dark">12% GST</option>
+                                    <option value=18 class="text-dark">18% GST</option>
+                                    <option value=28 class="text-dark">28% GST</option> 
                     </select></td>
                 <td style="display: none;">
                     <input type="text" name='taxamount1' id="taxamount${RowCount}" class="form-control taxamount" />
                             </td>
                 <td class='text-right'><input type='number' id='amount${RowCount}'
-                        class='form-control bg-transparent border-0 text-black text-right amount' name='amount[]' value='0.00' readonly></td>
+                        class='form-control bg-transparent border-0 text-light text-right amount' name='amount[]' value='0.00' readonly></td>
                 <td class='text-center'><button type='button' id='del_btn${RowCount}'
                         class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-row'
                         style='width:30px'><i class='fa fa-times'></i></button>
@@ -1977,7 +1976,7 @@ function reloadUnit() {
                 <td>
                     <div class='form-group'>
                         <select
-                            class='form-control bg-transparent text-black border-0 item_selectt' name='itemm[]'
+                            class='form-control bg-transparent text-light border-0 item_selectt' name='itemm[]'
                             id='itemm${RowCountt}'>
                             <option class='text-dark'>Select Items</option>
                             {% for i in items %}
@@ -1986,28 +1985,28 @@ function reloadUnit() {
                         </select></div>
                 </td>
                 <td class='text-right'><input type='number' id='qtyy${RowCountt}'
-                        class='form-control bg-transparent border-0 text-black text-right qtyy' name='quantityy[]' value='0.00' >
+                        class='form-control bg-transparent border-0 text-light text-right qtyy' name='quantityy[]' value='0.00' >
                 </td>
                 <td class='text-right'><input type='number' id='ratee${RowCountt}'
-                        class='form-control bg-transparent border-0 text-black text-right ratee' name='ratee[]' value='0.00'
+                        class='form-control bg-transparent border-0 text-light text-right ratee' name='ratee[]' value='0.00'
                         ></td>
                 <td class='text-right'><input type='number' id='discountt${RowCountt}'
-                        class='form-control bg-transparent border-0 text-black text-right discountt' name='discountt[]' value='0.00'>
+                        class='form-control bg-transparent border-0 text-light text-right discountt' name='discountt[]' value='0.00'>
                 </td>
                 <td class='text-right'> <select name='taxx[]' id='taxx${RowCountt}'
-                        class="form-control bg-transparent text-black text-right border-0 taxx">
+                        class="form-control bg-transparent text-light text-right border-0 taxx">
                         <option value=0>0% IGST</option>
-                                    <option value=3>3% IGST</option>
-                                    <option value=5>5% IGST</option>
-                                    <option value=12>12% IGST</option>
-                                    <option value=18>18% IGST</option>
-                                    <option value=28>28% IGST</option> 
+                                    <option value=3 class="text-dark">3% IGST</option>
+                                    <option value=5 class="text-dark">5% IGST</option>
+                                    <option value=12 class="text-dark">12% IGST</option>
+                                    <option value=18 class="text-dark">18% IGST</option>
+                                    <option value=28 class="text-dark">28% IGST</option> 
                     </select></td>
                 <td style="display: none;">
                     <input type="text" name='taxamountt1' id="taxamountt${RowCountt}" class="form-control taxamountt" />
                             </td>
                 <td class='text-right'><input type='number' id='amountt${RowCountt}'
-                        class='form-control bg-transparent border-0 text-black text-right amountt' name='amountt[]' value='0.00' readonly></td>
+                        class='form-control bg-transparent border-0 text-light text-right amountt' name='amountt[]' value='0.00' readonly></td>
                 <td class='text-center'><button type='button' id='del_btnn${RowCountt}'
                         class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-roww'
                         style='width:30px'><i class='fa fa-times'></i></button>
