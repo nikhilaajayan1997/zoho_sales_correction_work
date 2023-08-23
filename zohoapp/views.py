@@ -5313,14 +5313,22 @@ def recurbills_customer(request):
 @login_required(login_url='login')
 def customer_dropdown(request):
     user = User.objects.get(id=request.user.id)
-
     options = {}
     option_objects = customer.objects.filter(user=user)
     for option in option_objects:
-        options[option.id] = [option.id , option.customerName]
-
+        display_name = option.customerName
+        # options[option.id] = [option.id , option.customerName]
+        options[option.id] = [display_name, f"{display_name}"]
     return JsonResponse(options)
-    
+
+# def customer_dropdownE(request):
+#     user = User.objects.get(id=request.user.id)
+#     options = {}
+#     option_objects = customer.objects.filter(user=user)
+#     for option in option_objects:
+#         display_name = option.customerName
+#         options[option.id] = [display_name, f"{display_name}"]
+#     return JsonResponse(options)
     
 def entr_custmrA(request):
     if request.user.is_authenticated:
