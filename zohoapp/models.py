@@ -240,19 +240,12 @@ class EstimateItems(models.Model):
     amount = models.FloatField(null=True,blank=True)
 
 
-class payment(models.Model):
-    term=models.TextField(max_length=255)
-    days=models.TextField(max_length=255)
-    
-class payment_terms(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
-    Terms=models.CharField(max_length=100,null=True,blank=True)
-    Days=models.IntegerField(null=True,blank=True)    
-
 class invoice(models.Model):
-    customer=models.ForeignKey(customer,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    customer=models.ForeignKey(customer,on_delete=models.CASCADE,null=True,blank=True)
     invoice_no=models.TextField(max_length=255)
-    terms=models.ForeignKey(payment_terms,on_delete=models.CASCADE)
+    # terms=models.ForeignKey(payment_terms,on_delete=models.CASCADE)
+    terms=models.CharField(max_length=100)
     order_no=models.IntegerField()
     inv_date=models.DateField()
     due_date=models.DateField()
@@ -279,6 +272,16 @@ class invoice_item(models.Model):
     desc=models.TextField(max_length=255)
     rate=models.TextField(max_length=255)
     inv=models.ForeignKey(invoice,on_delete=models.CASCADE)
+
+
+class payment(models.Model):
+    term=models.TextField(max_length=255)
+    days=models.TextField(max_length=255)
+    
+class payment_terms(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    Terms=models.CharField(max_length=100,null=True,blank=True)
+    Days=models.IntegerField(null=True,blank=True)    
 
 
 class Pricelist(models.Model):

@@ -1843,14 +1843,7 @@ def addinvoice(request):
     if not payment.objects.filter(term='due end of month').exists():
         payment(term='due end of month',days=60).save()
     elif not  payment.objects.filter(term='net 30').exists():
-        payment(term='net 30',days=30).save() 
-    
-
-
-    
-            
-            
-            
+        payment(term='net 30',days=30).save()        
             
     context={
         'c':c,
@@ -1867,6 +1860,7 @@ def addinvoice(request):
 
 def add_prod(request):
     c=customer.objects.all()
+    company = company_details.objects.get(user=request.user.id)
     p=AddItem.objects.all()
     i=invoice.objects.all()
     pay=payment_terms.objects.all()
@@ -1940,6 +1934,7 @@ def add_prod(request):
             'p':p,
             'i':i,
             'pay':pay,
+            'company':company,
     }       
     return render(request,'createinvoice.html',context)
 
