@@ -265,7 +265,7 @@ class invoice(models.Model):
     
 class invoice_item(models.Model):
     product=models.TextField(max_length=255)
-    quantity=models.IntegerField()
+    quantity=models.IntegerField() 
     hsn=models.TextField(max_length=255)
     tax=models.IntegerField()
     total=models.FloatField()

@@ -1838,6 +1838,9 @@ def addinvoice(request):
     p=AddItem.objects.all()
     i=invoice.objects.all()
     pay=payment.objects.all()
+    sales=Sales.objects.all()
+    purchase=Purchase.objects.all()
+    # payments = payment_terms.objects.filter(user = request.user)
     if not payment.objects.filter(term='net 15').exists(): 
        payment(term='net 15',days=15).save()
     if not payment.objects.filter(term='due end of month').exists():
@@ -1850,9 +1853,9 @@ def addinvoice(request):
         'p':p,
         'i':i,
         'pay':pay,
-        
+        'sales':sales,
+        'purchase':purchase,
     }
-       
     return render(request,'createinvoice.html',context)
 
 
@@ -1864,6 +1867,9 @@ def add_prod(request):
     p=AddItem.objects.all()
     i=invoice.objects.all()
     pay=payment_terms.objects.all()
+    sales=Sales.objects.all()
+    purchase=Purchase.objects.all()
+    unit=Unit.objects.all()
     if not payment_terms.objects.filter(Terms='net 15').exists(): 
        payment_terms(Terms='net 15',Days=15).save()
     if not payment_terms.objects.filter(Terms='due end of month').exists():
@@ -1935,6 +1941,9 @@ def add_prod(request):
             'i':i,
             'pay':pay,
             'company':company,
+            'sales':sales,
+            'purchase':purchase,
+            'units':unit,
     }       
     return render(request,'createinvoice.html',context)
 
