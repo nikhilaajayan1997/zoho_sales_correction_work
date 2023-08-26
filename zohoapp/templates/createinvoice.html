@@ -163,7 +163,7 @@ crossorigin="anonymous"></script>
                               class='form-control bg-transparent  text-light border-0 item_select itm'
                               name='item[]' id='item1'>
                               {% for i in p %}
-                              <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
+                              <option class="text-dark" value="{{i.Name}}">{{ i.Name }}</option>
                               {% endfor %}
                           </select></div>
                   </td>
@@ -277,7 +277,8 @@ crossorigin="anonymous"></script>
         <table class="table table-bordered text-white"  id="item_tablee" style="background-color: #b6b3b36b;table-layout: fixed;width: 100%;display: none;" onchange="calc()">
           <thead >
               <tr >
-                  <th style="font-weight: bold;color: rgb(245, 154, 36);">Product</th>
+                  <th style="font-weight: bold;color: rgb(245, 154, 36);">Product<a href="" data-toggle="modal" data-target="#newitem">&nbsp;&nbsp;&nbsp;<i class="fa-solid  fa fa-plus fa-xl rounded p-1"
+                    style="color: white; background-color: rgb(210, 132, 30);height: 25px;width: 25%;"></i></a></th>
                   <th class="text-right" style="font-weight: bold;color: rgb(245, 154, 36);">Hsn</th>
                   <th class="text-right" style="font-weight: bold;color: rgb(245, 154, 36);">Quantity</th>
                   <th class="text-right" style="font-weight: bold;color: rgb(245, 154, 36);">Rate</th>
@@ -1149,231 +1150,234 @@ crossorigin="anonymous"></script>
     </div>  
   </div>  
 <!-- ................................................  END PAYMENT TERMS MODAL..................................... -->
-            <!--..................................... item modal ..................................................-->
 
-            <div class="modal fade" id="newitem">
-              <div class="modal-dialog modal-xl">
-                <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
-                  <div class="modal-header " style="background: rgb(32, 35, 37);">
-                      <h3 class="m-3 text-uppercase">New Item</h3>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                      </button>
+
+
+ <!-- .................................................ITEM MODAL................................................. -->
+
+
+ <div class="modal fade" id="newitem">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+      <div class="modal-header " style="background: rgb(32, 35, 37);">
+        <h3 class="m-3 text-uppercase">New Item</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="background: rgb(32, 35, 37);">
+        <div class="card p-3 m-3">
+          <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalItem">
+            <div class="row mt-2">
+              <div class="col-md-4 mr-0">
+                <label class="col-form-label col-sm-2 p-0">Type <i class="fa fa-question-circle"></i></label>
+              </div>
+              <div class="col-md-5 ml-0 d-flex">
+                <div class="radio_opt mx-5 ">
+                  <input type="radio" id="item_type1" name="radioOption" value="Goods" >
+                  <label for="option1">Goods</label>
+                </div>
+                <div class="radio_opt mx-5 ">
+                  <input type="radio" id="item_type2" name="radioOption" value="Services" >
+                  <label for="option2">Services</label>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-md-3">
+                <label for="name" style="color: rgb(190, 88, 88);">Name *</label>
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control text-dark bg-light" id="item_name" name="item_name" required>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col-md-3 ">
+                <label for="units">Unit</label>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex">
+                  <select class="form-control text-dark bg-light" id="item_units" name="item_units" required>
+                    <option value="">Select Unit</option>
+                    {% for u in units %}
+                    <option value="{{u.id}}">{{u.unit}}</option>
+                    {% endfor %}
+                  </select>                
+                  <a href="#" class="btn btn-outline-secondary py-2 my-1" data-target="#newunit" data-toggle="modal">+</a>  
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-md-4 ">
+                <label for="c_tax" style="color: rgb(190, 88, 88);">Tax Preference * </label>
+              </div>
+              <div class="col-md-5">
+                <div class="d-flex">
+                  <div class="radio_opt mx-5 mt-2">
+                    <input type="radio" id="item-tax1" name="radioOption1" value="Taxable" >
+                    <label for="option1">Taxable</label>
                   </div>
-                  <div class="modal-body" style="background: rgb(32, 35, 37);">
-                    <div class="card p-3 m-3">
-                      <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalItem">
-          
-                        <div class="row mt-2">
-                          <div class="col-md-4 mr-0">
-                            <label class="col-form-label col-sm-2 p-0">Type <i class="fa fa-question-circle"></i></label>
-                          </div>
-                          <div class="col-md-5 ml-0 d-flex">
-                            <div class="radio_opt mx-5 ">
-                              <input type="radio" id="item_type1" name="radioOption" value="Goods" >
-                              <label for="option1">Goods</label>
-                            </div>
-                            <div class="radio_opt mx-5 ">
-                              <input type="radio" id="item_type2" name="radioOption" value="Services" >
-                              <label for="option2">Services</label>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mt-2">
-                          <div class="col-md-3">
-                            <label for="name" style="color: rgb(190, 88, 88);">Name *</label>
-                          </div>
-                          <div class="col-md-6">
-                            <input type="text" class="form-control bg-light text-dark" id="item_name" name="item_name" required>
-                          </div>
-                        </div>
-                        <div class="row mt-2">
-                          <div class="col-md-3 ">
-                            <label for="units">Unit</label>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="d-flex">
-                              <select class="form-control bg-light text-dark" id="item_units" name="item_units" required>
-                                <option value="">Select Unit</option>
-                                {% for u in units %}
-                                <option value="{{u.id}}">{{u.unit}}</option>
-                                {% endfor %}
-                              </select>                
-                              <a href="#" class="btn btn-outline-secondary py-2 my-1" data-target="#newunit" data-toggle="modal">+</a>  
-                            </div>
-                          </div>
-                        </div>
-          
-                        <div class="row mt-2">
-                          <div class="col-md-4 ">
-                            <label for="c_tax" style="color: rgb(190, 88, 88);">Tax Preference * </label>
-                          </div>
-                          <div class="col-md-5">
-                            <div class="d-flex">
-                              <div class="radio_opt mx-5 mt-2">
-                                <input type="radio" id="item-tax1" name="radioOption1" value="Taxable" >
-                                <label for="option1">Taxable</label>
-                              </div>
-                              <div class="radio_opt mx-4 mt-2">
-                                <input type="radio" id="item-tax2" name="radioOption1" value="Tax-exempt" >
-                                <label for="option2">Tax-exempt</label>
-                              </div>
-                            </div>
-                          </div>       
-                        </div>
-          
-                        <div class="row mt-2 mb-4 d-none inter-intra" >
-                          <div class="col-md-3">
-                            <label for="intra">Intra-State TAX</label>
-                          </div>
-                          <div class="col-md-3">
-                            <select name="intra" class="form-control bg-light text-dark" id="intra">
-                              <option value="">Select GST</option>
-          
-                              <option value="GST0[0%]">GST0[0%]</option>
-                              <option value="GST5[5%]">GST5[5%]</option>
-                              <option value="GST12[12%]">GST12[12%]</option>
-                              <option value="GST18[18%]">GST18[18%]</option>
-                              <option value="GST28[28%]">GST28[28%]</option>
-                            </select>             
-                          </div>
-          
-                          
-                          <div class="col-md-2">
-                            <label for="inter">Inter-State TAX</label>
-                          </div>
-                          <div class="col-md-3">
-                            <select name="inter" class="form-control bg-light text-dark" id="inter">
-                              <option value="">Select GST</option>
-          
-                              <option value="IGST0[0%]">IGST0[0%]</option>
-                              <option value="IGST5[5%]">IGST5[5%]</option>
-                              <option value="IGST12[12%]">IGST12[12%]</option>
-                              <option value="IGST18[18%]">IGST18[18%]]</option>
-                              <option value="IGST28[28%]">IGST28[28%]</option>
-                            </select>               
-                          </div>
-                          <div class="col-md-1"></div>
-          
-                        </div>
-                        
-                        <hr>
-          
-                        <div class="row mt-5 text-center">
-                          <div class="col-md-6 d-flex text-center">
-                            <input  type="checkbox" name="selling" checked class="mx-2 my-0">
-                            <h6 class="m-0">Selling Information</h6>
-                          </div>
-                          <div class="col-md-6 d-flex text-center">
-                            <input  type="checkbox" name="purchase" checked class="mx-2 my-0">
-                            <h6 class="m-0">Purchase Information</h6>
-                          </div>
-                        </div>
-                        
-                        <div class="row mt-4">
-                          <div class="col-md-2">
-                            <label for="sell_price">Selling Price *</label>
-                          </div>
-                          <div class="col-md-4">
-                            <div class="input-group mb-2">
-                              <div class="input-group-prepend">
-                                <div class="input-group-text">INR</div>
-                              </div>
-                              <input required type="text" class="form-control bg-light text-dark" name="sell_price" id="sell_price">
-                            </div>                  
-                          </div>
-          
-                          <div class="col-md-2">
-                            <label for="cost_price">Cost Price *</label>
-                          </div>
-                          <div class="col-md-4 ">
-                            <div class="input-group mb-2">
-                              <div class="input-group-prepend">
-                                <div class="input-group-text">INR</div>
-                              </div>
-                              <input required type="text" class="form-control bg-light text-dark" name="cost_price" id="cost_price">
-                            </div>
-                          </div>
-                        </div>
-          
-                        <div class="row mt-2">
-                          <div class="col-md-2">
-                            <label for="vcity">Account</label>
-                          </div>
-                          <div class="col-md-4">
-                            <select name="sell_acc" id="sell_acc" class="form-control bg-light text-dark">
-                              <option value="">Select Account</option>
-               
-                                <option value="" disabled class="btn btn-dark text-white"><b>SALES</b></option>
-                                {% for s in sales %}
-                                    <option value="{{s.id}}">{{ s.Account_name }}</option>
-                              {% endfor %}
-                            </select> 
-                          </div>
-                          <div class="col-md-2">
-                            <label for="cost_acc">Account</label>
-                          </div>
-                          <div class="col-md-4">
-                            <select name="cost_acc" class="form-control bg-light text-dark" id="cost_acc">
-                              <option value="">Select Account</option>
-          
-          
-                              
-                                <option value="" disabled class="btn btn-dark text-white"><b>PURCHASE</b></option>
-                                {% for p in purchase %}
-                                    <option value="{{p.id}}">{{ p.Account_name }}</option>
-                              {% endfor %}
-          
-                            </select> 
-                          </div>
-                        </div>
-          
-                        <div class="row mt-2">
-                          <div class="col-md-2">
-                            <label for="sell_desc">Description</label>
-                          </div>
-                          <div class="col-md-4">
-                            <input  type="text" name="sell_desc" class="form-control bg-light text-dark"  id="sell_desc">
-                          </div>
-          
-                          <div class="col-md-2">
-                            <label for="cost_desc">Description</label>
-                          </div>
-                          <div class="col-md-4 ">
-                            <input  type="text" name="cost_desc" class="form-control bg-light text-dark"  id="cost_desc">
-                          </div>
-          
-                        </div>
-          
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                              <input type="checkbox" value="" id="invalidCheck" name="invalidCheck" required>
-                              <label for="invalidCheck" style="color: #909091;">Agree to terms and conditions</label>
-                              <div class="invalid-feedback text-warning" >You must agree before submitting.</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-4"></div>
-                          <div class="col-md-4">
-                            <div class="d-flex">
-                              <button class="btn save_btn rounded-pill text-grey w-50 my-4 mx-3"
-                              type="submit" data-dismiss="modal" id="itemSave">Submit
-                              </button> 
-          
-                              <button type="button" class="close btn save_btn rounded-pill text-grey w-50 my-4" 
-                                data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">Cancel</span>
-                              </button>
-                            </div>
-                          </div>
-                          <div class="col-md-4"></div>
-                        </div>
-                      </form>
-                          </div>
-                      </div>
+                  <div class="radio_opt mx-4 mt-2">
+                    <input type="radio" id="item-tax2" name="radioOption1" value="Tax-exempt" >
+                    <label for="option2">Tax-exempt</label>
                   </div>
-              </div>  
-            </div> 
+                </div>
+              </div>       
+            </div>
+
+            <div class="row mt-2 mb-4 d-none inter-intra" >
+              <div class="col-md-3">
+                <label for="intra">Intra-State TAX</label>
+              </div>
+              <div class="col-md-3">
+                <select name="intra" class="form-control text-dark bg-light" id="intra">
+                  <option value="">Select GST</option>
+
+                  <option value="GST0[0%]">GST0[0%]</option>
+                  <option value="GST5[5%]">GST5[5%]</option>
+                  <option value="GST12[12%]">GST12[12%]</option>
+                  <option value="GST18[18%]">GST18[18%]</option>
+                  <option value="GST28[28%]">GST28[28%]</option>
+                </select>             
+              </div>
+
+              
+              <div class="col-md-2">
+                <label for="inter">Inter-State TAX</label>
+              </div>
+              <div class="col-md-3">
+                <select name="inter" class="form-control text-dark bg-light" id="inter">
+                  <option value="">Select IGST</option>
+
+                  <option value="IGST0[0%]">IGST0[0%]</option>
+                  <option value="IGST5[5%]">IGST5[5%]</option>
+                  <option value="IGST12[12%]">IGST12[12%]</option>
+                  <option value="IGST18[18%]">IGST18[18%]]</option>
+                  <option value="IGST28[28%]">IGST28[28%]</option>
+                </select>               
+              </div>
+              <div class="col-md-1"></div>
+
+            </div>
+            
+            <hr>
+
+            <div class="row mt-5 text-center">
+              <div class="col-md-6 d-flex text-center">
+                <input  type="checkbox" name="selling" checked class="mx-2 my-0">
+                <h6 class="m-0">Selling Information</h6>
+              </div>
+              <div class="col-md-6 d-flex text-center">
+                <input  type="checkbox" name="purchase" checked class="mx-2 my-0">
+                <h6 class="m-0">Purchase Information</h6>
+              </div>
+            </div>
+            
+            <div class="row mt-4">
+              <div class="col-md-2">
+                <label for="sell_price">Selling Price *</label>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">INR</div>
+                  </div>
+                  <input required type="text" class="form-control text-dark bg-light" name="sell_price" id="sell_price">
+                </div>                  
+              </div>
+
+              <div class="col-md-2">
+                <label for="cost_price">Cost Price *</label>
+              </div>
+              <div class="col-md-4 ">
+                <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">INR</div>
+                  </div>
+                  <input required type="text" class="form-control text-dark bg-light" name="cost_price" id="cost_price">
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-md-2">
+                <label for="vcity">Account</label>
+              </div>
+              <div class="col-md-4">
+                <select name="sell_acc" id="sell_acc" class="form-control text-dark bg-light">
+                  <option value="">Select Account</option>
+   
+                  
+                    {% for s in sales %}
+                        <option value="{{s.id}}">{{ s.Account_name }}</option>
+                  {% endfor %}
+                </select> 
+              </div>
+              <div class="col-md-2">
+                <label for="cost_acc">Account</label>
+              </div>
+              <div class="col-md-4">
+                <select name="cost_acc" class="form-control text-dark bg-light" id="cost_acc">
+                  <option value="">Select Account</option>
+
+
+                    {% for p in purchase %}
+                        <option value="{{p.id}}">{{ p.Account_name }}</option>
+                  {% endfor %}
+
+                </select> 
+              </div>
+            </div>
+
+            <div class="row mt-2">
+              <div class="col-md-2">
+                <label for="sell_desc">Description</label>
+              </div>
+              <div class="col-md-4">
+                <input  type="text" name="sell_desc" class="form-control text-dark bg-light"  id="sell_desc">
+              </div>
+
+              <div class="col-md-2">
+                <label for="cost_desc">Description</label>
+              </div>
+              <div class="col-md-4 ">
+                <input  type="text" name="cost_desc" class="form-control text-dark bg-light"  id="cost_desc">
+              </div>
+
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                  <input type="checkbox" value="" id="invalidCheck" name="invalidCheck" required>
+                  <label for="invalidCheck" style="color: #909091;">Agree to terms and conditions</label>
+                  <div class="invalid-feedback text-warning" >You must agree before submitting.</div>
+                </div>
+            </div>
+            <div class="row ">
+              <div class="col-md-5"></div>
+              <div class="col-md-3">
+                <div class="d-flex">
+                  <button class="btn save_btn rounded-pill text-grey w-50 my-4 mx-3"
+                      type="submit" data-dismiss="modal" id="itemSave">Submit
+                  </button> 
+
+                  <button type="button" class="close btn save_btn rounded-pill text-grey w-50 my-4" 
+                    data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">Cancel</span>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-4"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+  </div>  
+</div>  
+
+
           
           
           
@@ -2157,82 +2161,70 @@ color: black;
   
   // item modal
 
-$(document).ready(function() {
-  $("#item-tax1").click(function() {
-  //  console.log($("#item_units").val().split(' ')[0]);
-    $(".inter-intra").removeClass('d-none');
-    $(".inter-intra").addClass('d-flex');
-  });
+  $(document).ready(function() {
 
-  $("#item-tax2").click(function() {
-
-    $(".inter-intra").removeClass('d-flex');
-    $(".inter-intra").addClass("d-none");
-  });
+$("#item-tax1").click(function() {
+  $(".inter-intra").removeClass('d-none');
+  $(".inter-intra").addClass('d-flex');
 });
 
-$(document).ready(function() {
-  $("#item-tax3").click(function() {
-  //  console.log($("#item_units").val().split(' ')[0]);
-    $(".inter-intra").removeClass('d-none');
-    $(".inter-intra").addClass('d-flex');
-  });
+$("#item-tax2").click(function() {
 
-  $("#item-tax4").click(function() {
-
-    $(".inter-intra").removeClass('d-flex');
-    $(".inter-intra").addClass("d-none");
-  });
+  $(".inter-intra").removeClass('d-flex');
+  $(".inter-intra").addClass("d-none");
 });
+});
+
 
 $(document).on("click","#itemSave",function(){
 
-  if ($('input[name="radioOption"]:checked').val() == 'Goods'){
+if ($('input[name="radioOption"]:checked').val() == 'Goods'){
 
-      itemtype = $('#item_type1').val();
-    }
-  else{
-    itemtype = $('#item_type2').val();
+    itemtype = $('#item_type1').val();
   }
+else{
+  itemtype = $('#item_type2').val();
+}
 
-  if ($('input[name="radioOption1"]:checked').val() == 'Taxable'){
-      inter = $('#inter').val();
-      intra = $('#intra').val();
-    }
-  else{
-    inter = 0;
-    intra = 0;
+if ($('input[name="radioOption1"]:checked').val() == 'Taxable'){
+    inter_st = $('#inter').val();
+    intra_st = $('#intra').val();
   }
+else{
+  inter_st = 0;
+  intra_st = 0;
+}
 
+$.ajax({
   
-  $.ajax({
-    
-    type : 'POST',
-    url:"{% url 'purchase_item' %}",
-    
-    data:{
-        type : itemtype,
-        name : $("#item_name").val(),
-        unit : $("#item_units").val(),
-        inter : inter,
-        intra : intra,
-        sell_price : $("#sell_price").val(),
-        cost_price : $("#cost_price").val(),
-        sell_acc : $("#sell_acc").val(),
-        cost_acc : $("#cost_acc").val(),
-        sell_desc : $("#sell_desc").val(),
-        cost_desc : $("#cost_desc").val(),
-        
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-        
-      },
-    
-      success: function(response) {
-        document.getElementById("modalItem").reset();
-        reloadItem();
-      },
-  });        
+  type : 'POST',
+  url:"{% url 'recurbills_item' %}",
+  
+  data:{
+      type : itemtype,
+      name : $("#item_name").val(),
+      unit : $("#item_units").val(),
+      inter : inter_st,
+      intra : intra_st,
+      sell_price : $("#sell_price").val(),
+      cost_price : $("#cost_price").val(),
+      sell_acc : $("#sell_acc").val(),
+      cost_acc : $("#cost_acc").val(),
+      sell_desc : $("#sell_desc").val(),
+      cost_desc : $("#cost_desc").val(),
+      
+      csrfmiddlewaretoken: '{{ csrf_token }}'
+      
+    },
+  
+    success: function(response) {
+      // console.log(response)
+      document.getElementById("modalItem").reset();
+      reloadItem();
+    },
+});        
 });
+
 
 
 function reloadItem() {
@@ -2249,9 +2241,10 @@ function reloadItem() {
       dropdown.empty();
       dropdown1.empty();
       $.each(data, function(key, value) {
-        dropdown.append($('<option></option>').attr('value', key).text(value[0]).val(value[1]));
-        dropdown1.append($('<option></option>').attr('value', key).text(value[0]).val(value[1]));
+        dropdown.append($('<option class="text-dark"></option>').attr('value', key).text(value[0]).val(value[1]));
+        dropdown1.append($('<option class="text-dark"></option>').attr('value', key).text(value[0]).val(value[1]));
       });
+
     },
     error: function(xhr, status, error) {
     console.error(xhr.responseText);
@@ -3099,7 +3092,7 @@ function test(taxamount) {
         var roinc = 0
         console.log("ajax");
 
-        $(document).on('click', '#item1', function () {
+        $(document).on('click','#item1', function () {
             select = $('#item1').val();
             customer = $('#customer_sel').val();
             console.log(select);
@@ -3110,7 +3103,7 @@ function test(taxamount) {
                 data: {
                     id: select,
                     cust: customer
-                },
+                  },
                 success: function (response) {
                     console.log(response)
                     data = response.rate
@@ -3120,31 +3113,39 @@ function test(taxamount) {
                     data5 = response.place
                     data4 = response.desc
                     data6 = response.mail
-                    
-                   document.getElementById('rate1').value = data
+
+                    var customerState = data3;
+                  var companyState = data5;
+              
+                  $(document).ready(function() {
+                      if (customerState === companyState) {
+                          $('#tax2 optgroup[label="GST"]').show();
+                          $('#tax2 optgroup[label="IGST"]').hide();
+                      } else {
+                          $('#tax2 optgroup[label="GST"]').hide();
+                          $('#tax2 optgroup[label="IGST"]').show();
+                      }
+                  });
+             
+                    // place_of_supply=data3;
+                    // console.log('pos:'+place_of_supply);
+                    document.getElementById('rate1').value = data
                     document.getElementById('desc1').value = data4
                     // document.getElementById('state').value = data5
                     // document.getElementById('cx_mail').value = data6
-                    console.log(data2,data1)
-                   
-                  
-                   // Assuming you have the customer state and company state values in variables
-                   var customerState = data3;
-                   var companyState = data5;
-               
-                   $(document).ready(function() {
-                       if (customerState === companyState) {
-                           $('#tax1 optgroup[label="GST"]').show();
-                           $('#tax1 optgroup[label="IGST"]').hide();
-                       } else {
-                           $('#tax1 optgroup[label="GST"]').hide();
-                           $('#tax1 optgroup[label="IGST"]').show();
-                       }
-                   });
+                    if (data3 == '{{ company.state }}') {
+                        document.getElementById('tgst1').innerHTML = data1 + ' % GST';
+                        document.getElementById('tgst1').value = data1
+                    }
+                    document.getElementById('tigst1').innerHTML = data2 + ' % IGST';
+                    document.getElementById('tigst1').value = data2
+
                 }
             });
 
         });
+
+
         $(document).on('click', '#item2', function () {
             select = $('#item2').val();
             customer = $('#customer_sel').val();

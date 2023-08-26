@@ -3869,10 +3869,7 @@ def itemdata_challan(request):
     print(company.state)
     id = request.GET.get('id')
     
-
-    
-
-    item = AddItem.objects.get(Name=id, user=user)
+    item = AddItem.objects.get(Name=id,user=user)
     name=item.Name
     rate = item.p_price
     place = company.state
@@ -4961,13 +4958,13 @@ def recurbills_item(request):
         
 @login_required(login_url='login')
 def item_dropdown(request):
-
     user = User.objects.get(id=request.user.id)
-
     options = {}
     option_objects = AddItem.objects.filter(user = request.user)
     for option in option_objects:
-        options[option.id] = [option.Name,option.id]
+      display_name = option.Name        
+    #   options[option.id] = [option.Name,option.id]
+      options[option.id] = [display_name, f"{display_name}"]
 
     return JsonResponse(options)
 

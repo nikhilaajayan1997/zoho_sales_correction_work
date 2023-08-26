@@ -273,7 +273,6 @@ class invoice_item(models.Model):
     rate=models.TextField(max_length=255)
     inv=models.ForeignKey(invoice,on_delete=models.CASCADE)
 
-
 class payment(models.Model):
     term=models.TextField(max_length=255)
     days=models.TextField(max_length=255)
@@ -282,7 +281,6 @@ class payment_terms(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     Terms=models.CharField(max_length=100,null=True,blank=True)
     Days=models.IntegerField(null=True,blank=True)    
-
 
 class Pricelist(models.Model):
     itemtable=models.ForeignKey(AddItem,on_delete=models.CASCADE,null=True)
@@ -303,7 +301,6 @@ class Sample_table(models.Model):
     cust_rate=models.FloatField()
     pl=models.ForeignKey(Pricelist,on_delete=models.CASCADE)
     
-    
 class contact_person_table(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     vendor=models.ForeignKey(vendor_table,on_delete=models.CASCADE,null=True)
@@ -321,7 +318,6 @@ class remarks_table(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
     vendor=models.ForeignKey(vendor_table,on_delete=models.CASCADE,null=True)
     remarks=models.CharField(max_length=500)
-
 
 class banking(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -404,8 +400,6 @@ class SalesOrder(models.Model):
     terms=models.ForeignKey(payment_terms,on_delete=models.CASCADE,null=True,blank=True)
     def __str__(self) :
         return self.invoice_no
-    
-
     
 class sales_item(models.Model):
     product=models.TextField(max_length=255,null=True,blank=True)
