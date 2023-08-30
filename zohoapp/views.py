@@ -1211,7 +1211,7 @@ def newestimate(request):
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
     payments = payment_terms.objects.filter(user = request.user)
-    estimates_count = Estimates.objects.count()
+    estimates_count = Estimates.objects.last().id
     next_count = estimates_count+1
     context = {'company': company,
                'items': items,
@@ -1870,6 +1870,8 @@ def add_prod(request):
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
     unit=Unit.objects.all()
+    invoice_count = invoice.objects.last().id
+    count=invoice_count+1
     if not payment_terms.objects.filter(Terms='net 15').exists(): 
        payment_terms(Terms='net 15',Days=15).save()
     if not payment_terms.objects.filter(Terms='due end of month').exists():
@@ -1881,13 +1883,15 @@ def add_prod(request):
    
     if request.user.is_authenticated:
         if request.method=='POST':
-            c=request.POST['cx_name']
-            cus=customer.objects.get(customerName=c) 
+            x=request.POST["hidden_state"]
+            y=request.POST["hidden_cus_place"]
+            c=request.POST['customer_id']
+            cus=customer.objects.get(id=c) 
             print(cus.id)  
             custo=cus.id
             invoice_no=request.POST['inv_no']
             terms=request.POST['term']
-            term=payment_terms.objects.get(id=terms)
+            # term=payment_terms.objects.get(id=terms)
             order_no=request.POST['ord_no']
             inv_date=request.POST['inv_date']
             due_date=request.POST['due_date']
@@ -1912,29 +1916,52 @@ def add_prod(request):
             else:
                 print(status)  
         
-            product=request.POST.getlist('item[]')
-            hsn=request.POST.getlist('hsn[]')
-            quantity=request.POST.getlist('quantity[]')
-            rate=request.POST.getlist('rate[]')
-            desc=request.POST.getlist('desc[]')
-            tax=request.POST.getlist('tax[]')
-            total=request.POST.getlist('amount[]')
-            term=payment_terms.objects.get(id=term.id)
+            if x==y:
+                item=request.POST.getlist('item[]')
+                hsn=request.POST.getlist('hsn[]')
+                quantity=request.POST.getlist('quantity[]')
+                rate=request.POST.getlist('rate[]')
+                desc=request.POST.getlist('desc[]')
+                tax=request.POST.getlist('tax[]')
+                amount=request.POST.getlist('amount[]')
+                # term=payment_terms.objects.get(id=term.id)
+            else:
+                itemm=request.POST.getlist('itemm[]')
+                hsnn=request.POST.getlist('hsnn[]')
+                quantityy=request.POST.getlist('quantityy[]')
+                ratee=request.POST.getlist('ratee[]')
+                descc=request.POST.getlist('descc[]')
+                taxx=request.POST.getlist('taxx[]')
+                amountt=request.POST.getlist('amountt[]')
+                # term=payment_terms.objects.get(id=term.id)
 
-            inv=invoice(customer_id=custo,invoice_no=invoice_no,terms=term,order_no=order_no,inv_date=inv_date,due_date=due_date,
+            inv=invoice(customer_id=custo,invoice_no=invoice_no,terms=terms,order_no=order_no,inv_date=inv_date,due_date=due_date,
                         cxnote=cxnote,subtotal=subtotal,igst=igst,cgst=cgst,sgst=sgst,t_tax=totaltax,
                         grandtotal=t_total,status=status,terms_condition=tc,file=file)
             inv.save()
-            inv_id=invoice.objects.get(id=inv.id)
-            if len(product)==len(hsn)==len(quantity)==len(desc)==len(tax)==len(total)==len(rate):
+            if x==y:
+                inv_id=invoice.objects.get(id=inv.id)
+                if len(item)==len(hsn)==len(quantity)==len(desc)==len(tax)==len(amount)==len(rate):
 
-                mapped = zip(product,hsn,quantity,desc,tax,total,rate)
-                mapped = list(mapped)
-                for element in mapped:
-                    created = invoice_item.objects.get_or_create(inv=inv_id,product=element[0],hsn=element[1],
-                                        quantity=element[2],desc=element[3],tax=element[4],total=element[5],rate=element[6])
-                    
-                return redirect('invoiceview')
+                    mapped = zip(item,hsn,quantity,desc,tax,amount,rate)
+                    mapped = list(mapped)
+                    for element in mapped:
+                        created = invoice_item.objects.get_or_create(inv=inv_id,product=element[0],hsn=element[1],
+                                            quantity=element[2],desc=element[3],tax=element[4],total=element[5],rate=element[6])
+                        
+                    return redirect('invoiceview')
+            else:
+                inv_id=invoice.objects.get(id=inv.id)
+                if len(itemm)==len(hsnn)==len(quantityy)==len(descc)==len(taxx)==len(amountt)==len(ratee):
+
+                    mapped = zip(itemm,hsnn,quantityy,descc,taxx,amountt,ratee)
+                    mapped = list(mapped)
+                    for element in mapped:
+                        created = invoice_item.objects.get_or_create(inv=inv_id,product=element[0],hsn=element[1],
+                                            quantity=element[2],desc=element[3],tax=element[4],total=element[5],rate=element[6])
+                        
+                    return redirect('invoiceview')
+
     context={
             'c':c,
             'p':p,
@@ -1944,6 +1971,7 @@ def add_prod(request):
             'sales':sales,
             'purchase':purchase,
             'units':unit,
+            'count':count,
     }       
     return render(request,'createinvoice.html',context)
 

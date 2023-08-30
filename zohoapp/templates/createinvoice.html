@@ -65,7 +65,7 @@ crossorigin="anonymous"></script>
     <form method="post" action="{% url 'add_prod' %}" class="">
         {% csrf_token %}
         <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
-
+        <input type="hidden" name="hidden_state" id="state" value="{{company.state}}">
         <div class="row mb-4 border-top pt-5">
             <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
             <div class="col-sm-6">
@@ -94,7 +94,7 @@ crossorigin="anonymous"></script>
       </div>
         <div class="row mb-4">
             <div class="col-sm-2"><label for="estimate_number">Invoice#*</label></div>
-            <div class="col-sm-6"><input type="text" class="form-control text-dark" id="estimate_number" name="inv_no" value="INV-000">
+            <div class="col-sm-6"><input type="text" class="form-control text-dark" id="estimate_number" name="inv_no" value="INV-{{count}}">
                
             </div>
         </div>
@@ -125,13 +125,14 @@ crossorigin="anonymous"></script>
             </div>
             <div class="row mb-4 border-bottom pb-5">
               <div class="col-sm-2">
-                <label for="input-2"> Terms</label>
+                <label for="input-2">Terms</label>
               </div>
               <div class="col-sm-6 ">
                 <select class="my-select form-control text-dark" name="term" id="">
                   {% for p in pay %}
         
-                    <option value="{{p.id}}">{{p.Terms}}</option>
+                    <!-- <option value="{{p.id}}">{{p.Terms}}</option> -->
+                    <option value="{{p.Terms}}">{{p.Terms}}</option>
                     {% endfor %}
                     <option value="modal-1">Configure</option>
                     
@@ -500,11 +501,11 @@ crossorigin="anonymous"></script>
         <div class="row mt-4">
           <div class="col-sm-6 col-lg-6 col-md-6" style="margin-bottom: 20rem;">
             <button type="submit" name="sd" class="btn  text-white " 
-                value="Save As Draft" style="background-color:  rgb(59, 59, 58) ;">Save as Draft</button>
+                value="Draft" style="background-color:  rgb(59, 59, 58) ;">Save as Draft</button>
             <button type="submit" name="sd" class="btn  text-white" 
-                value="Save and Send" style="background-color: rgb(210, 132, 30);">Save and Send</button>
+                value="Send" style="background-color: rgb(210, 132, 30);">Save and Send</button>
             <input class="btn  text-white"
-                type="reset" style="background-color:  rgb(59, 59, 58) ;">
+                type="reset" value="Cancel" style="background-color:  rgb(59, 59, 58) ;">
         </div>
         <div class="col-sm-6 col-lg-6 col-md-6"></div>
         </div>
