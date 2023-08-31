@@ -128,15 +128,20 @@ crossorigin="anonymous"></script>
                 <label for="input-2">Terms</label>
               </div>
               <div class="col-sm-6 ">
-                <select class="my-select form-control text-dark" name="term" id="">
-                  {% for p in pay %}
-        
-                    <!-- <option value="{{p.id}}">{{p.Terms}}</option> -->
+                <select class="my-select form-control text-dark" name="term" id="inv_term">
+                  <!-- {% for p in pay %}
                     <option value="{{p.Terms}}">{{p.Terms}}</option>
-                    {% endfor %}
-                    <option value="modal-1">Configure</option>
-                    
-                  </select>              
+                  {% endfor %} -->
+                  <option selected value="15">NET 15</option>
+                        <option value="30">NET 30</option>
+                        <option value="45">NET 45</option>
+                        <option value="60">NET 60</option>
+                        <option value="90">NET 90</option>
+                        <option value="Due end of the month">Due end of the month</option>
+                        <option value="recpt">Due on receipt</option>
+                   
+                  </select> 
+                  <!-- <a href=""data-target="#newpayment" data-toggle="modal"><i class="fa fa-gear"></i> Configure Payment Trems</a> -->
                 </div>
             </div>
 
@@ -2159,6 +2164,69 @@ color: black;
 
 
 <script>
+
+  // payment term modal
+
+$(document).on("click","#paySave",function(){
+  $.ajax({
+    
+    type : 'POST',
+    url:"{% url 'recurbills_pay' %}",
+
+    data:{
+        name : $("#term_name").val(),
+        days : $("#term_days").val(),
+        
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+        
+      },
+    
+      success: function(response) {
+        document.getElementById("modalPayment").reset();
+        reloadPayment();
+      },
+  });        
+});
+
+function reloadPayment() {
+
+  $.ajax({
+    url: "{% url 'pay_dropdown' %}",
+    type: "GET",
+    dataType: "json",
+    data: $(this).serialize(),
+    csrfmiddlewaretoken: '{{ csrf_token }}',
+
+    success: function(data) {
+      var dropdown = $('#c_terms');
+      dropdown.empty();
+      dropdown.append(`<option selected value="15">NET 15</option>
+                          <option value="30">NET 30</option>
+                          <option value="45">NET 45</option>
+                          <option value="60">NET 60</option>
+                          <option value="90">NET 90</option>
+                          <option value="">Due end of the month</option>
+                          <option value="recpt">Due on receipt</option>`);
+      var drpv = $('#inv_term');
+      drpv.empty();
+      drpv.append(`<option selected value="15">NET 15</option>
+                        <option value="30">NET 30</option>
+                        <option value="45">NET 45</option>
+                        <option value="60">NET 60</option>
+                        <option value="90">NET 90</option>
+                        <option value="">Due end of the month</option>
+                        <option value="recpt">Due on receipt</option>`);
+      $.each(data, function(key, value) {
+          dropdown.append($('<option></option>').attr('value', key).text(value[0]).val(value[1]));
+          drpv.append($('<option></option>').attr('value', key).text(value).val(value));
+      });
+    },
+    error: function(xhr, status, error) {
+    console.error(xhr.responseText);
+    }
+  });
+}
+
   
   // item modal
 

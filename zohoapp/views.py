@@ -1788,7 +1788,8 @@ def payment_term(request):
 @login_required(login_url='login')
 
 def invoiceview(request):
-    invoicev=invoice.objects.all()
+    user=request.user
+    invoicev=invoice.objects.filter(user=user)
     
     if not payment_terms.objects.filter(Terms='net 15').exists(): 
        payment_terms(Terms='net 15',Days=15).save()
@@ -1804,10 +1805,21 @@ def invoiceview(request):
     }
     return render(request,'invoiceview.html',context)
 
-@login_required(login_url='login')
+def filter_invoice_draft(request):
+    user = request.user
+    invo=invoice.objects.filter(status='draft',user=user)
+    return render(request, 'invoiceview.html', {'invoice':invo})
 
+def filter_invoice_sent(request):
+    user = request.user
+    invo=invoice.objects.filter(status='send',user=user)
+    return render(request, 'invoiceview.html', {'invoice':invo})
+
+
+@login_required(login_url='login')
 def detailedview(request,id):
-    inv_dat=invoice.objects.all()
+    user=request.user
+    inv_dat=invoice.objects.filter(user=user)
     inv_master=invoice.objects.get(id=id)
     invoiceitem=invoice_item.objects.filter(inv_id=id)
     company=company_details.objects.get(user_id=request.user.id)
@@ -1818,8 +1830,38 @@ def detailedview(request,id):
         'invoiceitem':invoiceitem,
         'comp':company,
         'invoice':inv_master,
-        
-                    }
+    }
+    return render(request,'invoice_det.html',context)
+
+def filter_inv_det_send(request,id):
+    user=request.user
+    inv_dat=invoice.objects.filter(user=user,status="send")
+    inv_master=invoice.objects.get(id=id)
+    invoiceitem=invoice_item.objects.filter(inv_id=id)
+    company=company_details.objects.get(user_id=request.user.id)
+    
+    
+    context={
+        'inv_dat':inv_dat,
+        'invoiceitem':invoiceitem,
+        'comp':company,
+        'invoice':inv_master,
+    }
+    return render(request,'invoice_det.html',context)
+def filter_inv_det_draft(request,id):
+    user=request.user
+    inv_dat=invoice.objects.filter(user=user,status="draft")
+    inv_master=invoice.objects.get(id=id)
+    invoiceitem=invoice_item.objects.filter(inv_id=id)
+    company=company_details.objects.get(user_id=request.user.id)
+    
+    
+    context={
+        'inv_dat':inv_dat,
+        'invoiceitem':invoiceitem,
+        'comp':company,
+        'invoice':inv_master,
+    }
     return render(request,'invoice_det.html',context)
 
 
@@ -1883,12 +1925,13 @@ def add_prod(request):
    
     if request.user.is_authenticated:
         if request.method=='POST':
+            user=request.user
             x=request.POST["hidden_state"]
             y=request.POST["hidden_cus_place"]
             c=request.POST['customer_id']
             cus=customer.objects.get(id=c) 
             print(cus.id)  
-            custo=cus.id
+            custo=cus
             invoice_no=request.POST['inv_no']
             terms=request.POST['term']
             # term=payment_terms.objects.get(id=terms)
@@ -1935,7 +1978,7 @@ def add_prod(request):
                 amountt=request.POST.getlist('amountt[]')
                 # term=payment_terms.objects.get(id=term.id)
 
-            inv=invoice(customer_id=custo,invoice_no=invoice_no,terms=terms,order_no=order_no,inv_date=inv_date,due_date=due_date,
+            inv=invoice(user=user,customer=custo,invoice_no=invoice_no,terms=terms,order_no=order_no,inv_date=inv_date,due_date=due_date,
                         cxnote=cxnote,subtotal=subtotal,igst=igst,cgst=cgst,sgst=sgst,t_tax=totaltax,
                         grandtotal=t_total,status=status,terms_condition=tc,file=file)
             inv.save()
