@@ -81,6 +81,7 @@ urlpatterns = [
     path('filter_invoice_sent',views.filter_invoice_sent,name='filter_invoice_sent'),
     path('add_prod',views.add_prod,name='add_prod'),
     path('detailedview/<int:id>',views.detailedview,name='detailedview'),
+    path('add_invoice_comment/<int:pk>',views.add_invoice_comment,name='add_invoice_comment'),
     path('filter_inv_det_draft/<int:id>',views.filter_inv_det_draft,name='filter_inv_det_draft'),
     path('filter_inv_det_send/<int:id>',views.filter_inv_det_send,name='filter_inv_det_send'),
     path('edited_prod/<int:id>',views.edited_prod,name='edited_prod'),

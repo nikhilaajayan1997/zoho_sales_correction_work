@@ -11,6 +11,7 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;
+  overflow: scroll;
 }
 
 .modal p {
@@ -24,7 +25,7 @@
 
 </style>
 <section >
-    <div class="row fixed-top  " style="top: 7rem; margin-left: 15rem;" >
+    <div class="row ">
      
       <div class="col-md-12 " style="width: 100%;">
         
@@ -35,13 +36,13 @@
             Invoice</a></div>
             <input type="hidden" id="state" value="{{ company.state }}">
 </div>
-<div style="overflow-y: scroll;height: 600px;">
+<div>
   <form method="post" action="{% url 'edited_prod' i.id %}" >
     {% csrf_token %}
     <div class="row mb-4 border-top pt-5">
         <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
-        <div class="col-sm-10">
-            <select  class="my-select" id="customer_sel" name="cx_name" style="width: 50%;height: 35px;">
+        <div class="col-sm-6">
+            <select  class="my-select form-control text-dark" id="customer_sel" name="cx_name" >
                 <option value="{{i.customer.customerName}}" data-pos="{{i.customer.placeofsupply}}"  selected>{{i.customer.customerName}}</option>
                 {% for cust in c %}
                 <option value="{{cust.customerName}}" data-pos="{{cust.placeofsupply}}"  >{{cust.customerName}}</option>
@@ -49,50 +50,65 @@
             </select>
         
         </div>
+        <div class="col-sm-4">
+            <a  href="" data-toggle="modal" data-target="#newcustomer"><i class="fa-solid  fa fa-plus p-2 rounded"
+                style="color: white; background-color: rgb(210, 132, 30);height: 37px;"></i></a>
+        </div>
     </div>
-    <div class="modal modal-1" style="background-color: black;top:7rem">
-      
-      </div>
+    
 
     <div class="row mb-4">
         <div class="col-sm-2"><label for="estimate_number">Invoice#*</label></div>
-        <div class="col-sm-10"><input type="text" id="estimate_number" name="inv_no" value="{{i.invoice_no}}"
-                style="width: 38%;height: 35px;">
+        <div class="col-sm-6"><input type="text" class="form-control text-dark" id="estimate_number" name="inv_no" value="{{i.invoice_no}}">
+                
            
         </div>
     </div>
     <div class="row mb-4">
         <div class="col-sm-2"><label for="reference">Order Number</label></div>
-        <div class="col-sm-10"> <input type="text" id="ord_no" name="ord_no" value="{{i.order_no}}"
-                style="width: 38%;height: 35px;"></div>
+        <div class="col-sm-6"> <input type="text" class="form-control text-dark" id="ord_no" name="ord_no" value="{{i.order_no}}"></div>
     </div>
-
- 
-  
-    <div class="input-row mb-4 form-inline">
-      <label class="mr-3 " for="input-1">invoice Date</label>
-          <input value="{{i.inv_date |date:'Y-m-d'}}"  style="width: 18%;height: 35px;margin-left: 6rem;" type="date" name="inv_date" id="input-1">
-          <label for="input-2"class="mr-3 "> Terms</label>
-          <select style="width: 18%;height: 35px;"  name="term" id="">
+    <div class="row mb-4">
+        <div class="col-sm-2"><label for="reference">Terms</label></div>
+        <div class="col-sm-6"> 
+            <!-- <option style="color: black;" value="{{i.id}}">{{i.Terms}}</option> -->
+            <select  class="form-control text-dark"  name="term" id="">
             {% for p in pay %}
 
             <option style="color: black;" value="{{p.id}}">{{p.Terms}}</option>
             {% endfor %}
           </select>
-  
-          <label for="input-2"class="mr-3 ml-2"> Due Date</label>
-          <input style="width: 18%;height: 35px;" class="form-control" value="{{i.due_date|date:'Y-m-d'}}" name="due_date" type="date" id="input-2">
         </div>
+    </div>
+    <div class="row mb-4 ">
+        <div class="col-sm-6 col-lg-2 col-md-2">
+          <label class="mr-3 " for="input-1">invoice Date</label>
+        </div>
+        <div class="col-sm-6 col-lg-2 col-md-2">
+          <input class="form-control text-dark" value="{{i.inv_date |date:'Y-m-d'}}"  type="date" name="inv_date" id="input-1">
+        </div>
+        
+            
+            <div class="col-sm-6 col-md-2 col-lg-2">
+              <label for="input-2"class="ms-5"> Due Date</label>
+            </div>
+            <div class="col-sm-6 col-lg-2 col-md-2">
+              <input  class="form-control text-dark" value="{{i.due_date|date:'Y-m-d'}}" name="due_date" type="date" id="input-2">
+            </div>
+            
+          </div>
+ 
+  
+    
         <div class="row mb-4">
           <div class="col-sm-2"><label for="estimate_number">Customer Mail</label></div>
-          <div class="col-sm-10"><input type="email" id="cx_mail" name="cx_mail" value="{{i.customer.customerEmail}}"
-                  style="width: 38%;height: 35px;">
+          <div class="col-sm-6"><input type="email" class="form-control text-dark" id="cx_mail" name="cx_mail" value="{{i.customer.customerEmail}}">
              
           </div>
       </div>
   
   
-    <table class="table  text-white" id="item_table" style="background-color: rgba(12, 12, 11, 0.8);" onchange="calc()">
+    <table class="table table-bordered text-white" id="item_table" style="background-color: #b6b3b36b;" onchange="calc()">
         <thead style="width: 50%;" >
             <tr style="background-color: black;">
                 <th>Product</th>

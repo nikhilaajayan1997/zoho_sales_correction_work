@@ -1815,6 +1815,19 @@ def filter_invoice_sent(request):
     invo=invoice.objects.filter(status='send',user=user)
     return render(request, 'invoiceview.html', {'invoice':invo})
 
+def add_invoice_comment(request,pk):
+    if request.method=="POST":
+        user=request.user      
+        inv=invoice.objects.get(id=pk)
+       
+        comment=invoice_comments()
+        comment.user=user
+        comment.invoice=inv
+        comment.comments=request.POST.get('comments')
+        comment.save()
+    return redirect('detailedview',inv.id)
+
+
 
 @login_required(login_url='login')
 def detailedview(request,id):
@@ -1823,6 +1836,7 @@ def detailedview(request,id):
     inv_master=invoice.objects.get(id=id)
     invoiceitem=invoice_item.objects.filter(inv_id=id)
     company=company_details.objects.get(user_id=request.user.id)
+    inv_comments=invoice_comments.objects.filter(user=user,invoice=id)
     
     
     context={
@@ -1830,6 +1844,7 @@ def detailedview(request,id):
         'invoiceitem':invoiceitem,
         'comp':company,
         'invoice':inv_master,
+        'inv_comments':inv_comments,
     }
     return render(request,'invoice_det.html',context)
 

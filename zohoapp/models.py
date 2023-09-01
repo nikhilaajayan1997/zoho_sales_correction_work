@@ -273,6 +273,11 @@ class invoice_item(models.Model):
     rate=models.TextField(max_length=255)
     inv=models.ForeignKey(invoice,on_delete=models.CASCADE)
 
+class invoice_comments(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    invoice=models.ForeignKey(invoice,on_delete=models.CASCADE,null=True,blank=True)
+    comments=models.CharField(max_length=500,null=True,blank=True)
+
 class payment(models.Model):
     term=models.TextField(max_length=255)
     days=models.TextField(max_length=255)

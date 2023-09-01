@@ -75,7 +75,7 @@ crossorigin="anonymous"></script>
                     {% for cust in c %}
                     <option value="{{cust.id}} {{cust.customerName}}" data-pos="{{cust.placeofsupply}}">{{cust.customerName}}</option>
                     {% endfor %}
-                    <option value="customer">Register as a customer</option>
+                    <!-- <option value="customer">Register as a customer</option> -->
     
                 </select>
             
@@ -1391,53 +1391,55 @@ crossorigin="anonymous"></script>
 
 <!-- ............................................unit modal............................................ -->
 
-<div class="modal fade" id="newunit">
-    <div class="modal-dialog modal-xl">
-      <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
-        <div class="modal-header " style="background: rgb(32, 35, 37);">
-            <h3 class="m-3 text-uppercase">Add Unit</h3>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body" style="background: rgb(32, 35, 37);">
-          <div class="card p-3 m-3">
-            <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalUnit">
-              <div class="row mt-2">
-                <div class="col-md-3 mt-2"></div>
-                <div class="col-md-1 mt-2">
-                  <label for="unit" style="color: rgb(190, 88, 88);">Unit</label>
-                </div>
-
-                <div class="col-md-4 mt-2">
-                  <input type="text" class="form-control bg-light text-dark" id="unit" name="unit" required>
-                </div>
-                <div class="col-md-4 mt-2"></div>
+ <div class="modal fade" id="newunit">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+      <div class="modal-header " style="background: rgb(32, 35, 37);">
+          <h3 class="m-3 text-uppercase">Add Unit</h3>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      <div class="modal-body" style="background: rgb(32, 35, 37);">
+        <div class="card p-3 m-3">
+          <form action="" method="post" class="needs-validation" novalidate autocomplete="off" id="modalUnit">
+            <div class="row mt-2">
+              <div class="col-md-3 mt-2"></div>
+              <div class="col-md-1 mt-2">
+                <label for="unit" style="color: rgb(190, 88, 88);">Unit</label>
               </div>
-              
-              <div class="row mt-5">
-                <div class="col-md-4"></div>
-                <div class="col-md-4">
-                  <div class="d-flex">
-                    <button class="btn save_btn rounded-pill text-grey w-50 my-4 mx-3"
-                    type="submit" data-dismiss="modal" id="unitSave">Save
-                    </button> 
-                    
 
-                    <button type="button" class="close btn save_btn rounded-pill text-grey w-50 my-4" 
-                      data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">Cancel</span>
-                    </button>
-                  </div>
-                </div>
-                <div class="col-md-4"></div>
+              <div class="col-md-4 mt-2">
+                <input type="text" class="form-control text-dark bg-light" id="unit" name="unit" required>
               </div>
-            </form>
-          </div>
+              <div class="col-md-4 mt-2"></div>
+            </div>
+            
+            <div class="row mt-5">
+              <div class="col-md-4"></div>
+              <div class="col-md-4">
+                <div class="d-flex">
+                  <button class="btn save_btn rounded-pill text-grey w-50 my-4 mx-3"
+                  type="submit" data-dismiss="modal" id="unitSave">Save
+                  </button> 
+                  
+
+                  <button type="button" class="close btn save_btn rounded-pill text-grey w-50 my-4" 
+                    data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">Cancel</span>
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-4"></div>
+            </div>
+          </form>
         </div>
       </div>
-    </div>  
+    </div>
   </div>  
+</div>  
+
+
 <!-- ............................................  END UNIT MODAL..................................................... -->
 
 </div>
@@ -2322,21 +2324,22 @@ function reloadItem() {
 }
 
 
+
+
+// ###################################################
+
+
 // unit modal
 
 
 $(document).on("click","#unitSave",function(){
   $.ajax({
-    
     type : 'POST',
-    url:"{% url 'purchase_unit' %}",
-
+    url:"{% url 'recurbills_unit' %}",
     data:{
-        unit : $("#unit").val(),      
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-        
-      },
-    
+        unit : $("#unit").val(),                
+        csrfmiddlewaretoken: '{{ csrf_token }}'        
+      },    
       success: function(response) {
         document.getElementById("modalUnit").reset();
         reloadUnit();
@@ -2348,18 +2351,17 @@ $(document).on("click","#unitSave",function(){
 function reloadUnit() {
 
   $.ajax({
-    url: "{% url 'item_dropdown' %}",
+    url: "{% url 'unit_dropdown' %}",
     type: "GET",
     dataType: "json",
     data: $(this).serialize(),
     csrfmiddlewaretoken: '{{ csrf_token }}',
 
     success: function(data) {
-      var dropdown = $('.itm');
+      var dropdown = $('#item_units');
       dropdown.empty();
 
       $.each(data, function(key, value) {
-          // dropdown.append($('<option></option>').attr('value', key).text(value).val(value));
           dropdown.append($('<option></option>').attr('value', key).text(value[0]).val(value[1]));
       });
     },
@@ -2370,6 +2372,9 @@ function reloadUnit() {
 }
 
 
+
+
+// #################################################
 
 
   //---------modal customer-----
@@ -2998,7 +3003,7 @@ if( x != y )
             var pos = $("#customer_sel option:selected").data("pos");
             var state = document.getElementById("state").value;
             d=0
-            if(pos==state){
+            // if(pos==state){
                 
                 gst = taxamount / 2;
             console.log(gst);
@@ -3011,7 +3016,7 @@ if( x != y )
             var sgst= parseFloat($('#sgst').val());
             $('#sgst').val(( taxamount-sgst ).toFixed(2));
            
-            }
+            // }
             // if(pos!=state){
                
             // console.log(gst);
@@ -3065,7 +3070,7 @@ if( x != y )
             // $('#sgst').val(( taxamount-sgst ).toFixed(2));
            
             // }
-            if(pos!=state){
+            // if(pos!=state){
                
             console.log(gst);
             $('#cgst').val(parseFloat(d.toFixed(2)));
@@ -3076,7 +3081,7 @@ if( x != y )
             var igst= parseFloat($('#igst').val());
             $('#igst').val(( total_taxamount-igst ).toFixed(2));
            
-            }
+            // }
            
            
 
