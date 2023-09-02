@@ -2070,6 +2070,9 @@ def edited_prod(request,id):
     invoiceitem = invoice_item.objects.filter(inv_id=id)
     invoic = invoice.objects.get(id=id)
     pay=payment_terms.objects.all()
+    sales=Sales.objects.all()
+    purchase=Purchase.objects.all()
+    unit=Unit.objects.all()
   
     if request.method == 'POST':
         u=request.user.id
@@ -2133,6 +2136,9 @@ def edited_prod(request,id):
             'inv': invoiceitem,
             'i': invoic,
             'pay':pay,
+            'sales':sales,
+            'purchase':purchase,
+            'units':unit,
         }             
         
     return render(request, 'invoiceedit.html', context)
