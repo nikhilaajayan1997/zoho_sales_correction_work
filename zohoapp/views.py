@@ -2065,14 +2065,19 @@ def add_cx(request):
 
 def edited_prod(request,id):
     print(id)
+    user=request.user
     c = customer.objects.all()
     p = AddItem.objects.all()
     invoiceitem = invoice_item.objects.filter(inv_id=id)
     invoic = invoice.objects.get(id=id)
+    cust=invoic.customer.placeofsupply
+    cust_id=invoic.customer.id
     pay=payment_terms.objects.all()
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
     unit=Unit.objects.all()
+    company=company_details.objects.get(user=user)
+    comp=company.state
   
     if request.method == 'POST':
         u=request.user.id
@@ -2139,6 +2144,10 @@ def edited_prod(request,id):
             'sales':sales,
             'purchase':purchase,
             'units':unit,
+            'company':company,
+            'cust':cust,
+            'comp':comp,
+            'custo_id':cust_id,
         }             
         
     return render(request, 'invoiceedit.html', context)
