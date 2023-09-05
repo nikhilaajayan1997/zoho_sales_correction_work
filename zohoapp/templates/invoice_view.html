@@ -4,47 +4,45 @@
 
 <section>
 
-    <div class="row fixed-top  " style="top: 7rem; margin-left: 18rem;" >
 
         <div class="col-md-12">
 
 
-            <div style="height: 640px;width: 1215px;overflow-y: scroll;">
                 
                 
                 <div class="row">
 
 
-                    <div class="col-4" >
+                    <div class="col-md-4" >
                         <section >
                             <div class="row">
 
-                                <div class="col-7">
+                                <div class="col-md-7">
                                     <h3 style="font-size:large;">All Retainer Invoices</h3>
                                 </div>
                 
-                                <div class="col-1"></div>
+                                <div class="col-md-1"></div>
                 
-                                <div class="col-4">
-                                    <a href="{% url 'add_invoice' %}"><button class="btn btn-success" style="height: 35px;width: 100px;"><i class="fa-solid fa-plus "></i> New</button></a>
+                                <div class="col-md-4">
+                                    <a href="{% url 'add_invoice' %}"><button class="btn btn-success" style="height: 35px;width: 100px;">+ New</button></a>
                 
                                 </div>
         
                 
                             </div><br>
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-md-12">
                                     <div class="table-responsive">
                                         <table class="table">
                                             {% for i in invoices %}
                                             <tr>
                                                 <td>
-                                                    <p>{{i.customer_name.customer_name}} <br>
+                                                    <p class="text-white mb-1">{{i.customer_name.customerName}} <br>
                                                     <a href="{% url 'invoice_view' i.id %}">{{i.retainer_invoice_number}}</a> | {{i.retainer_invoice_date}}
                                                     </p>
                                                     
                                                 </td>
-                                                <td><p>₹{{i.total_amount}}</p></td>
+                                                <td><p class="text-white">₹{{i.total_amount}}</p></td>
                                             </tr>
                                             {% endfor %}
                                         </table>
@@ -60,15 +58,15 @@
     
     
     
-                    <div class="col-8" style="border: 1px solid;border-color: white; height: 820px;">
+                    <div class="col-md-8" style="border: 1px solid;border-color: white; height: 820px;">
 
                         <section>
 
                             <div class="row">
-                                <div class="col-4"><br>
+                                <div class="col-md-4"><br>
                                     <h3>{{invoice.retainer_invoice_number}}</h3>
                                 </div>
-                                <div class="col-8"><br>
+                                <div class="col-md-8"><br>
                                     <div class="button-group">
                                         <a href="{% url 'retainer_edit_page' invoice.id %}"><button class="edit-button">
                                             <i class="fas fa-edit"></i>
@@ -101,8 +99,8 @@
                                         </button>
                                         <a href="{% url 'retainer_delete' invoice.id %}">
                                             <button class="close-button">
-                                            <i class="fa fa-close"></i>
-                                            Close
+                                            <i class="fas fa-trash-alt"></i>
+                                            Delete
                                           </button>
                                         </a>
 
@@ -114,10 +112,10 @@
 
                                 
 
-                                <div class="col-12"><br>
+                                <div class="col-md-12"><br>
 
                                     <div id="comment-section"></div>
-                                    <a href="#" id="add-comment-link"><i class="fa-solid fa-plus "></i> Add Comment</a>
+                                    <a href="#" id="add-comment-link"><i class="fas fa-plus "></i> Add Comment</a>
                                     <div id="comment-form" style="display: none;">
                                         <textarea id="comment-text" rows="2" cols="85"></textarea><br>
                                         <button id="submit-comment" type="button" class="btn btn-primary">Add Comment</button>
@@ -128,8 +126,8 @@
                             </div><br><br>
 
                             <div class="row">
-                                <div class="col-2"></div>
-                                <div id="invoice-section" class="col-9  container border"  style="background-color: rgb(251, 251, 251);border-color: #000000;" >
+                                <div class="col-md-2"></div>
+                                <div id="invoice-section" class="col-md-9   border"  style="background-color: rgb(251, 251, 251);border-color: #000000;" >
 
                                     <div class="invoice-header">
                                         <p style="color: #000000;font-size: x-large;text-align: center;margin-top: 10px;">RETAINER  INVOICE</p>
@@ -140,8 +138,10 @@
                                         <p style="text-align: end;color: rgb(0, 0, 0);">Retainer Invoice Date: {{invoice.retainer_invoice_date}}</p>
                                         <p style="text-align: end;color: rgb(0, 0, 0);">Retainer Invoice Number:<b>{{invoice.retainer_invoice_number}}</b></p>
                                         <p style="color: rgb(0, 0, 0);">Bill To,</p>
-                                        <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.customer_name}}</p>
-                                        <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.customer_address|linebreaksbr}}</p>
+                                        <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.customerName}}</p>
+                                        <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.companyName}}</p>
+                                        <p style="color: rgb(0, 0, 0);">{{invoice.customer_name.customerMobile}}</p>
+                                        
                                         
                                     </div>
                                     <table>
@@ -180,7 +180,7 @@
 
 
                                 </div>
-                                <div class="col-1"></div>
+                                <div class="col-md-1"></div>
                             </div>
 
                         </section>

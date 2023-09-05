@@ -6,23 +6,21 @@
 {% block content %}
 
 <section>
-    <div class="row fixed-top  " style="top: 7rem; margin-left: 18rem;" >
 
 
         <div class="col-md-10 ">
 
-            <div style="height: 640px;width: 1215px;overflow-y: scroll;">
 
                 <div class="row">
 
-                    <div class="col-3">
+                    <div class="col-md-3">
                         <h3 style="font-size: x-large;">All Retainer Invoices</h3>
                     </div>
     
-                    <div class="col-7"></div>
+                    <div class="col-md-7"></div>
     
-                    <div class="col-2">
-                        <a href="{% url 'add_invoice' %}"><button class="btn btn-success" style="height: 35px;width: 100px;"><i class="fa-solid fa-plus "></i> New</button></a>
+                    <div class="col-md-2">
+                        <a href="{% url 'add_invoice' %}"><button class="btn btn-success" style="height: 35px;width: 100px;">+ New</button></a>
     
                     </div>
     
@@ -33,7 +31,7 @@
                 </div><br>
     
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-md-12">
     
                         <div class="table-responsive">
     
@@ -55,7 +53,7 @@
                                     <tr>
                                         <td class="align-top">{{i.retainer_invoice_date}}</td>
                                         <td class="align-top"><a href="{% url 'invoice_view' i.id %}">{{i.retainer_invoice_number}}</a></td>
-                                        <td class="align-top">{{i.customer_name.customer_name}}</td>
+                                        <td class="align-top">{{i.customer_name.customerName}}</td>
                                         <td class="align-top">₹{{i.total_amount}}</td>
                                         <td class="align-top">
                                             {% if i.is_sent %}
