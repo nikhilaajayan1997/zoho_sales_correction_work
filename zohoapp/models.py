@@ -188,6 +188,7 @@ class customer(models.Model):
     CPdepartment=models.CharField(max_length=100,null=True,blank=True)
 
 class RetainerInvoice(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     customer_name=models.ForeignKey(customer,on_delete=models.CASCADE)
     retainer_invoice_number=models.CharField(max_length=255)
     refrences=models.CharField(max_length=255)

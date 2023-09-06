@@ -955,22 +955,38 @@ def add_customer(request):
 
 @login_required(login_url='login')
 def retainer_invoice(request):
-    invoices=RetainerInvoice.objects.all()
+    invoices=RetainerInvoice.objects.all().order_by('-id')
     context={'invoices':invoices}
     return render(request,'retainer_invoice.html',context)
 
+def filter_retainer_draft(request):
+    user = request.user
+    invoices=RetainerInvoice.objects.filter(is_draft=1)
+    return render(request, 'retainer_invoice.html', {'invoices':invoices})
+
+def filter_retainer_sent(request):
+    user = request.user
+    invoices=RetainerInvoice.objects.filter(is_draft=0,is_sent=1)
+    return render(request, 'retainer_invoice.html', {'invoices':invoices})
 
 
 @login_required(login_url='login')
 def add_invoice(request):
-    customer1=customer.objects.all()   
-    context={'customer1':customer1,}    
+    customer1=customer.objects.all()
+    if  RetainerInvoice.objects.all().exists():
+        ret_invoice_count = RetainerInvoice.objects.last().id
+        count=ret_invoice_count+1 
+    else:
+        count=1 
+
+    context={'customer1':customer1,'count':count }    
     return render(request,'add_invoice.html',context)
 
 @login_required(login_url='login')
 def create_invoice_draft(request):
     
     if request.method=='POST':
+        user=request.user
         select=request.POST['customer_id']
         customer_name=customer.objects.get(id=select)
         retainer_invoice_number=request.POST['retainer-invoice-number']
@@ -981,7 +997,7 @@ def create_invoice_draft(request):
         terms_and_conditions=request.POST['terms']
     
         retainer_invoice=RetainerInvoice(
-            customer_name=customer_name,retainer_invoice_number=retainer_invoice_number,refrences=references,retainer_invoice_date=retainer_invoice_date,total_amount=total_amount,customer_notes=customer_notes,terms_and_conditions=terms_and_conditions)
+            user=user,customer_name=customer_name,retainer_invoice_number=retainer_invoice_number,refrences=references,retainer_invoice_date=retainer_invoice_date,total_amount=total_amount,customer_notes=customer_notes,terms_and_conditions=terms_and_conditions)
     
         retainer_invoice.save()
         
@@ -1006,6 +1022,7 @@ def create_invoice_draft(request):
 @login_required(login_url='login')
 def create_invoice_send(request):
     if request.method=='POST':
+        user=request.user
         select=request.POST['customer_id']
         customer_name=customer.objects.get(id=select)
         retainer_invoice_number=request.POST['retainer-invoice-number']
@@ -1015,7 +1032,7 @@ def create_invoice_send(request):
         customer_notes=request.POST['customer_notes']
         terms_and_conditions=request.POST['terms']
         retainer_invoice=RetainerInvoice(
-        customer_name=customer_name,retainer_invoice_number=retainer_invoice_number,refrences=references,retainer_invoice_date=retainer_invoice_date,total_amount=total_amount,customer_notes=customer_notes,terms_and_conditions=terms_and_conditions,is_draft=False)
+        user=user,customer_name=customer_name,retainer_invoice_number=retainer_invoice_number,refrences=references,retainer_invoice_date=retainer_invoice_date,total_amount=total_amount,customer_notes=customer_notes,terms_and_conditions=terms_and_conditions,is_draft=False)
         retainer_invoice.save()
 
         description = request.POST.getlist('description[]')
@@ -1039,6 +1056,23 @@ def invoice_view(request,pk):
 
     context={'invoices':invoices,'invoice':invoice,'item':item}
     return render(request,'invoice_view.html',context)
+
+def filter_retainer_view_draft(request,pk):
+    invoices=RetainerInvoice.objects.filter(is_draft=1)
+    invoice=RetainerInvoice.objects.get(id=pk)
+    item=Retaineritems.objects.filter(retainer=pk)
+
+    context={'invoices':invoices,'invoice':invoice,'item':item}
+    return render(request,'invoice_view.html',context)
+
+def filter_retainer_view_sent(request,pk):
+    invoices=RetainerInvoice.objects.filter(is_sent=1)
+    invoice=RetainerInvoice.objects.get(id=pk)
+    item=Retaineritems.objects.filter(retainer=pk)
+
+    context={'invoices':invoices,'invoice':invoice,'item':item}
+    return render(request,'invoice_view.html',context)
+
 
 @login_required(login_url='login')
 def retainer_template(request,pk):
