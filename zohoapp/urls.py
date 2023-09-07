@@ -48,6 +48,7 @@ urlpatterns = [
     path('filter_retainer_sent',views.filter_retainer_sent,name='filter_retainer_sent'),
     path('filter_retainer_view_sent/<int:pk>',views.filter_retainer_view_sent,name='filter_retainer_view_sent'),
     path('filter_retainer_view_draft/<int:pk>',views.filter_retainer_view_draft,name='filter_retainer_view_draft'),
+    path('add_ret_invoice_comment/<int:pk>',views.add_ret_invoice_comment,name='add_ret_invoice_comment'),
     path('create_invoice_draft/',views.create_invoice_draft,name='create_invoice_draft'),
     path('create_invoice_send/',views.create_invoice_send,name='create_invoice_send'),
     path('view_invoice/<int:pk>',views.invoice_view,name='invoice_view'),

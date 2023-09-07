@@ -1047,14 +1047,31 @@ def create_invoice_send(request):
         return redirect('invoice_view',pk=retainer_invoice.id)
 
 
+def add_ret_invoice_comment(request,pk):
+    if request.method=="POST":
+        user=request.user      
+        invoice=RetainerInvoice.objects.get(id=pk)
+       
+        comment=retainer_invoice_comments()
+        comment.user=user
+        comment.retainer=invoice
+        comment.comments=request.POST.get('comments')
+       
+        comment.save()
+    return redirect('invoice_view',invoice.id)
+
+
 
 @login_required(login_url='login')
 def invoice_view(request,pk):
+    user=request.user
+    company=company_details.objects.get(user=user)
     invoices=RetainerInvoice.objects.all()
     invoice=RetainerInvoice.objects.get(id=pk)
     item=Retaineritems.objects.filter(retainer=pk)
+    ret_comments=retainer_invoice_comments.objects.filter(retainer=invoice.id,user=user)
 
-    context={'invoices':invoices,'invoice':invoice,'item':item}
+    context={'invoices':invoices,'invoice':invoice,'item':item,'company':company,'ret_comments':ret_comments}
     return render(request,'invoice_view.html',context)
 
 def filter_retainer_view_draft(request,pk):
@@ -1130,19 +1147,21 @@ def retainer_update(request,pk):
 def mail_send(request,pk):
 
     if request.method=='POST':
-        comments=request.POST.getlist('mailcomments')
-        print(comments)
+        # comments=request.POST.getlist('mailcomments')
+        # print(comments)
         files=request.FILES.getlist('files')
-        email_to='alenantony32@gmail.com'
+        email_to='nikhilaajayan76@gmail.com'
         subject='Retainer Invoice'
-        message1=f'Please keep the attached\nretainer invoice for future use.\n\ncomments:\n'
-        message2='' 
+        message1=f'Please keep the attached\nretainer invoice for future use.\n\n'
+        # message2='' 
 
-        for comment in comments:
-            message2 += comment + '\n'
+        # for comment in comments:
+        #     message2 += comment + '\n'
 
-        messages=message1+message2    
+        messages=message1
+        # +message2 
 
+  
 
         email=EmailMessage(
             subject=subject,

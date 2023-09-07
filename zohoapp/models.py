@@ -199,6 +199,11 @@ class RetainerInvoice(models.Model):
     is_draft=models.BooleanField(default=True)
     is_sent=models.BooleanField(default=False)
 
+class retainer_invoice_comments(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    retainer=models.ForeignKey(RetainerInvoice,on_delete=models.CASCADE,null=True,blank=True)
+    comments=models.CharField(max_length=500,null=True,blank=True)
+
 class Retaineritems(models.Model):
     retainer=models.ForeignKey(RetainerInvoice, on_delete=models.CASCADE)
     description=models.TextField()

@@ -7,64 +7,62 @@
 
 <section>
 
-
-    <div class="col-md-10">
+  <div class="row">
+    <div class="col-md-12 col-lg-12 col-sm-12">
 
         <div class="row">
             <div class="col-md-12">
                 <h3 class="align-text-top" style="font-size: 35px;" >New Retainer Invoice</h3>
             </div>
-        </div><br><br>
+        </div><br>
         <div class="row">
-          <div class="col-md-7">
+          <div class="col-md-12 col-lg-12 col-sm-12">
 
 
 
             <form  method="post" action="{% url 'retainer_update' invoice.id %}"   enctype="multipart/form-data"  class="needs-validation" novalidate>
               {% csrf_token %}
-              <div class="row mb-3">
-                <label  class="col-sm-4 col-form-label">Customer Name*</label>
+              <div class="row mb-4">
+                <label  class="col-sm-4 col-md-12 col-lg-2 ">Customer Name*</label>
                     
-                <div class="col-sm-8">
-                      
+                <div class="col-sm-8 col-md-6 col-lg-6">
                   <select class="form-control form-select bg-light text-dark" name="select" onchange="if (this.value === 'new') window.location.href = '/add_customers';">
-                        
-                        
                     <option hidden   value="{{invoice.customer_name.id}}">{{invoice.customer_name.customerName}}</option>
                     {% for i in customer1 %}
                     <option value="{{i.id}}">{{i.customerName}}</option>
                     {% endfor %}         
                     <option value="new" style="color: blue;">+ New Customer</option>
-                        
-                        
                   </select>
-                      
-
                 </div>
+                <div class="col-sm-4">
+                  <a  href="" data-toggle="modal" data-target="#newcustomer"><i class="fa-solid  fa fa-plus p-2 rounded"
+                      style="color: white; background-color: rgb(210, 132, 30);height: 37px;"></i>
+                  </a>
+              </div>
                     
-              </div><br>
-              <div class="row mb-3">
-                <label  class="col-sm-4 col-form-label">Retainer Invoice Number*</label>
-                <div class="col-sm-6">
+              </div>
+              <div class="row mb-4">
+                <label  class="col-sm-4 col-lg-2 col-md-2">Retainer Invoice Number*</label>
+                <div class="col-sm-8 col-md-6 col-lg-6">
                   <input type="text" class="form-control bg-light text-dark" name="retainer-invoice-number" id="invoice-number" value="{{invoice.retainer_invoice_number}}">
                 </div>
-              </div><br>
-              <div class="row mb-3">
-                <label  class="col-sm-4 col-form-label">Reference</label>
-                <div class="col-sm-6">
+              </div>
+              <div class="row mb-4">
+                <label  class="col-sm-4 col-lg-2 col-md-2">Reference</label>
+                <div class="col-sm-8 col-md-6 col-lg-6">
                   <input type="text" class="form-control bg-light text-dark" name="references" value="{{invoice.refrences}}">
                 </div>
-              </div><br>
-              <div class="row mb-3">
-                <label  class="col-sm-4 col-form-label">Retainer Invoice Date*</label>
-                <div class="col-sm-6">
+              </div>
+              <div class="row mb-4">
+                <label  class="col-sm-4 col-md-2 col-lg-2">Retainer Invoice Date*</label>
+                <div class="col-sm-8 col-md-6 col-lg-6">
                   <input type="date" class="form-control bg-light text-dark" name="invoicedate" id="dateField" value="{{invoice.retainer_invoice_date|date:'Y-m-d' }}">
                 </div>
               </div><br>
 
               <div class="row">
                 <div class="col-10 ">
-                  <table id="retainer-table">
+                  <table id="retainer-table" class="table table-bordered" style="background-color: #b6b3b36b;">
                     <thead>
                       <tr>
                         <th class="text-white">Description</th>
@@ -90,7 +88,8 @@
                     <tfoot>
                       <tr>
                         <td colspan="2">
-                          <a href="#" id="add-another-line">Add Another Line</a>
+                          <a href="#" id="add-another-line" style="background-color: rgb(210, 132, 30) ;" class="btn"><i class="fa-solid  fa fa-plus rounded"
+                            style="color: white; background-color: rgb(210, 132, 30);height: 20px;"></i></a>
                         </td>
                         <td  class="text-white">Total: <span id="total-amount">{{invoice.total_amount}}</span></td>
                       </tr>
@@ -103,24 +102,26 @@
                 </div>
                 <div class="col-2"></div>
 
-              </div><br><br>
+              </div>
 
-              <div class="mb-3">
-                <label for="formGroupExampleInput" class="form-label">Customer Notes</label>
-                <div class="form-floating">
-                  <textarea class="form-control col-8 bg-light text-dark" name="customer_notes"  id="floatingTextarea">{{invoice.customer_notes}}</textarea>
-                      
+              
+              <div class="mb-4 mt-4">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                  <label for="formGroupExampleInput" class="form-label">Customer Notes</label>
+                  <textarea class="form-control   text-dark" style="height: 50%;" cols="5" rows="5" name="customer_notes"  id="floatingTextarea" required>{{invoice.customer_notes}}</textarea>
+                  
                 </div>
-              </div><br><br>
+              </div>
 
 
-              <div class="mb-3">
-                <label for="formGroupExampleInput" class="form-label">Terms and Conditions</label>
-                <div class="form-floating">
-                  <textarea class="form-control col-12 bg-light text-dark" name="terms"   id="floatingTextarea">{{invoice.terms_and_conditions}}</textarea>
-                        
+              
+              <div class="mb-4">
+                <div class="col-sm-6 col-md-6 col-lg-6">                        
+                  <label for="formGroupExampleInput" class="form-label">Terms and Conditions</label>
+                  <textarea class="form-control  bg-light text-dark" style="height: 50%;" cols="5" rows="5"  name="terms"   id="floatingTextarea" required>{{invoice.terms_and_conditions}}</textarea>
+
                 </div>
-              </div><br><br>
+              </div>
 
               
 
