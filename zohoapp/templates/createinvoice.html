@@ -515,7 +515,10 @@ crossorigin="anonymous"></script>
         <div class="col-sm-6 col-lg-6 col-md-6"></div>
         </div>
       </form>
-       <!-- customer modal -->
+
+
+      
+       <!--.................. customer modal ...........................................-->
 
 
     <div class="modal fade" id="newcustomer">
@@ -781,13 +784,13 @@ crossorigin="anonymous"></script>
                   <div class="col-md-6 mt-2">
                     <div class="d-flex">
                       <select class="form-control text-dark bg-light" id="c_terms" name="c_terms" required>
-                        <option selected value="15">NET 15</option>
+                        <!-- <option selected value="15">NET 15</option>
                         <option value="30">NET 30</option>
                         <option value="45">NET 45</option>
                         <option value="60">NET 60</option>
                         <option value="90">NET 90</option>
                         <option value="">Due end of the month</option>
-                        <option value="recpt">Due on receipt</option>
+                        <option value="recpt">Due on receipt</option> -->
                         {% for p in payments %}
                         <option value="{{p.Terms}} {{p.id}}">{{p.Terms}}</option>
                         {% endfor %}
@@ -1679,13 +1682,13 @@ function reloadPayment() {
     success: function(data) {
       var dropdown = $('#c_terms');
       dropdown.empty();
-      dropdown.append(`<option selected value="15">NET 15</option>
-                          <option value="30">NET 30</option>
-                          <option value="45">NET 45</option>
-                          <option value="60">NET 60</option>
-                          <option value="90">NET 90</option>
-                          <option value="">Due end of the month</option>
-                          <option value="recpt">Due on receipt</option>`);
+      // dropdown.append(`<option selected value="15">NET 15</option>
+      //                     <option value="30">NET 30</option>
+      //                     <option value="45">NET 45</option>
+      //                     <option value="60">NET 60</option>
+      //                     <option value="90">NET 90</option>
+      //                     <option value="">Due end of the month</option>
+      //                     <option value="recpt">Due on receipt</option>`);
       // var drpv = $('#inv_term');
       // drpv.empty();
       // drpv.append(`<option selected value="15">NET 15</option>

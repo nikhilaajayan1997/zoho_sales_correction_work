@@ -2,6 +2,28 @@
 {% load static %}
 {% block content %}
 <style>
+
+
+  /* width */
+  ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
     .modal {
   display: none;
   position: fixed;
@@ -94,7 +116,7 @@
     <div class="row mb-4">
       <div class="col-sm-2"><label for="estimate_number">Customer Mail</label></div>
       <div class="col-sm-6"><input type="email" class="form-control text-dark" id="cx_mail" name="cx_mail" value="{{i.customer.customerEmail}}">
-        <input type="text" id="customer_id" name="customer_id"  readonly>
+        <input type="text" style="display: none;" id="customer_id" name="customer_id"  readonly>
       </div>
   </div>
 
@@ -119,7 +141,7 @@
                 <option value="{{i.terms}}">{{i.terms}}</option>
             {% for p in pay %}
 
-            <option style="color: black;" value="{{p.id}}">{{p.Terms}}</option>
+            <option style="color: black;" value="{{ p.Terms }}">{{ p.Terms }}</option>
             {% endfor %} 
           </select>
         </div>
@@ -711,14 +733,14 @@
                 <div class="col-md-6 mt-2">
                   <div class="d-flex">
                     <select class="form-control text-dark bg-light" id="c_terms" name="c_terms" required>
-                      <option selected value="15">NET 15</option>
+                      <!-- <option selected value="15">NET 15</option>
                       <option value="30">NET 30</option>
                       <option value="45">NET 45</option>
                       <option value="60">NET 60</option>
                       <option value="90">NET 90</option>
                       <option value="">Due end of the month</option>
-                      <option value="recpt">Due on receipt</option>
-                      {% for p in payments %}
+                      <option value="recpt">Due on receipt</option> -->
+                      {% for p in pay %}
                       <option value="{{p.Terms}} {{p.id}}">{{p.Terms}}</option>
                       {% endfor %}
                     </select>                
@@ -1459,13 +1481,13 @@ function reloadPayment() {
     success: function(data) {
       var dropdown = $('#c_terms');
       dropdown.empty();
-      dropdown.append(`<option selected value="15">NET 15</option>
-                          <option value="30">NET 30</option>
-                          <option value="45">NET 45</option>
-                          <option value="60">NET 60</option>
-                          <option value="90">NET 90</option>
-                          <option value="">Due end of the month</option>
-                          <option value="recpt">Due on receipt</option>`);
+      // dropdown.append(`<option selected value="15">NET 15</option>
+      //                     <option value="30">NET 30</option>
+      //                     <option value="45">NET 45</option>
+      //                     <option value="60">NET 60</option>
+      //                     <option value="90">NET 90</option>
+      //                     <option value="">Due end of the month</option>
+      //                     <option value="recpt">Due on receipt</option>`);
       // var drpv = $('#inv_term');
       // drpv.empty();
       // drpv.append(`<option selected value="15">NET 15</option>

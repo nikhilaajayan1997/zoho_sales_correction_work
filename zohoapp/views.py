@@ -972,6 +972,7 @@ def filter_retainer_sent(request):
 
 @login_required(login_url='login')
 def add_invoice(request):
+    payments=payment_terms.objects.all()
     customer1=customer.objects.all()
     if  RetainerInvoice.objects.all().exists():
         ret_invoice_count = RetainerInvoice.objects.last().id
@@ -979,7 +980,7 @@ def add_invoice(request):
     else:
         count=1 
 
-    context={'customer1':customer1,'count':count }    
+    context={'customer1':customer1,'count':count,'payments':payments}    
     return render(request,'add_invoice.html',context)
 
 @login_required(login_url='login')
@@ -1099,9 +1100,12 @@ def retainer_template(request,pk):
 @login_required(login_url='login')
 def retainer_edit_page(request,pk):
     invoice=RetainerInvoice.objects.get(id=pk)
+    payments=payment_terms.objects.all()
+    cust_id=customer.objects.get(id=invoice.customer_name.id)
+    custo_id=cust_id.id
     customer1=customer.objects.all()
     items=Retaineritems.objects.filter(retainer=pk)
-    context={'invoice':invoice, 'customer1':customer1,'items':items}
+    context={'invoice':invoice, 'customer1':customer1,'items':items,'custo_id':custo_id,'payments':payments}
     return render(request,'retainer_invoice_edit.html', context)
 
 
@@ -1111,7 +1115,7 @@ def retainer_update(request,pk):
 
     if request.method=='POST':
         retainer_invoice=RetainerInvoice.objects.get(id=pk)
-        select=request.POST['select']
+        select=request.POST['customer_id']
         retainer_invoice.customer_name=customer.objects.get(id=select)
         retainer_invoice.retainer_invoice_number=request.POST['retainer-invoice-number']
         retainer_invoice.refrences=request.POST['references']
@@ -1121,21 +1125,32 @@ def retainer_update(request,pk):
         retainer_invoice.terms_and_conditions=request.POST['terms']
     
         retainer_invoice.save()
+
+        objects_to_delete = Retaineritems.objects.filter(retainer=retainer_invoice.id)
+        objects_to_delete.delete()
+
+        description=request.POST.getlist('description[]')
+        amount=request.POST.getlist('amount[]')
+
+        if len(description) == len(amount):
+              mapped = zip(description,amount)
+              mapped = list(mapped)
+              for element in mapped:
+                created = Retaineritems.objects.get_or_create(
+                    retainer=retainer_invoice, description=element[0], amount=element[1])
+
         
-        descriptions=request.POST.getlist('description[]')
-        amounts=request.POST.getlist('amount[]')
-        # if len(descriptions)==len(amounts):
-        #     mapped = zip(descriptions,amounts)
-        #     mapped=list(mapped)
-        #     for ele in mapped:
-        #         created=Retaineritems.objects.filter(retainer=retainer_invoice).update(description=ele[0])
-        # else:
-        #     pass
-        for i in range(len(descriptions)):
-            description=descriptions[i]
-            amount=amounts[i]
-            obj,created=Retaineritems.objects.update_or_create(retainer=retainer_invoice,description=description,defaults={'amount':amount})
-            obj.save()
+        # descriptions=request.POST.getlist('description[]')
+        # amounts=request.POST.getlist('amount[]')
+        
+
+
+
+        # for i in range(len(descriptions)):
+        #     description=descriptions[i]
+        #     amount=amounts[i]
+        #     obj,created=Retaineritems.objects.update_or_create(retainer=retainer_invoice,description=description,defaults={'amount':amount})
+        #     obj.save()
 
 
 
@@ -1182,13 +1197,13 @@ def mail_send(request,pk):
     
     return redirect('retainer_invoice')
 
-@login_required(login_url='login')
-def retaineritem_delete(request,pk):
-    print('delete')
-    item = get_object_or_404(Retaineritems, id=pk)
-    item.delete()
-    print('deleted')
-    return redirect('retainer_edit_page' ,pk=item.retainer.id)
+# @login_required(login_url='login')
+# def retaineritem_delete(request,pk):
+#     print('delete')
+#     item = get_object_or_404(Retaineritems, id=pk)
+#     item.delete()
+#     print('deleted')
+#     return redirect('retainer_edit_page' ,pk=item.retainer.id)
     
 @login_required(login_url='login')
 def retainer_delete(request,pk):
@@ -1263,7 +1278,7 @@ def newestimate(request):
     unit=Unit.objects.all()
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
-    payments = payment_terms.objects.filter(user = request.user)
+    payments = payment_terms.objects.all()
     estimates_count = Estimates.objects.last().id
     next_count = estimates_count+1
     context = {'company': company,
@@ -1571,6 +1586,7 @@ def editestimate(request,est_id):
     unit=Unit.objects.all()
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
+    payments=payment_terms.objects.all()
 
     est_items = EstimateItems.objects.filter(estimate=estimate)
     context = {
@@ -1585,6 +1601,7 @@ def editestimate(request,est_id):
         'units':unit,
         'sales':sales,
         'purchase':purchase,
+        'payments':payments,
     }
     return render(request,'edit_estimate.html', context)
 
@@ -1976,7 +1993,7 @@ def add_prod(request):
     company = company_details.objects.get(user=request.user.id)
     p=AddItem.objects.all()
     i=invoice.objects.all()
-    pay=payment_terms.objects.all()
+    payments=payment_terms.objects.all()
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
     unit=Unit.objects.all()
@@ -2077,12 +2094,12 @@ def add_prod(request):
             'c':c,
             'p':p,
             'i':i,
-            'pay':pay,
             'company':company,
             'sales':sales,
             'purchase':purchase,
             'units':unit,
             'count':count,
+            'payments':payments,
     }       
     return render(request,'createinvoice.html',context)
 
