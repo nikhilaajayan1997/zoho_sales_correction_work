@@ -146,6 +146,10 @@ urlpatterns = [
     path('edit_sales_order/<int:id>',views.edit_sales_order,name='edit_sales_order'),
     path('delet_sales/<int:id>',views.delet_sales,name='delet_sales'),
     
+    path('filter_delivery_draft',views.filter_delivery_draft,name="filter_delivery_draft"),
+    path('filter_delivery_sent',views.filter_delivery_sent,name="filter_delivery_sent"),
+    path('filter_by_draft_chellan_view/<int:pk>',views.filter_by_draft_chellan_view,name='filter_by_draft_chellan_view'),
+    path('filter_by_sent_chellan_view/<int:pk>',views.filter_by_sent_chellan_view,name='filter_by_sent_chellan_view'),
     path('create_delivery_chellan',views.create_delivery_chellan,name='create_delivery_chellan'),
     path('delivery_chellan_home',views.delivery_chellan_home,name='delivery_chellan_home'),
     path('add_customer_for_challan',views.add_customer_for_challan,name='add_customer_for_challan'),

@@ -3,8 +3,36 @@
 {% block content %}
 
 <style>
+  .dropdown-item:hover{
+    color: rgb(226, 149, 5);
+}
+
+
+
+    /* width */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+  
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+  
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+    }
+  
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+    #tr_data:hover{
+      background-color: #757575;
+    }
   a{
-    color: rgb(210, 132, 30);
+    color: rgb(240, 239, 238);
   }
 </style>
 
@@ -29,10 +57,10 @@
             <i style="color: chocolate;" class="fa fa-filter"></i>
           </a>
           <div class="dropdown-menu m-1">
-            <a class="dropdown-item" href="">All</a>
+            <a class="dropdown-item" href="{% url 'delivery_chellan_home' %}">All</a>
 
-            <a class="dropdown-item" href="" >Draft</a>
-            <a class="dropdown-item" href="">Sent</a>
+            <a class="dropdown-item" href="{% url 'filter_delivery_draft' %}" >Draft</a>
+            <a class="dropdown-item" href="{% url 'filter_delivery_sent' %}">Sent</a>
           </div>
         </div>
 
@@ -85,21 +113,21 @@
         <table class="table"  style="text-align: left;">
           <thead>
             <tr>
-              <th class="text-light">Customer Name</th>
-              <th class="text-light">Customer Mail id</th>
-              <th class="text-light">Delivery Challan#</th>
-              <th class="text-light">Date</th>
-              <th class="text-light">Refferernce#</th>
-              <th class="text-light">Status</th>
-              <th class="text-light">Amount</th>
+              <th >CUSTOMER NAME</th>
+              <th >CUSTOMER MAIL ID</th>
+              <th >DELIVERY CHELLAN#</th>
+              <th >DATE</th>
+              <th >REFFERENCE#</th>
+              <th >STATUS</th>
+              <th >AMOUNT</th>
             
             </tr>
           </thead>
   
           {% for v in view %}
           <tbody id="table">
-            <tr>
-              <td class="text-light"><a href="{% url 'delivery_challan_view' v.id%}">{{v.customer_name}}</a> </td>
+            <tr id="tr_data" class="clickable-row" >
+              <td class="text-light"><a href="{% url 'delivery_challan_view' v.id %}">{{v.customer_name}}</a> </td>
               <td class="text-light">{{v.customer_mailid}}</td>
               <td class="text-light">DC-{{v.chellan_no}}</td>
               <td class="text-light"> {{v.chellan_date | date:'d-m-Y'}}</td>
@@ -142,5 +170,14 @@
       });
     });
   </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
  
 {% endblock %}

@@ -1304,6 +1304,7 @@ def get_estimate_customerdet(request):
     cust_place_supply=cust.placeofsupply
     return JsonResponse({'customer_email': email,'cust_id':cust_id,'cust_place_supply':cust_place_supply},safe=False)
 
+
 @login_required(login_url='login')
 def create_estimate_customer(request):
     if request.user.is_authenticated:
@@ -1313,10 +1314,8 @@ def create_estimate_customer(request):
             first=request.POST['firstname']
             last=request.POST['lastname']
             txtFullName= request.POST['display_name']
-            
             itemtype=request.POST.get('itemtype')
             cpname=request.POST['company_name']
-            
             email=request.POST.get('email')
             wphone=request.POST.get('work_mobile')
             mobile=request.POST.get('pers_mobile')
@@ -1324,22 +1323,16 @@ def create_estimate_customer(request):
             desg=request.POST.get('desg')      
             dept=request.POST.get('dpt')
             wbsite=request.POST.get('website')
-
             gstt=request.POST.get('gsttype')
             posply=request.POST.get('placesupply')
             crncy=request.POST.get('currency')
             obal=request.POST.get('openingbalance')
-
-           
             pterms=request.POST.get('paymentterms')
-
             plst=request.POST.get('plst')
             plang=request.POST.get('plang')
             fbk=request.POST.get('facebook')
             twtr=request.POST.get('twitter')
-        
             ctry=request.POST.get('country')
-            
             street=request.POST.get('street')
             shipstate=request.POST.get('shipstate')
             shipcity=request.POST.get('shipcity')
@@ -3291,6 +3284,19 @@ def edit_sales_order(request,id):
 
     }
     return render(request,'edit_sale_page.html',context)
+
+
+def filter_delivery_draft(request):
+    user = request.user
+    view=DeliveryChellan.objects.filter(status='draft',user=user)
+    return render(request,'delivery_chellan.html',{'view':view})
+
+def filter_delivery_sent(request):
+    user = request.user
+    view=DeliveryChellan.objects.filter(status='send',user=user)
+    return render(request,'delivery_chellan.html',{'view':view})
+
+
     
     
 def create_delivery_chellan(request):
@@ -3675,6 +3681,35 @@ def delivery_challan_view(request, id):
         'items': items,
     }
     return render(request, 'delivery_challan_view.html', context)
+
+def filter_by_draft_chellan_view(request,pk):
+    user = request.user
+    company = company_details.objects.get(user=user)
+    all_estimates = DeliveryChellan.objects.filter(user=user,status='draft')
+    estimate = DeliveryChellan.objects.get(id=pk)
+    items = ChallanItems.objects.filter(chellan=estimate)
+    context = {
+        'company': company,
+        'all_estimates':all_estimates,
+        'estimate': estimate,
+        'items': items,
+    }
+    return render(request, 'delivery_challan_view.html', context)
+
+def filter_by_sent_chellan_view(request,pk):
+    user = request.user
+    company = company_details.objects.get(user=user)
+    all_estimates = DeliveryChellan.objects.filter(user=user,status='send')
+    estimate = DeliveryChellan.objects.get(id=pk)
+    items = ChallanItems.objects.filter(chellan=estimate)
+    context = {
+        'company': company,
+        'all_estimates':all_estimates,
+        'estimate': estimate,
+        'items': items,
+    }
+    return render(request, 'delivery_challan_view.html', context)
+
 
 
 # delivery_challan_edit.html
