@@ -452,7 +452,11 @@ class ChallanItems(models.Model):
     discount = models.FloatField(null=True,blank=True)
     tax_percentage = models.IntegerField(null=True,blank=True)
     amount = models.FloatField(null=True,blank=True)
-    
+
+class delivery_chellan_comments(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    chellan=models.ForeignKey(DeliveryChellan,on_delete=models.CASCADE,null=True,blank=True)
+    comments=models.CharField(max_length=500,null=True,blank=True)    
     
 class recurring_invoice(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)

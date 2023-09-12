@@ -131,21 +131,28 @@
       <div class="col-md-7 text-white text-right my-auto " style="text-align: end;">
           <div class="btn-group" role="group" aria-label="Basic example">
               <a href="" class="btn btn-sm ms-1  text-white"
-              style="background-color:  rgb(212, 139, 3);border-radius: 5px;" data-toggle="tooltip" title="Back">
+              style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" data-toggle="tooltip" title="Back">
               <i class="fas fa-arrow-left"></i></a>
               <a href="{% url 'edited_prod' invoice.id %}" class="btn btn-sm ms-1  text-white"
-              style="background-color:  rgb(212, 139, 3);border-radius: 5px;" data-toggle="tooltip" title="Edit">
+              style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" data-toggle="tooltip" title="Edit">
                   <i class="fas fa-pencil-alt"></i>                     </a>
-              <a href="" class="btn btn-sm text-white ms-1 btn_print"  style="background-color:  rgb(212, 139, 3);border-radius: 5px;"
+              <a href="" class="btn btn-sm text-white ms-1 btn_print"  style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;"
                   data-toggle="tooltip" title="PDF/Print" id="pdf">
                   <i class="far fa-file-pdf"></i></a>
              
               <a href="{% url 'emailattachment' %}" class="btn btn-sm text-white ms-1"
-              style="background-color:  rgb(212, 139, 3);border-radius: 5px;" data-toggle="tooltip" title="Email">
+              style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" data-toggle="tooltip" title="Email">
                   <i class="fas fa-envelope"></i></a>
+            
+                  {% if invoice.file != "" %}
+                    <a href="{{invoice.file.url}}"  style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" class="btn ms-1 text-white"
+                        data-toggle="tooltip" title="Download Attached File">
+                        <span class="mdi mdi-download"></span></a>
+                    {% endif %}
+                    
 
 
-              <div class="dropdown m-0 p-0 ms-1" title="comments" style="background-color:  rgb(212, 139, 3);border-radius: 5px;">
+              <div class="dropdown m-0 p-0 ms-1" title="comments" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;">
                   <a href=" " class=" fas fa-comment-dots dropdown-toggle  btn-sm text-white ms-1"  
                       data-bs-toggle="dropdown" id="attachmentDropdown" aria-haspopup="true" aria-expanded="false"> 
                   </a>
@@ -164,7 +171,7 @@
           </div>
          
              
-          <a href="{% url 'dele' invoice.id %}" class="btn btn-sm text-white" title="Delete" style="background-color:  rgb(212, 139, 3);border-radius: 5px;" 
+          <a href="{% url 'dele' invoice.id %}" class="btn btn-sm text-white" title="Delete" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" 
           onclick="return confirm('Do you want to Delete this Estimate?');"><i class="fas fa-trash-alt"></i></a>
       </div>
    </div>

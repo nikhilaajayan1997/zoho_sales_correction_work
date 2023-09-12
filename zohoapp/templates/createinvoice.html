@@ -20,6 +20,30 @@ crossorigin="anonymous"></script>
       z-index: 9999;
       overflow: scroll;
     }
+    /* width */
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    .hide {
+        display: none;
+    }
+   
     .popup-0 {
       height: 17rem;
       width: 20rem;
@@ -62,7 +86,7 @@ crossorigin="anonymous"></script>
 </div>
 
 <div>
-    <form method="post" action="{% url 'add_prod' %}" class="">
+    <form method="post" action="{% url 'add_prod' %}" enctype="multipart/form-data" class="">
         {% csrf_token %}
         <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
         <input type="hidden" name="hidden_state" id="state" value="{{company.state}}">
@@ -487,18 +511,29 @@ crossorigin="anonymous"></script>
                 <textarea name="ter_cond" id="" cols="20" class="form-control text-dark" style="height: 100%;" rows="6"
                     placeholder=" Enter the terms & conditions..." required></textarea>
             </div>
-            <div class="col-md-6 col-lg-6 col-sm-12 py-5 text-center rounded mt-4">
+            <!-- <div class="col-md-6 col-lg-6 col-sm-12 py-5 text-center rounded mt-4">
                 <div style="width: 100%;background-color: rgba(153, 152, 152, 0.507);height: 120px;">
-                  <label class="text-black mt-3 pt-3" for="">Attach File(s) to Estimate</label><br>
+                  <label class="text-black mt-3 pt-3" for="">Attach File(s) to Invoice</label><br>
                 
                 <label for="file-upload" class="btn text-white border-0"
                 style="background-color: rgb(210, 132, 30);"><i class="fas fa-upload text-white"></i>
                 Upload File</label>
-                <input class="pb-3"  class="form-control" type="file" name="file" style="display:none;">
+                <input class="pb-3"   type="file" name="file" style="display:none;">
                 </div>
                 
       
-            </div>
+            </div> -->
+            <div class="col-md-6 col-lg-6 col-sm-12 py-5 text-center rounded mt-4" >
+              <div  style="width: 100%;background-color: rgba(153, 152, 152, 0.507);height: 120px;">
+                  <label class="text-black mt-3 pt-3" for="">Attach File(s) to Invoice</label><br>
+
+              <label for="file-upload" class="btn text-white border-0"
+                  style="background-color: rgb(210, 132, 30);">
+                  <i class="fas fa-upload text-white"></i> Upload File
+              </label>
+              <input class="pb-3"  id="file-upload" type="file" name="file" style="display:none;">
+              </div>
+          </div>
         </div>
       
       

@@ -150,6 +150,7 @@ urlpatterns = [
     path('filter_delivery_sent',views.filter_delivery_sent,name="filter_delivery_sent"),
     path('filter_by_draft_chellan_view/<int:pk>',views.filter_by_draft_chellan_view,name='filter_by_draft_chellan_view'),
     path('filter_by_sent_chellan_view/<int:pk>',views.filter_by_sent_chellan_view,name='filter_by_sent_chellan_view'),
+    path('add_delivery_chellan_comment/<int:pk>',views.add_delivery_chellan_comment,name='add_delivery_chellan_comment'),
     path('create_delivery_chellan',views.create_delivery_chellan,name='create_delivery_chellan'),
     path('delivery_chellan_home',views.delivery_chellan_home,name='delivery_chellan_home'),
     path('add_customer_for_challan',views.add_customer_for_challan,name='add_customer_for_challan'),

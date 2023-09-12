@@ -2025,10 +2025,11 @@ def add_prod(request):
             sgst=request.POST['sgst']
             totaltax=request.POST['totaltax']
             t_total=request.POST['t_total']
-            if request.FILES.get('file') is not None:
-                file=request.FILES['file']
-            else:
-                file="/static/images/alt.jpg"
+            # if request.FILES.get('file') is not None:
+            file=request.FILES.get('file')
+            # attachment = request.FILES.get('file')
+            # else:
+                # file="/static/images/alt.jpg"
             tc=request.POST['ter_cond']
 
             status=request.POST['sd']
@@ -2166,12 +2167,19 @@ def edited_prod(request,id):
         invoic.t_tax = request.POST['totaltax']
         invoic.grandtotal = request.POST['t_total']
 
-        if request.FILES.get('file') is not None:
-            invoic.file = request.FILES['file']
+        # if request.FILES.get('file') is not None:
+        #      invoic.file = request.FILES.get('file')
+        # else:
+        #     invoic.file = "/static/images/alt.jpg"
+        old=invoic.file
+        new=request.FILES.get('file')
+        if old != None and new == None:
+            invoic.file = old
         else:
-            invoic.file = "/static/images/alt.jpg"
+            invoic.file = new
 
-            invoic.terms_condition = request.POST.get('ter_cond')
+
+        invoic.terms_condition = request.POST.get('ter_cond')
         
         status=request.POST['sd']
         if status=='draft':
@@ -3307,9 +3315,14 @@ def create_delivery_chellan(request):
     customers = customer.objects.filter(user_id=user.id)
     dates=date.today()
     # estimates_count = DeliveryChellan.objects.filter(user_id=user.id).count()
-    estimates_count = DeliveryChellan.objects.last().id
-    print(estimates_count)
-    next_count = estimates_count+1
+    # estimates_count = DeliveryChellan.objects.last().id
+    if  DeliveryChellan.objects.all().exists():
+        chellan_count = RetainerInvoice.objects.last().id
+        count=chellan_count+1 
+    else:
+        count=1 
+    # print(estimates_count)
+    # next_count = estimates_count+1
 
     unit=Unit.objects.all()
     sale=Sales.objects.all()
@@ -3325,7 +3338,7 @@ def create_delivery_chellan(request):
     context = {'company': company,
                'items': items,
                'customers': customers,
-               'count': next_count,
+               'count': count,
                'date':dates,
                'unit':unit,
                'sale':sale,
@@ -3673,12 +3686,14 @@ def delivery_challan_view(request, id):
     all_estimates = DeliveryChellan.objects.filter(user=user)
     estimate = DeliveryChellan.objects.get(id=id)
     items = ChallanItems.objects.filter(chellan=estimate)
+    chellan_comments=delivery_chellan_comments.objects.filter(chellan=estimate.id,user=user)
     print(items)
     context = {
         'company': company,
         'all_estimates':all_estimates,
         'estimate': estimate,
         'items': items,
+        'comments':chellan_comments,
     }
     return render(request, 'delivery_challan_view.html', context)
 
@@ -3710,6 +3725,19 @@ def filter_by_sent_chellan_view(request,pk):
     }
     return render(request, 'delivery_challan_view.html', context)
 
+def add_delivery_chellan_comment(request,pk):
+    if request.method=="POST":
+        user=request.user      
+        chellan=DeliveryChellan.objects.get(id=pk)
+       
+        comment=delivery_chellan_comments()
+        comment.user=user
+        comment.chellan=chellan
+        comment.comments=request.POST.get('comments')
+       
+        comment.save()
+    return redirect('delivery_challan_view',chellan.id)
+
 
 
 # delivery_challan_edit.html
@@ -3720,7 +3748,9 @@ def delivery_challan_edit(request,id):
     customers = customer.objects.filter(user_id=user.id)
     items = AddItem.objects.filter(user_id=user.id)
     estimate = DeliveryChellan.objects.get(id=id)
-   
+    cust=estimate.customer.placeofsupply
+    cust_id=estimate.customer.id
+    payments=payment_terms.objects.all()
     
     pls= customer.objects.get(customerName=estimate.customer_name)
     
@@ -3752,6 +3782,7 @@ def delivery_challan_edit(request,id):
         "accounts":accounts,
         "account_types":account_types,
         "pls":pls,
+        'payments':payments,
     }
     return render(request, 'delivery_challan_edit.html', context)
 

@@ -287,11 +287,13 @@ function calc(){
                         
                     </div>
                 </div>
+                
                 <div class="row mb-4">
                     <div class="col-sm-2"><label for="reference">Reference#</label></div>
                     <div class="col-sm-6"> <input type="number" id="reference" name="reference" class="form-control text-black"
                         value="{{estimate.reference}}"></div>
                 </div>
+
                 <div class="row mb-4 border-bottom pb-5">
                     <div class="col-sm-2"><label for="reference">Estimate Date*</label></div>
                     <div class="col-sm-2"> <input type="date" id="estimate_date" name="estimate_date" class="form-control text-black"
@@ -481,7 +483,7 @@ function calc(){
                                 <tr style="font-weight: bold;">
                                     <td>Sub Total</td>
                                     <td><input type="text" id="subtotal" name="subtotal" value="{{estimate.sub_total}}"
-                                            class="bg-transparent border-0 text-right form-control" step="any" style="width: 50%;"></td>
+                                            class="bg-transparent border-0 text-right text-light form-control" step="any" style="width: 50%;"></td>
                                 </tr>
                                 <tr style="display: none;font-weight: bold;" id="tr_igst" style="width: 50%;">
                                     <td>IGST</td>
@@ -568,6 +570,8 @@ function calc(){
                      value="Save">
                 
             </form>
+
+
              <!-- customer modal -->
 
 

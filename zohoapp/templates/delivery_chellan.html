@@ -129,7 +129,7 @@
             <tr id="tr_data" class="clickable-row" >
               <td class="text-light"><a href="{% url 'delivery_challan_view' v.id %}">{{v.customer_name}}</a> </td>
               <td class="text-light">{{v.customer_mailid}}</td>
-              <td class="text-light">DC-{{v.chellan_no}}</td>
+              <td class="text-light">{{v.chellan_no}}</td>
               <td class="text-light"> {{v.chellan_date | date:'d-m-Y'}}</td>
               
               <td class="text-light">{{v.reference}}</td>

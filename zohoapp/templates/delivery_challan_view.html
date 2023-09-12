@@ -3,6 +3,12 @@
 {% block content %}
 
 <style>
+
+.modal{
+      z-index: 9999;
+      overflow: scroll;
+    }
+
     /* width */
     ::-webkit-scrollbar {
         width: 10px;
@@ -29,7 +35,10 @@
     #tr_data:hover{
     background-color: #757575;
   }
-  
+  .dropdown-item:hover{
+    color: rgb(226, 149, 5);
+}
+
     
 </style>
 
@@ -97,7 +106,7 @@ function printForm() {
                     <table class="text-white" style="width: 100%; ">
                         {% for estimate in all_estimates %}
                         <tbody id="table">
-                        <tr id="tr_data" class="clickable-row border-bottom" style="cursor: pointer;" data-href="{% url 'estimateslip' estimate.id %}">
+                        <tr id="tr_data" class="clickable-row border-bottom" style="cursor: pointer;" data-href="{% url 'delivery_challan_view' estimate.id %}">
                             <td>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -135,31 +144,48 @@ function printForm() {
     <div class="col-sm-8">
         <div class="row  mx-1 py-3" style="background-color: rgba(136, 136, 135, 0.5)">
             <div class="col-sm-5 text-light" style="font-size: 2.5rem;">
-                DC-{{estimate.chellan_no }}</div>
+                {{estimate.chellan_no }}</div>
             <div class="col-sm-7 text-white text-right my-auto">
                 <div class="btn-group" role="group" aria-label="Basic example">
-                    <a href="{% url 'delivery_challan_edit' estimate.id %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;"  class="btn btn-sm m-1 text-white"
+                    <a href="{% url 'delivery_challan_edit' estimate.id %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;"  class="btn btn-sm m-1 text-white"
                          data-toggle="tooltip" title="Edit">
                         <i class="mdi mdi-pencil"></i></a>
-                    <a href="{% url 'render_challan_pdf' estimate.id %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;" class="btn btn-sm m-1 text-white " 
+                    <a href="{% url 'render_challan_pdf' estimate.id %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" class="btn btn-sm m-1 text-white " 
                         data-toggle="tooltip" title="PDF" id="pdf">
                         <i class="mdi mdi-file-pdf-box"></i></a>
-                    <a href="" onclick="printForm()" style="background-color:  rgb(212, 139, 3);border-radius: 5px;" class="btn btn-sm m-1 text-white btn_print" 
+                    <a href="" onclick="printForm()" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" class="btn btn-sm m-1 text-white btn_print" 
                         data-toggle="tooltip" title="Print">
                         <i class="mdi mdi-printer"></i></a>
-                    <a href="{% url 'emailattachment' %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;" class="btn btn-sm m-1 text-white"
+                    <a href="{% url 'emailattachment' %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" class="btn btn-sm m-1 text-white"
                          data-toggle="tooltip" title="Email">
                         <i class="mdi mdi-email"></i></a>
                     
+                        <div class="dropdown m-0 p-0 ms-1 mt-1" title="comments" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;">
+                            <a href=" " class=" fas fa-comment-dots dropdown-toggle  btn-sm text-white ms-1"  
+                                data-bs-toggle="dropdown" id="attachmentDropdown" aria-haspopup="true" aria-expanded="false"> 
+                            </a>
+        
+                            <div class="dropdown-menu" aria-labelledby="attachmentDropdown">
+                                <a class="dropdown-item" style="cursor: pointer;" data-toggle="modal"
+                                 data-target="#cmnts"><i class="fa-solid fa fa-plus"></i>Add</a>
+                                <a class="dropdown-item" style="cursor: pointer;" data-toggle="modal"
+                                data-target="#cmt_list"><i class="fas fa-list"></i>&nbsp;View List</a>
+                                        
+                            </div>
+                        </div>
+                    
+                       
+                    
                     {% if estimate.attachment != ""%}
-                    <a href="{{estimate.attachment.url}}" class="btn btn-dark m-1 text-white"
+                    <a href="{{estimate.attachment.url}}"  style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" class="btn  m-1 text-white"
                         data-toggle="tooltip" title="Download Attached File">
                         <span class="mdi mdi-download"></span></a>
                     {%endif%}
                     
                 </div>
+               
         
-                <a href="{% url 'deletechallan' estimate.id %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;" class="btn btn-sm text-white"  
+                <a href="{% url 'deletechallan' estimate.id %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" class="btn btn-sm text-white"  
                 onclick="return confirm('Do you want to Delete this Estimate?');"><i class="mdi mdi-delete"></i></a>
             </div>
         </div>
@@ -285,6 +311,103 @@ style="background-color: rgba(124, 124, 123, 0.507); height: 600px; overflow-y: 
 
 
 </div>
+
+
+
+<!-- comment modal -->
+
+<div class="modal fade " id="cmnts"
+style="width: 750px; margin-left: 350px; justify-content: center; overflow: hidden;">
+<div class="modal-dialog modal-xl m-5 p-5">
+    <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+        <div class="modal-header " style="background: rgb(32, 35, 37);">
+            <h5 class="m-3 text-uppercase text-light">Enter Comment</h5>
+            <button type="button" class="close text-dark bg-none" data-dismiss="modal"
+                aria-label="Close">&times;</button>
+
+        </div>
+        <div class="modal-body" style="background: rgb(32, 35, 37); justify-content: center; overflow: hidden;">
+            <div class="card p-0 m-0">
+                <form action="{% url 'add_delivery_chellan_comment' estimate.id %}" method="post" class="needs-validation" novalidate autocomplete="off"
+                    id="modalComment">
+                    {% csrf_token %}
+                    <div class="row mt-2">
+                        <div class="col-md-6 mt-2">
+                            <textarea class="form-control text-dark bg-light" id="comment" name="comments" required
+                                style="height: 200px; width: 520px;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                            <div class="d-flex">
+                                <button class="btn save_btn rounded-pill text-grey w-50 my-4 mx-3" type="submit">Save </button>
+                                <button type="button"
+                                    class="close btn save_btn rounded-pill text-grey w-50 my-4"
+                                    data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">Cancel</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+
+
+<!-- ....................................  comment list modal ................ -->
+
+<div class="modal fade " id="cmt_list"
+   style="width: 750px; margin-left: 350px; justify-content: center; overflow: hidden;">
+ <div class="modal-dialog modal-dialog-scrollable modal-xl m-5 p-5">
+    <div class="modal-content" style="background: rgb(32, 35, 37);border-radius: 20px;">
+        <div class="modal-header " style="background: rgb(32, 35, 37);">
+            <h5 class="m-3 text-uppercase text-light">LIST</h5>
+            <button type="button" class="close text-dark bg-none" data-dismiss="modal"
+                aria-label="Close">&times;</button>
+
+        </div>
+        <div class="modal-body" style="background: rgb(32, 35, 37); justify-content: center; overflow-x: hidden;">
+            <div class="card p-0 m-0">
+
+                <div class="row mt-3">
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="p-2">
+                            <table class="table table-bordered" style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="background-color:rgb(218, 143, 3) ;color: white;">Comments</th>
+                                    </tr>
+                                </thead>
+                                {% for comt in comments %}
+                                <tbody>
+                                    <tr>
+                                        <!-- <td><input type="text" value="{{ comt.comments }}" style="width: 100%;height: 20px;"></td> -->
+                                        <td><textarea name="" id="" cols="80" rows="5" style="border: none;background-color:transparent ;color: white;">{{ comt.comments }}</textarea></td>
+                                    </tr>
+                                </tbody>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+  </div>
+</div>
+
+
+
 
  <!-- .....................................................................................................        -->
 <!--         
