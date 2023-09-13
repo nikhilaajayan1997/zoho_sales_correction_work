@@ -104,8 +104,8 @@
     
                                 <thead>
                                     <tr>
+                                      <th>RETAINER INVOICE NUMBER</th>
                                         <th>DATE</th>
-                                        <th>RETAINER INVOICE NUMBER</th>
                                         <th>CUSTOMER NAME</th>
                                         <th>CUSTOMER MAIL ID</th>
                                         <th>AMOUNT</th>
@@ -117,8 +117,8 @@
                                 {% for i in invoices %}
                                 <tbody id="table">
                                     <tr id="tr_data">
+                                      <td class="align-top"><a href="{% url 'invoice_view' i.id %}" style="color: rgb(226, 149, 6);">{{i.retainer_invoice_number}}</a></td>
                                         <td class="align-top">{{i.retainer_invoice_date}}</td>
-                                        <td class="align-top"><a href="{% url 'invoice_view' i.id %}" class="text-light">{{i.retainer_invoice_number}}</a></td>
                                         <td class="align-top">{{i.customer_name.customerName}}</td>
                                         <td class="align-top">{{i.customer_name.customerEmail}}</td>
                                         <td class="align-top">₹{{i.total_amount}}</td>

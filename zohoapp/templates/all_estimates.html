@@ -80,8 +80,8 @@
       <table id="estimates-table" class="table  text-white text-center" style="cursor: pointer;">
         <thead>
           <tr>
-            <th>DATE</th>
             <th>ESTIMATE NUMBER</th>
+            <th>DATE</th>
             <th>REFERENCE NUMBER</th>
             <th>CUSTOMER NAME</th>
             <th>CUSTOMER MAIL ID</th>
@@ -92,8 +92,9 @@
         <tbody id="table">
           {% for estimate in estimates %}
           <tr id="tr_data" class="clickable-row" data-href="{% url 'estimateslip' estimate.id %}">
+            <td style="color: rgb(230, 151, 6);">{{estimate.estimate_no}}</td>
+
             <td>{{estimate.estimate_date}}</td>
-            <td>{{estimate.estimate_no}}</td>
             <td>{{estimate.reference}}</td>
             <td>{{estimate.customer_name}}</td>
             <td>{{estimate.customer.customerEmail}}</td>

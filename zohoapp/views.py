@@ -1279,8 +1279,13 @@ def newestimate(request):
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
     payments = payment_terms.objects.all()
-    estimates_count = Estimates.objects.last().id
-    next_count = estimates_count+1
+    if Estimates.objects.all().exists():
+        estimates_count = Estimates.objects.last().id
+        next_count = estimates_count+1
+    else:
+        next_count=1 
+    # estimates_count = Estimates.objects.last().id
+    # next_count = estimates_count+1
     context = {'company': company,
                'items': items,
                'customers': customers,
@@ -1990,8 +1995,13 @@ def add_prod(request):
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
     unit=Unit.objects.all()
-    invoice_count = invoice.objects.last().id
-    count=invoice_count+1
+    if invoice.objects.all().exists():
+        invoice_count = invoice.objects.last().id
+        count=invoice_count+1
+    else:
+        count=1 
+    # invoice_count = invoice.objects.last().id
+    # count=invoice_count+1
     if not payment_terms.objects.filter(Terms='net 15').exists(): 
        payment_terms(Terms='net 15',Days=15).save()
     if not payment_terms.objects.filter(Terms='due end of month').exists():
@@ -3783,6 +3793,8 @@ def delivery_challan_edit(request,id):
         "account_types":account_types,
         "pls":pls,
         'payments':payments,
+        'cust':cust,
+        'custo_id':cust_id,
     }
     return render(request, 'delivery_challan_edit.html', context)
 
@@ -3791,9 +3803,16 @@ def update_challan(request,id):
     user = User.objects.get(id=cur_user.id)
 
     if request.method == "POST":
+        x=request.POST["hidden_state"]
+        y=request.POST["hidden_cus_place"]
+        c=request.POST['customer_id']
+        cus=customer.objects.get(id=c) 
+        custo=cus
+        cust_name =cus.customerName
         estimate = DeliveryChellan.objects.get(id=id)
-        
-        estimate.customer_name = request.POST['customer_name']
+        # estimate.customer_name = request.POST['customer_name']
+        estimate.customer_name = cust_name
+        estimate.customer=custo
         estimate.chellan_no = request.POST['chellan_number']
         estimate.reference = request.POST['reference']
         estimate.chellan_date = request.POST['challan_date']
@@ -3819,35 +3838,56 @@ def update_challan(request,id):
 
         estimate.save()
 
-        item = request.POST.getlist('item[]')
-        quantity1 = request.POST.getlist('quantity[]')
-        quantity = [float(x) for x in quantity1]
-        rate1 = request.POST.getlist('rate[]')
-        rate = [float(x) for x in rate1]
-        discount1 = request.POST.getlist('discount[]')
-        discount = [float(x) for x in discount1]
-        tax1 = request.POST.getlist('tax[]')
-        tax = [float(x) for x in tax1]
-        amount1 = request.POST.getlist('amount[]')
-        amount = [float(x) for x in amount1]
-        # print(item)
-        # print(quantity)
-        # print(rate)
-        # print(discount)
-        # print(tax)
-        # print(amount)
+        if x==y:
+
+            item = request.POST.getlist('item[]')
+            quantity1 = request.POST.getlist('quantity[]')
+            quantity = [float(x) for x in quantity1]
+            rate1 = request.POST.getlist('rate[]')
+            rate = [float(x) for x in rate1]
+            discount1 = request.POST.getlist('discount[]')
+            discount = [float(x) for x in discount1]
+            tax1 = request.POST.getlist('tax[]')
+            tax = [float(x) for x in tax1]
+            amount1 = request.POST.getlist('amount[]')
+            amount = [float(x) for x in amount1]
+        
+        else:
+
+            itemm = request.POST.getlist('itemm[]')
+            quantityy1 = request.POST.getlist('quantityy[]')
+            quantityy = [float(x) for x in quantityy1]
+            ratee1 = request.POST.getlist('ratee[]')
+            ratee = [float(x) for x in ratee1]
+            discountt1 = request.POST.getlist('discountt[]')
+            discountt = [float(x) for x in discountt1]
+            taxx1 = request.POST.getlist('taxx[]')
+            taxx = [float(x) for x in taxx1]
+            amountt1 = request.POST.getlist('amountt[]')
+            amountt = [float(x) for x in amountt1]
+       
 
         objects_to_delete = ChallanItems.objects.filter(chellan=id)
         objects_to_delete.delete()
 
-        
-        if len(item) == len(quantity) == len(rate) == len(discount) == len(tax) == len(amount):
-            mapped = zip(item, quantity, rate, discount, tax, amount)
-            mapped = list(mapped)
-            for element in mapped:
-                created = ChallanItems.objects.get_or_create(
-                    chellan=estimate, item_name=element[0], quantity=element[1], rate=element[2], discount=element[3], tax_percentage=element[4], amount=element[5])
-        return redirect('delivery_chellan_home')
+        if x==y:
+            if len(item) == len(quantity) == len(rate) == len(discount) == len(tax) == len(amount):
+                mapped = zip(item, quantity, rate, discount, tax, amount)
+                mapped = list(mapped)
+                for element in mapped:
+                    created = ChallanItems.objects.get_or_create(
+                        chellan=estimate, item_name=element[0], quantity=element[1], rate=element[2], discount=element[3], tax_percentage=element[4], amount=element[5])
+            return redirect('delivery_chellan_home')
+
+        else:
+            if len(itemm) == len(quantityy) == len(ratee) == len(discountt) == len(taxx) == len(amountt):
+                mapped = zip(itemm, quantityy, ratee, discountt, taxx, amountt)
+                mapped = list(mapped)
+                for element in mapped:
+                    created = ChallanItems.objects.create(
+                        chellan=estimate, item_name=element[0], quantity=element[1], rate=element[2], discount=element[3], tax_percentage=element[4], amount=element[5])
+            return redirect('delivery_chellan_home')
+
     return redirect('delivery_chellan_home')
 
 def get_cust_mail(request):

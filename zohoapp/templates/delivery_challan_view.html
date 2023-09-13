@@ -145,7 +145,7 @@ function printForm() {
         <div class="row  mx-1 py-3" style="background-color: rgba(136, 136, 135, 0.5)">
             <div class="col-sm-5 text-light" style="font-size: 2.5rem;">
                 {{estimate.chellan_no }}</div>
-            <div class="col-sm-7 text-white text-right my-auto">
+            <div class="col-sm-7 text-white text-right my-auto" style="text-align: end;">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <a href="{% url 'delivery_challan_edit' estimate.id %}" style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;"  class="btn btn-sm m-1 text-white"
                          data-toggle="tooltip" title="Edit">
@@ -203,8 +203,8 @@ style="background-color: rgba(124, 124, 123, 0.507); height: 600px; overflow-y: 
             <h6 class="text-dark">{{ company.city }},{{ company.state }}</h6>
         </div>
         <div class="col-md-6 text-right">
-            <h1 class="text-dark" style="font-size: 2rem; ">DELIVERY CHELLAN</h1>
-            <h6 class="text-dark">Delivery Chellan Number : {{estimate.chellan_no }}</h6>
+            <h1 class="text-dark" style="font-size: 2rem; ">DELIVERY CHALLAN</h1>
+            <h6 class="text-dark">Delivery Challan Number : {{estimate.chellan_no }}</h6>
         </div>
     </div>
     <hr>
@@ -298,8 +298,8 @@ style="background-color: rgba(124, 124, 123, 0.507); height: 600px; overflow-y: 
             </div>
             <div class="row mt-2">
                 <div class="col-sm-6" style="text-align: justify;">
-                    <p class="m-0 font-weight-bold" style="color:black">Customer Note : </p>
-                    <p style="color:black">{{estimate.customer_notes}}</p>
+                    <p class="m-0 font-weight-bold" style="color:black">Terms & Conditions : </p>
+                    <p style="color:black">{{estimate.terms_conditions}}</p>
                 </div>
             </div>
 

@@ -291,9 +291,9 @@
                     {{estimate.estimate_no }}</div>
                 <div class="col-md-7 text-white text-right my-auto " style="text-align: end;">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <a href="{% url 'estimateslip' estimate.id %}" class="btn btn-sm ms-1  text-white"
+                        <!-- <a href="{% url 'estimateslip' estimate.id %}" class="btn btn-sm ms-1  text-white"
                         style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" data-toggle="tooltip" title="Back">
-                        <i class="fas fa-arrow-left"></i></a>
+                        <i class="fas fa-arrow-left"></i></a> -->
                         <a href="{% url 'editestimate' estimate.id %}" class="btn btn-sm ms-1  text-white"
                         style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" data-toggle="tooltip" title="Edit">
                             <i class="fas fa-pencil-alt"></i>                     </a>
@@ -324,7 +324,7 @@
                         </div>
 
                         {% if estimate.attachment != ""%}
-                        <a href="{{estimate.attachment.url}}"  style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" class="btn  m-1 text-white"
+                        <a href="{{estimate.attachment.url}}"  style="background-color:  rgb(212, 139, 3);border-radius: 5px;height: 1.7rem;" class="btn  ms-1 text-white"
                             data-toggle="tooltip" title="Download Attached File">
                             <span class="mdi mdi-download"></span></a>
                         {%endif%}

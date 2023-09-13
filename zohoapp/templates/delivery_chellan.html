@@ -113,9 +113,10 @@
         <table class="table"  style="text-align: left;">
           <thead>
             <tr>
+              <th >DELIVERY CHALLAN#</th>
+
               <th >CUSTOMER NAME</th>
               <th >CUSTOMER MAIL ID</th>
-              <th >DELIVERY CHELLAN#</th>
               <th >DATE</th>
               <th >REFFERENCE#</th>
               <th >STATUS</th>
@@ -126,10 +127,11 @@
   
           {% for v in view %}
           <tbody id="table">
-            <tr id="tr_data" class="clickable-row" >
-              <td class="text-light"><a href="{% url 'delivery_challan_view' v.id %}">{{v.customer_name}}</a> </td>
+            <tr id="tr_data" class="clickable-row" style="cursor: pointer;">
+              <td ><a href="{% url 'delivery_challan_view' v.id %}" style="color: rgb(230, 152, 8);">{{v.chellan_no}}</a></td>
+
+              <td class="text-light">{{v.customer_name}}</td>
               <td class="text-light">{{v.customer_mailid}}</td>
-              <td class="text-light">{{v.chellan_no}}</td>
               <td class="text-light"> {{v.chellan_date | date:'d-m-Y'}}</td>
               
               <td class="text-light">{{v.reference}}</td>

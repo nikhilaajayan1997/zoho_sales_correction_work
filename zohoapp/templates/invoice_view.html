@@ -130,14 +130,14 @@
                                             <tr id="tr_data">
                                                 {% if i.is_draft == 1 %}
                                                 <td> 
-                                                    <p class="text-white mb-1"><span style="color: rgb(218, 143, 5);font-weight: bold;font-size: larger;">{{i.customer_name.customerName}}</span> <br><br>
+                                                    <p class="text-white mb-1"><span style="font-weight: bold;font-size: larger;"><a href="{% url 'invoice_view' i.id %}" style="color: rgb(218, 143, 5);">{{i.customer_name.customerName}}</a></span> <br><br>
                                                     <a href="{% url 'invoice_view' i.id %}" class="text-light">{{i.retainer_invoice_number}}</a> | <span style="color: rgb(218, 143, 5);">Draft</span>
                                                     </p>
                                                     
                                                 </td>
                                                 {% else %}
                                                 <td> 
-                                                    <p class="text-white mb-1"><span style="color: rgb(218, 143, 5);font-weight: bold;font-size: larger;">{{i.customer_name.customerName}}</span> <br><br>
+                                                    <p class="text-white mb-1"><span style="color: rgb(218, 143, 5);font-weight: bold;font-size: larger;"><a href="{% url 'invoice_view' i.id %}" style="color: rgb(218, 143, 5);">{{i.customer_name.customerName}}</a></span> <br><br>
                                                     <a href="{% url 'invoice_view' i.id %}" class="text-light">{{i.retainer_invoice_number}}</a> |<span style="color: rgb(218, 143, 5);">Send</span>
                                                     </p>
                                                     
@@ -167,9 +167,9 @@
                     {{invoice.retainer_invoice_number}}</div>
                 <div class="col-md-7 text-white text-right my-auto " style="text-align: end;">
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <a href="" class="btn btn-sm ms-1  text-white"
+                        <!-- <a href="" class="btn btn-sm ms-1  text-white"
                         style="background-color:  rgb(212, 139, 3);border-radius: 5px;" data-toggle="tooltip" title="Back">
-                        <i class="fas fa-arrow-left"></i></a>
+                        <i class="fas fa-arrow-left"></i></a> -->
                         <a href="{% url 'retainer_edit_page' invoice.id %}" class="btn btn-sm ms-1  text-white"
                         style="background-color:  rgb(212, 139, 3);border-radius: 5px;" data-toggle="tooltip" title="Edit">
                             <i class="fas fa-pencil-alt"></i>                     </a>

@@ -83,8 +83,8 @@
   <table class="table  text-white " style="width: 100%;">
     <thead>
       <tr>
-        <th>DATE</th>
         <th>INVOICE</th>
+        <th>DATE</th>
         <th>ORDER NUMBER</th>
         <th>CUSTOMER NAME</th>
         <th>MAIL ID</th>
@@ -98,8 +98,8 @@
 
       <tr id="tr_data" style="cursor: pointer;" class="clickable-row" data-href="{% url 'detailedview' v.id %}">
         <!-- onclick="location.href ='{% url 'detailedview' v.id %}' " -->
-               <td > {{v.inv_date}}</td>
-        <td>{{v.invoice_no}}</td>
+        <td style="color: rgb(226, 150, 9);">{{v.invoice_no}}</td>
+         <td > {{v.inv_date}}</td>
         <td>{{v.order_no}}</td>
         <td>{{v.customer.customerName}}</td>
         <td>{{v.customer.customerEmail}}</td>
