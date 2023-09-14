@@ -113,7 +113,7 @@ crossorigin="anonymous"></script>
           <div class="col-sm-2 "><label for="estimate_number">Customer Mail</label></div>
           <div class="col-sm-6"><input type="email" id="cx_mail" name="cx_mail" class="form-control text-dark">
           </div>
-          <input type="text" id="customer_id" name="customer_id" style="display: none;" readonly>
+          <input type="text" id="customer_id" name="customer_id" style="display: none;"  readonly>
 
       </div>
         <div class="row mb-4">
@@ -124,7 +124,7 @@ crossorigin="anonymous"></script>
         </div>
         <div class="row mb-4">
             <div class="col-sm-2"><label for="reference">Order Number</label></div>
-            <div class="col-sm-6"> <input type="text" class="form-control text-dark" id="ord_no" name="ord_no" class="">
+            <div class="col-sm-6"> <input type="text" class="form-control text-dark" id="ord_no" name="ord_no" class="" required>
                     </div>
         </div>
     
@@ -199,10 +199,12 @@ crossorigin="anonymous"></script>
                   </td>
                  
                   <td class='text-right'><input type='text' id='hsn1'
-                    class='form-control bg-transparent border-0 text-light text-right hsn' name='hsn[]'
-                    value=''>
+                    class='form-control bg-transparent border-0 text-light text-right hsn'  placeholder="6 Digit No" pattern="[0-9]{6}" name='hsn[]'
+                    value=''  >
+                    <!-- <span class='hsn-validation'></span> -->
+
                   </td>
-             <script>
+             <!-- <script>
              $(document).on("input", ".hsn", function() {
                     var hsn_value = $(this).val();
                     var hsn_length = hsn_value.length;
@@ -213,7 +215,7 @@ crossorigin="anonymous"></script>
                 });
            
    
-  </script>
+  </script> -->
   
   
                   <td class='text-right'><input type='number' id='qty1'
@@ -240,23 +242,26 @@ crossorigin="anonymous"></script>
                       
                 </select>
                 
-  <script>
-    function validateHSN(hsnInput) {
-      var hsn = hsnInput.value;
-      var errorSpan = hsnInput.nextElementSibling;
-      var valid = true;
+  <!-- <script>
+    function validateHSN() {
+      // var hsn = hsnInput.value;
+      // var errorSpan = hsnInput.nextElementSibling;
+      // var valid = true;
+      var hsn=document.getElementById('hsn1')
   
       if (hsn.length != 6) {
-          errorSpan.innerHTML = "HSN must be 6 digits long";
-          valid = false;
+          // errorSpan.innerHTML = "HSN must be 6 digits long";
+          // valid = false;
+          hsn.style.color='red';
+          hsn.innerHTML=0
       } else {
           errorSpan.innerHTML = "&#x2713;"; // Check mark
       }
   
-      return valid;
+      // return valid;
   }
   
-  </script>
+  </script> -->
   <style>
     .hsn-validation {
       font-size: 1.2em;
@@ -331,11 +336,12 @@ crossorigin="anonymous"></script>
                   </td>
                  
                   <td class='text-right'><input type='text' id='hsnn1'
-                    class='form-control bg-transparent border-0 text-light text-right hsnn' name='hsnn[]'
-                    value=''>
+                    class='form-control bg-transparent border-0 text-light text-right hsnn' placeholder="6 Digit No" pattern="[0-9]{6}" name='hsnn[]'
+                    value='' >
+
                   </td>
-             <script>
-             $(document).on("input", ".hsn", function() {
+             <!-- <script>
+             $(document).on("input", ".hsnn", function() {
                     var hsn_value = $(this).val();
                     var hsn_length = hsn_value.length;
                     if (hsn_length > 6) {
@@ -345,7 +351,7 @@ crossorigin="anonymous"></script>
                 });
            
    
-  </script>
+  </script> -->
   
   
                   <td class='text-right'><input type='number' id='qtyy1'
@@ -372,7 +378,7 @@ crossorigin="anonymous"></script>
                         <option value="28" class="text-dark">IGST 28%</option>
                 </select>
                 
-  <script>
+  <!-- <script>
     function validateHSNN(hsnInput) {
       var hsn = hsnInput.value;
       var errorSpan = hsnInput.nextElementSibling;
@@ -388,7 +394,7 @@ crossorigin="anonymous"></script>
       return valid;
   }
   
-  </script>
+  </script> -->
   <style>
     .hsn-validation {
       font-size: 1.2em;
@@ -441,7 +447,7 @@ crossorigin="anonymous"></script>
       
                 <label for="">Customer Notes</label>
                 <textarea class="form-control text-dark" style="height: 50%;" name="customer_note" id="" cols="8" rows="8"
-                    placeholder=" Customer information for future Buisness"></textarea>
+                    placeholder=" Customer information for future Buisness" required></textarea>
             </div>
             <div class="col-sm-6">
                 <table class="rounded table table-bordered" style="background-color: #b6b3b36b;">
@@ -2248,7 +2254,7 @@ modalEl.addEventListener('click', (event) => {
                         </select></div>
                 </td>
                 <td class='text-right'>
-            <input type='text' id='hsn${RowCount}'  class='form-control bg-transparent  text-white border-0  text-right hsn' name='hsn[]' value='' onchange="validateHSN(this)">
+            <input type='text' id='hsn${RowCount}'  class='form-control bg-transparent  text-white border-0  text-right hsn' name='hsn[]' placeholder="6 Digit No" pattern="[0-9]{6}" value='' required>
             <span class='hsn-validation'></span>
         </td>
                 <td class='text-right'><input type='number' id='qty${RowCount}'
@@ -2325,7 +2331,7 @@ modalEl.addEventListener('click', (event) => {
                      </select></div>
              </td>
              <td class='text-right'>
-         <input type='text' id='hsnn${RowCount}'  class='form-control bg-transparent  text-white border-0  text-right hsnn' name='hsnn[]' value='' onchange="validateHSNN(this)">
+         <input type='text' id='hsnn${RowCount}'  class='form-control bg-transparent  text-white border-0  text-right hsnn' name='hsnn[]' value='' placeholder="6 Digit No" pattern="[0-9]{6}" required>
          <span class='hsn-validation'></span>
      </td>
              <td class='text-right'><input type='number' id='qtyy${RowCount}'
@@ -2362,14 +2368,14 @@ modalEl.addEventListener('click', (event) => {
                      </td>
          </tr>`);
 
-         $(document).on("input", ".hsnn", function() {
- var hsn_value = $(this).val();
- var hsn_length = hsn_value.length;
- if (hsn_length > 6) {
-     $(this).val(hsn_value.substring(0, 6));
-     alert("HSN should not be more than 6 digits!");
- }
-});
+//          $(document).on("input", ".hsnn", function() {
+//  var hsn_value = $(this).val();
+//  var hsn_length = hsn_value.length;
+//  if (hsn_length > 6) {
+//      $(this).val(hsn_value.substring(0, 6));
+//      alert("HSN should not be more than 6 digits!");
+//  }
+// });
          $('#item_tablee').append(newRow);
      });
 

@@ -91,7 +91,7 @@
             <!-- <input  id="state" value="{{ company.state }}"> -->
 </div>
 <div>
-  <form method="post" action="{% url 'edited_prod' i.id %}" >
+  <form method="post" action="{% url 'edited_prod' i.id %}" enctype="multipart/form-data">
     {% csrf_token %}
     <input class="hidden"  id="cus_place" name="hidden_cus_place"  value="">
     <input class="hidden"  name="hidden_state" id="state" value="{{ company.state }}">
@@ -196,11 +196,11 @@
                         </td>
                        
                         <td class='text-right'><input type='text' id="hsn{{forloop.counter}}"
-                          class='form-control bg-transparent  text-light border-0  text-right hsn' name='hsn[]'
+                          class='form-control bg-transparent  text-light border-0  text-right hsn' placeholder="6 Digit No" pattern="[0-9]{6}" name='hsn[]'
                           value="{{k.hsn}}"  >
                         </td>
         
-                  <script>
+                  <!-- <script>
                           $(document).on("input", ".hsn", function() {
                             var hsn_value = $(this).val();
                             var hsn_length = hsn_value.length;
@@ -209,7 +209,7 @@
                                 alert("HSN should not be more than 6 digits!");
                             }
                         });
-                  </script>
+                  </script> -->
                         
         
                         <td class='text-right'><input type='number' id='qty{{forloop.counter}}'
@@ -295,11 +295,11 @@
                         </td>
                        
                         <td class='text-right'><input type='text' id="hsnn{{forloop.counter}}"
-                          class='form-control bg-transparent  text-light border-0  text-right hsnn' name='hsnn[]'
+                          class='form-control bg-transparent  text-light border-0  text-right hsnn' placeholder="6 Digit No" pattern="[0-9]{6}" name='hsnn[]'
                           value="{{k.hsn}}"  >
                         </td>
         
-                  <script>
+                  <!-- <script>
                           $(document).on("input", ".hsn", function() {
                             var hsn_value = $(this).val();
                             var hsn_length = hsn_value.length;
@@ -308,7 +308,7 @@
                                 alert("HSN should not be more than 6 digits!");
                             }
                         });
-                  </script>
+                  </script> -->
                         
         
                         <td class='text-right'><input type='number' id='qtyy{{forloop.counter}}'
@@ -436,20 +436,17 @@
                 placeholder=" Enter the terms & conditions .">{{i.terms_condition}}</textarea>
         </div>
        
-        <div class="col-md-6 col-lg-6 col-sm-12 py-5 text-center rounded mt-4">
-            <div style="width: 100%;background-color: rgba(153, 152, 152, 0.507);height: 120px;">
-              <label class="text-black mt-3 pt-3" for="">Attach File(s) to Estimate</label><br>
-            
-            <label for="file-upload" class="btn text-white border-0"
-            style="background-color: rgb(210, 132, 30);"><i class="fas fa-upload text-white"></i>
-            Upload File</label>
-            <input class="pb-3"  class="form-control" type="file" name="file" style="display:none;">
-            <!-- <img src="{{i.file.url}}" alt="alt"> -->
+        <div class="col-md-6 col-lg-6 col-sm-12 py-5 text-center rounded mt-4" >
+          <div  style="width: 100%;background-color: rgba(153, 152, 152, 0.507);height: 120px;">
+              <label class="text-black mt-3 pt-3" for="">Attach File(s) to Invoice</label><br>
 
-            </div>
-            
-  
-        </div>
+          <label for="file-upload" class="btn text-white border-0"
+              style="background-color: rgb(210, 132, 30);">
+              <i class="fas fa-upload text-white"></i> Upload File
+          </label>
+          <input class="pb-3"  id="file-upload" type="file" name="file" style="display:none;">
+          </div>
+      </div>
     </div>
   
   
@@ -1833,7 +1830,7 @@ function reloadUnit() {
                 </td>
                 <td class='text-right'><input type='text' id='hsn${RowCount}'
                   class='form-control bg-transparent  text-light border-0  text-right hsn' name='hsn[]'
-                  value=''  >
+                  value=''  placeholder="6 Digit No" pattern="[0-9]{6}" required>
                 </td>
                 <td class='text-right'><input type='number' id='qty${RowCount}'
                         class='form-control bg-transparent  text-light border-0  text-right qty' name='quantity[]' value='0' onchange="calc()">
@@ -1870,14 +1867,14 @@ function reloadUnit() {
                         </button>
                         </td>
             </tr>`);
-            $(document).on("input", ".hsn", function() {
-                    var hsn_value = $(this).val();
-                    var hsn_length = hsn_value.length;
-                    if (hsn_length > 6) {
-                        $(this).val(hsn_value.substring(0, 6));
-                        alert("HSN should not be more than 6 digits!");
-                    }
-                });
+            // $(document).on("input", ".hsn", function() {
+            //         var hsn_value = $(this).val();
+            //         var hsn_length = hsn_value.length;
+            //         if (hsn_length > 6) {
+            //             $(this).val(hsn_value.substring(0, 6));
+            //             alert("HSN should not be more than 6 digits!");
+            //         }
+            //     });
             $('#item_table').append(newRow);
         });
 
@@ -1912,7 +1909,7 @@ $(document).ready(function () {
                 </td>
                 <td class='text-right'><input type='text' id='hsnn${RowCount}'
                   class='form-control bg-transparent  text-light border-0  text-right hsnn' name='hsnn[]'
-                  value=''  >
+                  value=''  placeholder="6 Digit No" pattern="[0-9]{6}" required>
                 </td>
                 <td class='text-right'><input type='number' id='qtyy${RowCount}'
                         class='form-control bg-transparent  text-light border-0  text-right qtyy' name='quantityy[]' value='0' onchange="calc()">
@@ -1948,14 +1945,14 @@ $(document).ready(function () {
                         </button>
                 </td>
             </tr>`);
-            $(document).on("input", ".hsnn", function() {
-                    var hsn_value = $(this).val();
-                    var hsn_length = hsn_value.length;
-                    if (hsn_length > 6) {
-                        $(this).val(hsn_value.substring(0, 6));
-                        alert("HSN should not be more than 6 digits!");
-                    }
-                });
+            // $(document).on("input", ".hsnn", function() {
+            //         var hsn_value = $(this).val();
+            //         var hsn_length = hsn_value.length;
+            //         if (hsn_length > 6) {
+            //             $(this).val(hsn_value.substring(0, 6));
+            //             alert("HSN should not be more than 6 digits!");
+            //         }
+            //     });
             $('#item_tablee').append(newRow);
         });
 

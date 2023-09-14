@@ -1075,6 +1075,7 @@ def invoice_view(request,pk):
     context={'invoices':invoices,'invoice':invoice,'item':item,'company':company,'ret_comments':ret_comments}
     return render(request,'invoice_view.html',context)
 
+
 def filter_retainer_view_draft(request,pk):
     invoices=RetainerInvoice.objects.filter(is_draft=1)
     invoice=RetainerInvoice.objects.get(id=pk)
@@ -4166,12 +4167,8 @@ def render_challan_pdf(request,id):
     print(challan.customer_name) 
     print(challan.customer_mailid)
     customers = customer.objects.get(user=user,customerName=challan.customer_name,customerEmail=challan.customer_mailid)
-
-
-
     print(items)
     
-
     total = challan.total
 
     template_path = 'delivery_challan_pdf.html'
