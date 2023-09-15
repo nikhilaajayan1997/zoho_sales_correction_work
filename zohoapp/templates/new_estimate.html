@@ -72,10 +72,7 @@ function calc() {
                 var rate = $(this).find('.rate').val();
                 var discount = $(this).find('.discount').val();
                 var tax = $(this).find('.tax').val();
-                console.log(qty);
-                console.log(rate);
-                console.log(discount);
-                console.log(tax);
+                
                 $(this).find('.taxamount').val((qty * rate) * (tax / 100));
                 var taxamount = parseFloat($(this).find('.taxamount').val());
                 $(this).find('.amount').val(qty * rate - discount);
@@ -102,9 +99,14 @@ function calc() {
     console.log(ratee);
     console.log(discountt);
     console.log(taxx);
-    $(this).find('.taxamountt').val((qtyy * ratee) * (taxx / 100));
+    $(this).find('.taxamountt').val((qtyy * ratee - discountt) * (taxx / 100));
     var taxamountt = parseFloat($(this).find('.taxamountt').val());
     $(this).find('.amountt').val(qtyy * ratee - discountt);
+    
+
+    // $(this).find('.taxamountt').val((qtyy * ratee) * (taxx / 100));
+    // var taxamountt = parseFloat($(this).find('.taxamountt').val());
+    // $(this).find('.amountt').val(qtyy * ratee - discountt);
 
     calc_total();
    }
@@ -161,7 +163,7 @@ function calc() {
     function test() {
         console.log('test');
         d = 0;
-        var pos = $("#customer_sel option:selected").data("pos");
+        var pos = document.getElementById("cus_place").value;
         var state = document.getElementById("state").value;
 
         if (pos == state) {
@@ -319,8 +321,12 @@ function calc() {
             <form method="POST" action="" class="p-5" enctype="multipart/form-data" novalidate
                 id="forms">
                 {% csrf_token %}
-                <input type="hidden" id="state" name="hidden_state" value="{{ company.state }}">
-            <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
+                <input  id="state1" name="hidden_state1" value="{{ company.state }}">
+                <input  id="state" name="hidden_state" value="">
+
+                <input type="text" name="samp" id="samp" >
+
+            <input  id="cus_place" name="hidden_cus_place"  value="">
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
                     <div class="col-sm-6">
@@ -342,7 +348,7 @@ function calc() {
                     <div class="col-sm-2"><label for="estimate_number">Customer Mail ID</label></div>
                     <div class="col-sm-6"><input type="text" id="customer_mail" name="customer_mail" class="form-control text-dark"
                             value="" readonly>
-                           <input type="text" id="customer_id" name="customer_id" style="display: none;" readonly>
+                           <input type="text" id="customer_id" name="customer_id"  readonly>
                         
                     </div>
                 </div>
@@ -476,6 +482,8 @@ function calc() {
                     <th class="text-right" style="font-weight: bold;color:rgb(245, 154, 36);">Rate</th>
                     <th class="text-right" style="font-weight: bold;color:rgb(245, 154, 36);">Discount</th>
                     <th class="text-right" style="font-weight: bold;color:rgb(245, 154, 36);" >Tax</th>
+                    <th class="text-right" style="font-weight: bold;color:rgb(245, 154, 36);" >Tax-amt</th>
+
                     <th class="text-right" style="font-weight: bold;color:rgb(245, 154, 36);">Amount</th>
                 </tr>
             </thead>
@@ -524,7 +532,7 @@ function calc() {
                        
                     </td>
 
-                    <td style="display: none;">
+                    <td >
                         <input type="number" name='taxamountt[]' id="taxamountt1"
                             class="form-control bg-transparent border-0 text-light text-right taxamountt" />
                     </td>
@@ -1129,8 +1137,8 @@ function calc() {
                       <option value="Himachal Predesh">[HP] Himachal Predesh</option>
                       <option value="Jammu and Kashmir">[JK] Jammu and Kashmir</option>
                       <option value="Jharkhand">[JH] Jharkhand</option>
-                      <option value="Karnataka">[KA] Karnataka</option>
-                      <option value="Kerala">[KL] Kerala</option>
+                      <option value="[KA]-Karnataka">[KA] Karnataka</option>
+                      <option value="[kL]-Kerala">[KL] Kerala</option>
                       <option value="Ladakh">[LA] Ladakh</option>
                       <option value="Lakshadweep">[LD] Lakshadweep</option>
                       <option value="Madhya Predesh">[MP] Madhya Predesh</option>
@@ -1917,12 +1925,22 @@ $(document).ready(function() {
               
               
               $('#customer_mail').val(' '+ data.customer_email);
-              $('#cus_place').val(data.cust_place_supply);
+              $('#samp').val(data.cust_place_supply);
               $('#customer_id').val(data.cust_id);
-              var x=document.getElementById("cus_place").value
+
+              var plc=document.getElementById("samp").value
               
-              var y=document.getElementById("state").value
-                                if ( x == y )
+              var ste=document.getElementById("state1").value
+              var y=ste.toLowerCase();  
+              var inputstring=plc;
+              const parts = inputstring.split("-");   
+              var extractedWord = parts[1];  
+              var extractedWord1= extractedWord.trim();
+              var x=extractedWord1.toLowerCase();  
+              $('#cus_place').val(x);
+              $('#state').val(y);
+
+                           if ( x == y )
                                 {
                                    document.getElementById("item_table").style.display="block"
                                    document.getElementById("item_tablee").style.display="none"
