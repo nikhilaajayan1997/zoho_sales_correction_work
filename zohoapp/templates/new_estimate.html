@@ -72,10 +72,14 @@ function calc() {
                 var rate = $(this).find('.rate').val();
                 var discount = $(this).find('.discount').val();
                 var tax = $(this).find('.tax').val();
-                
-                $(this).find('.taxamount').val((qty * rate) * (tax / 100));
+
+                $(this).find('.taxamount').val((qty * rate - discount) * (tax / 100));
                 var taxamount = parseFloat($(this).find('.taxamount').val());
                 $(this).find('.amount').val(qty * rate - discount);
+                
+                // $(this).find('.taxamount').val((qty * rate) * (tax / 100));
+                // var taxamount = parseFloat($(this).find('.taxamount').val());
+                // $(this).find('.amount').val(qty * rate - discount);
 
                 calc_total();
            
@@ -232,7 +236,6 @@ function calc() {
     }
 
     // function get_customer_email() {
-
     //  var eml = document.getElementById("customer_sel");
     //  eml.action = ("{% url 'newestimate'%}")
     // }
@@ -325,8 +328,8 @@ function calc() {
                 <input  id="state" name="hidden_state" value="">
 
                 <input type="text" name="samp" id="samp" >
-
-            <input  id="cus_place" name="hidden_cus_place"  value="">
+                <input  id="cus_place" name="hidden_cus_place"  value="">
+                
                 <div class="row mb-4 border-top pt-5">
                     <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
                     <div class="col-sm-6">

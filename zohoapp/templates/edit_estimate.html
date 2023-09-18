@@ -42,9 +42,18 @@
 </style>
 <script>
     window.onload=function(){        
-        var x="{{ comp }}";
-        var y="{{ cust }}";
-        document.getElementById("cus_place").value="{{ cust }}";
+        var ste="{{ comp }}";
+        var plc="{{ cust }}";
+        var x=ste.toLowerCase(); 
+
+        var inputstring=plc;
+        const parts = inputstring.split("-");   
+        var extractedWord = parts[1];  
+        var extractedWord1= extractedWord.trim();
+        var y=extractedWord1.toLowerCase();  
+        document.getElementById("cus_place").value=y;
+        document.getElementById("state").value=x;
+        document.getElementById("customer_mail").value="{{cust_email}}"
         document.getElementById("customer_id").value="{{ cust_id }}";
         if ( x == y )
                                 {
@@ -120,13 +129,14 @@ function calc(){
                 var discount = $(this).find('.discount').val();
                 var ttax = $(this).find('.tax').val();
                 var tax=parseInt(ttax);
-                console.log(qty);
-                console.log(rate);
-                console.log(discount);
-                console.log(tax);
-                $(this).find('.taxamount').val((qty * rate) * (tax / 100));
+                
+
+                $(this).find('.taxamount').val((qty * rate - discount) * (tax / 100));
                 var taxamount = parseFloat($(this).find('.taxamount').val());
                 $(this).find('.amount').val(qty * rate - discount);
+                // $(this).find('.taxamount').val((qty * rate) * (tax / 100));
+                // var taxamount = parseFloat($(this).find('.taxamount').val());
+                // $(this).find('.amount').val(qty * rate - discount);
 
                 calc_total();
             }
@@ -143,10 +153,14 @@ function calc(){
                 var discountt = $(this).find('.discountt').val();
                 var ttaxx = $(this).find('.taxx').val();
                 var taxx=parseInt(ttaxx);
-                
-                $(this).find('.taxamountt').val((qtyy * ratee) * (taxx / 100));
+
+                $(this).find('.taxamountt').val((qtyy * ratee - discountt) * (taxx / 100));
                 var taxamountt = parseFloat($(this).find('.taxamountt').val());
                 $(this).find('.amountt').val(qtyy * ratee - discountt);
+                
+                // $(this).find('.taxamountt').val((qtyy * ratee) * (taxx / 100));
+                // var taxamountt = parseFloat($(this).find('.taxamountt').val());
+                // $(this).find('.amountt').val(qtyy * ratee - discountt);
 
                 calc_total();
             }
@@ -257,8 +271,11 @@ function calc(){
             <form method="post" action="{% url 'updateestimate' estimate.id %}" class="p-5" enctype="multipart/form-data" novalidate
                 id="forms">
                 {% csrf_token %}
-                <input type="hidden" id="state" name="hidden_state" value="{{ company.state }}">
-                <input type="hidden" id="cus_place" name="hidden_cus_place"  value="">
+                <input  id="state1" name="hidden_state1" value="{{ company.state }}">
+                <input  id="state" name="hidden_state" value="">
+
+                <input type="text" name="samp" id="samp" >
+                <input  id="cus_place" name="hidden_cus_place"  value="">
                 <input type="number" id="customer_id" name="customer_id" style="display: none;"  readonly>
           
                 <div class="row mb-4 border-top pt-5">
@@ -279,6 +296,13 @@ function calc(){
                             style="color: white; background-color: rgb(210, 132, 30);height: 37px;"></i></a>
                     </div>
                 </div>
+                <div class="row mb-4 " id="cemail_row" >
+                  <div class="col-sm-2"><label for="estimate_number">Customer Mail ID</label></div>
+                  <div class="col-sm-6"><input type="text" id="customer_mail" name="customer_mail" class="form-control text-dark"
+                          value="" readonly>
+                      
+                  </div>
+              </div>
                 
                 <div class="row mb-4">
                     <div class="col-sm-2"><label for="estimate_number">Estimate#*</label></div>
@@ -1644,16 +1668,25 @@ $(document).ready(function() {
 
             success: function(data) {
 
-              $("#cemail_row").removeClass('d-none');
-              $("#cemail_row").addClass('d-flex');
+              // $("#cemail_row").removeClass('d-none');
+              // $("#cemail_row").addClass('d-flex');
               
               
               $('#customer_mail').val(' '+ data.customer_email);
-              $('#cus_place').val(data.cust_place_supply);
+              $('#samp').val(data.cust_place_supply);
               $('#customer_id').val(data.cust_id);
-              var x=document.getElementById("cus_place").value
+              var plc=document.getElementById("samp").value
               
-              var y=document.getElementById("state").value
+              var ste=document.getElementById("state1").value
+              var y=ste.toLowerCase();  
+              var inputstring=plc;
+              const parts = inputstring.split("-");   
+              var extractedWord = parts[1];  
+              var extractedWord1= extractedWord.trim();
+              var x=extractedWord1.toLowerCase();  
+              $('#cus_place').val(x);
+              $('#state').val(y);
+
                                 if ( x == y )
                                 {
                                    document.getElementById("item_table").style.display="block"

@@ -260,6 +260,8 @@ class invoice(models.Model):
     sgst=models.TextField(max_length=255)
     t_tax=models.FloatField()
     subtotal=models.FloatField()
+    shipping_charge = models.FloatField(null=True,blank=True)
+    adjustment = models.FloatField(null=True,blank=True)
     grandtotal=models.FloatField()
     cxnote=models.TextField(max_length=255)
     file=models.ImageField(upload_to='documents')
@@ -268,14 +270,14 @@ class invoice(models.Model):
     
     def __str__(self) :
         return self.invoice_no
-    
+   
 class invoice_item(models.Model):
     product=models.TextField(max_length=255)
     quantity=models.IntegerField() 
     hsn=models.TextField(max_length=255)
     tax=models.IntegerField()
-    total=models.FloatField()
-    desc=models.TextField(max_length=255)
+    total=models.FloatField()    
+    discount = models.FloatField(null=True,blank=True)
     rate=models.TextField(max_length=255)
     inv=models.ForeignKey(invoice,on_delete=models.CASCADE)
 
@@ -283,6 +285,7 @@ class invoice_comments(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     invoice=models.ForeignKey(invoice,on_delete=models.CASCADE,null=True,blank=True)
     comments=models.CharField(max_length=500,null=True,blank=True)
+
 
 class payment(models.Model):
     term=models.TextField(max_length=255)

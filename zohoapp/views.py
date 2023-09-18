@@ -1460,7 +1460,7 @@ def createestimate(request):
                 created = EstimateItems.objects.get_or_create(
                     estimate=estimate, item_name=element[0], quantity=element[1], rate=element[2], discount=element[3], tax_percentage=element[4], amount=element[5])
 
-    return redirect('newestimate')
+    return redirect('allestimates')
 
 
 def create_and_send_estimate(request):
@@ -1551,7 +1551,7 @@ def create_and_send_estimate(request):
         recipient = cust_email
         send_mail(subject, message, settings.EMAIL_HOST_USER, [recipient])
 
-    return redirect('newestimate')
+    return redirect('allestimates')
 
 def estimateslip(request, est_id):
     user = request.user
@@ -1582,6 +1582,7 @@ def editestimate(request,est_id):
     estimate = Estimates.objects.get(id=est_id)
     cust=estimate.customer.placeofsupply
     cust_id=estimate.customer.id
+    cust_email=estimate.customer.customerEmail
     unit=Unit.objects.all()
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
@@ -1601,6 +1602,7 @@ def editestimate(request,est_id):
         'sales':sales,
         'purchase':purchase,
         'payments':payments,
+        'cust_email':cust_email,
     }
     return render(request,'edit_estimate.html', context)
 
@@ -1725,12 +1727,10 @@ class EmailAttachementView(View):
         form = self.form_class(request.POST, request.FILES)
 
         if form.is_valid():
-            
             subject = form.cleaned_data['subject']
             message = form.cleaned_data['message']
             email = form.cleaned_data['email']
             files = request.FILES.getlist('attach')
-
             try:
                 mail = EmailMessage(subject, message, settings.EMAIL_HOST_USER, [email])
                 for f in files:
@@ -1739,7 +1739,6 @@ class EmailAttachementView(View):
                 return render(request, self.template_name, {'email_form': form, 'error_message': 'Sent email to %s'%email})
             except:
                 return render(request, self.template_name, {'email_form': form, 'error_message': 'Either the attachment is too big or corrupt'})
-
         return render(request, self.template_name, {'email_form': form, 'error_message': 'Unable to send email. Please try again later'})
 
 
