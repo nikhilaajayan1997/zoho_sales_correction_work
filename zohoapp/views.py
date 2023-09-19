@@ -1526,7 +1526,6 @@ def create_and_send_estimate(request):
                              adjustment=adjustment, total=total, status=status, customer_notes=cust_note, terms_conditions=tearms_conditions, 
                              attachment=attachment)
         estimate.save()
-
         if x == y:
             if len(item) == len(quantity) == len(rate) == len(discount) == len(tax) == len(amount):
               mapped = zip(item, quantity, rate, discount, tax, amount)
@@ -2033,6 +2032,8 @@ def add_prod(request):
             igst=request.POST['igst']
             cgst=request.POST['cgst']
             sgst=request.POST['sgst']
+            shipping_charge=request.POST['shipping_charge']
+            adjustment_charge=request.POST['adjustment_charge']
             totaltax=request.POST['totaltax']
             t_total=request.POST['t_total']
             # if request.FILES.get('file') is not None:
@@ -2053,7 +2054,7 @@ def add_prod(request):
                 hsn=request.POST.getlist('hsn[]')
                 quantity=request.POST.getlist('quantity[]')
                 rate=request.POST.getlist('rate[]')
-                desc=request.POST.getlist('desc[]')
+                discount=request.POST.getlist('discount[]')
                 tax=request.POST.getlist('tax[]')
                 amount=request.POST.getlist('amount[]')
                 # term=payment_terms.objects.get(id=term.id)
@@ -2062,35 +2063,35 @@ def add_prod(request):
                 hsnn=request.POST.getlist('hsnn[]')
                 quantityy=request.POST.getlist('quantityy[]')
                 ratee=request.POST.getlist('ratee[]')
-                descc=request.POST.getlist('descc[]')
+                discountt=request.POST.getlist('discountt[]')
                 taxx=request.POST.getlist('taxx[]')
                 amountt=request.POST.getlist('amountt[]')
                 # term=payment_terms.objects.get(id=term.id)
 
             inv=invoice(user=user,customer=custo,invoice_no=invoice_no,terms=terms,order_no=order_no,inv_date=inv_date,due_date=due_date,
-                        cxnote=cxnote,subtotal=subtotal,igst=igst,cgst=cgst,sgst=sgst,t_tax=totaltax,
+                        cxnote=cxnote,subtotal=subtotal,igst=igst,cgst=cgst,sgst=sgst,shipping_charge=shipping_charge, adjustment=adjustment_charge,t_tax=totaltax,
                         grandtotal=t_total,status=status,terms_condition=tc,file=file)
             inv.save()
             if x==y:
                 inv_id=invoice.objects.get(id=inv.id)
-                if len(item)==len(hsn)==len(quantity)==len(desc)==len(tax)==len(amount)==len(rate):
+                if len(item)==len(hsn)==len(quantity)==len(discount)==len(tax)==len(amount)==len(rate):
 
-                    mapped = zip(item,hsn,quantity,desc,tax,amount,rate)
+                    mapped = zip(item,hsn,quantity,discount,tax,amount,rate)
                     mapped = list(mapped)
                     for element in mapped:
                         created = invoice_item.objects.get_or_create(inv=inv_id,product=element[0],hsn=element[1],
-                                            quantity=element[2],desc=element[3],tax=element[4],total=element[5],rate=element[6])
+                                            quantity=element[2],discount=element[3],tax=element[4],total=element[5],rate=element[6])
                         
                     return redirect('invoiceview')
             else:
                 inv_id=invoice.objects.get(id=inv.id)
-                if len(itemm)==len(hsnn)==len(quantityy)==len(descc)==len(taxx)==len(amountt)==len(ratee):
+                if len(itemm)==len(hsnn)==len(quantityy)==len(discountt)==len(taxx)==len(amountt)==len(ratee):
 
-                    mapped = zip(itemm,hsnn,quantityy,descc,taxx,amountt,ratee)
+                    mapped = zip(itemm,hsnn,quantityy,discountt,taxx,amountt,ratee)
                     mapped = list(mapped)
                     for element in mapped:
                         created = invoice_item.objects.get_or_create(inv=inv_id,product=element[0],hsn=element[1],
-                                            quantity=element[2],desc=element[3],tax=element[4],total=element[5],rate=element[6])
+                                            quantity=element[2],discount=element[3],tax=element[4],total=element[5],rate=element[6])
                         
                     return redirect('invoiceview')
 

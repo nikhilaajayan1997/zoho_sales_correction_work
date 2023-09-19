@@ -453,7 +453,7 @@ crossorigin="anonymous"></script>
                     placeholder=" Customer information for future Buisness" required></textarea>
             </div>
             <div class="col-sm-6">
-                <table class="rounded table table-bordered" style="background-color: #b6b3b36b;">
+                <table class="rounded table table-bordered" id="table_tot" style="background-color: #b6b3b36b;" >
                     <tr>
                         <td class="text-black" style="font-weight: bold;">Sub Total</td>
                         <td>
@@ -499,6 +499,20 @@ crossorigin="anonymous"></script>
                         </center>
                       </td>
                     </tr>
+                    <tr>
+                      <td class="text-black" style="font-weight: bold;">Shipping Charges</td>
+                      <!-- <td></td> -->
+                      <!-- <td><input type="number" id="shipping"> <i class="fas fa-question"></i></td> -->
+                      <td><center><input type="number" id="shipping_charge" name="shipping_charge" step="any" onchange="calc_ship()" value="0.00" 
+                          class="form-control bg-transparent border-0 text-right shipping_charge" style="width: 50%;"></center></td>
+                  </tr>
+                  <tr>
+                      <td class="text-black" style="font-weight: bold;">Adjustmment</td>
+                      <!-- <td></td> -->
+                      <!-- <td><input type="number" id="adjustment"> <i class="fas fa-question"></i></td> -->
+                      <td><center><input type="number" id="adjustment_charge" name="adjustment_charge" step="any" onchange="calc_ship()" value="0.00" 
+                          class="form-control bg-transparent border-0 text-right adjustment" style="width: 50%;"></center> </td>
+                  </tr>
                    
                    
                     <tr>
@@ -2303,19 +2317,20 @@ modalEl.addEventListener('click', (event) => {
                         </td>
             </tr>`);
 
-            $(document).on("input", ".hsn", function() {
-    var hsn_value = $(this).val();
-    var hsn_length = hsn_value.length;
-    if (hsn_length > 6) {
-        $(this).val(hsn_value.substring(0, 6));
-        alert("HSN should not be more than 6 digits!");
-    }
-});
+//             $(document).on("input", ".hsn", function() {
+//     var hsn_value = $(this).val();
+//     var hsn_length = hsn_value.length;
+//     if (hsn_length > 6) {
+//         $(this).val(hsn_value.substring(0, 6));
+//         alert("HSN should not be more than 6 digits!");
+//     }
+// });
             $('#item_table').append(newRow);
         });
 
         $('#item_table').on('click', '.delete-row', function () {
             $(this).closest('tr').remove();
+            calc();
         });
 
     });
@@ -2326,35 +2341,35 @@ modalEl.addEventListener('click', (event) => {
 <script>
   $(document).ready(function () {
      $('#add-roww').click(function () {
-         var table = document.getElementById("item_tablee");
-         var RowCount = table.rows.length;
-         console.log(RowCount);
-         var newRow = $(`
-         <tr id='row${RowCount}' >
+         var tablee = document.getElementById("item_tablee");
+         var RowCountt = tablee.rows.length;
+         console.log(RowCountt);
+         var newRoww= $(`
+         <tr id='row${RowCountt}' >
              <td>
                  <div class='form-group'>
                      <select
                          class='form-control  bg-transparent  text-white border-0 item_selectt' name='itemm[]'
-                         id='itemm${RowCount}'>
+                         id='itemm${RowCountt}'>
                          {% for i in p %}
                          <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
                          {% endfor %}
                      </select></div>
              </td>
              <td class='text-right'>
-         <input type='text' id='hsnn${RowCount}'  class='form-control bg-transparent  text-white border-0  text-right hsnn' name='hsnn[]' value='' placeholder="6 Digit No" pattern="[0-9]{6}" required>
+         <input type='text' id='hsnn${RowCountt}'  class='form-control bg-transparent  text-white border-0  text-right hsnn' name='hsnn[]' value='' placeholder="6 Digit No" pattern="[0-9]{6}" required>
          <span class='hsn-validation'></span>
      </td>
-             <td class='text-right'><input type='number' id='qtyy${RowCount}'
+             <td class='text-right'><input type='number' id='qtyy${RowCountt}'
                      class='form-control border-0 bg-transparent  text-white text-right qtyy' name='quantityy[]' value='0' onchange="calc()">
              </td>
-             <td class='text-right'><input type='number' id='ratee${RowCount}'
+             <td class='text-right'><input type='number' id='ratee${RowCountt}'
                      class='form-control border-0 bg-transparent  text-white text-right ratee' name='ratee[]' value='0.00'>
                 </td>
                 <td class='text-right'><input type='number' id='discountt${RowCountt}'
                         class='form_control bg-transparent border-0 text-light text-right discountt' name='discountt[]' value='0.00' style="width:85%">
                 </td>
-             <td class='text-right'> <select name='taxx[]' id='taxx${RowCount}'
+             <td class='text-right'> <select name='taxx[]' id='taxx${RowCountt}'
                      class="form-control  bg-transparent  text-white text-right border-0 taxx">
                      <option>Select Tax</option>
                  
@@ -2367,11 +2382,11 @@ modalEl.addEventListener('click', (event) => {
                     
                  </select></td>
              <td style="display: none;">
-                 <input type="text" name='taxamountt1' id="taxamountt${RowCount}" class="form-control taxamountt" />
+                 <input type="text" name='taxamountt1' id="taxamountt${RowCountt}" class="form-control taxamountt" />
                          </td>
-             <td class='text-right'><input type='number' id='amountt${RowCount}'
+             <td class='text-right'><input type='number' id='amountt${RowCountt}'
                      class='form-control border-0 bg-transparent  text-white text-right amountt' name='amountt[]' value='0.00'></td>
-             <td class='text-center'><button type='button' id='del_btn${RowCount}'
+             <td class='text-center'><button type='button' id='del_btn${RowCountt}'
                      class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-roww'
                      style='width:30px'><i class='fa fa-times'></i></button>
                      <button type='button' class='btn btn-transparent text-primary btn-sm btn-outline-primary rounded-circle clone-roww' data-row=1 style='width:30px'><i class="fa fa-clone"></i>
@@ -2379,19 +2394,13 @@ modalEl.addEventListener('click', (event) => {
                      </td>
          </tr>`);
 
-//          $(document).on("input", ".hsnn", function() {
-//  var hsn_value = $(this).val();
-//  var hsn_length = hsn_value.length;
-//  if (hsn_length > 6) {
-//      $(this).val(hsn_value.substring(0, 6));
-//      alert("HSN should not be more than 6 digits!");
-//  }
-// });
-         $('#item_tablee').append(newRow);
+
+         $('#item_tablee').append(newRoww);
      });
 
-     $('#item_tablee').on('click', '.delete-roww', function () {
+     $('#item_tablee').on('click','.delete-roww', function () {
          $(this).closest('tr').remove();
+         calc();
      });
 
  });
@@ -2513,124 +2522,96 @@ if( x != y )
 
 }
 
-  // Update subtotal when a row is deleted
-    $(document).ready(function dlt () {
+// Update subtotal when a row is deleted
+// $(document).ready(function dlt () {
 
-      var x=document.getElementById("cus_place").value
-      var y=document.getElementById("state").value
+// var x=document.getElementById("cus_place").value
+// var y=document.getElementById("state").value
 
-     if( x == y )
-     {
-      $('#item_table').on('click', '.delete-row', function () {
-            var tr = $(this).closest('tr');
-            var taxamount= parseFloat(tr.find('input[name^="taxamount"]').val());
-            var amount = parseFloat(tr.find('input[name^="amount"]').val());
-            var subtotal = parseFloat($('#subtotal').val());
+// if( x == y )
+// {
+// $('#item_table').on('click', '.delete-row', function () {
+//       var tr = $(this).closest('tr');
+//       var taxamount= parseFloat(tr.find('input[name^="taxamount"]').val());
+//       var amount = parseFloat(tr.find('input[name^="amount"]').val());
+//       var subtotal = parseFloat($('#subtotal').val());
 
-            var total_taxamount = parseFloat($('#total_taxamount').val());
-            $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
+//       var total_taxamount = parseFloat($('#total_taxamount').val());
+//       $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
 
-            $('#subtotal').val((subtotal - amount).toFixed(2));
+//       $('#subtotal').val((subtotal - amount).toFixed(2));
 
-            var total_with_tax= parseFloat($('#total_with_tax').val());
-            $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
-            
-            var pos =document.getElementById("cus_place").value;
-            var state = document.getElementById("state").value;
-            d=0
-            // if(pos==state){
-                
-                gst = taxamount / 2;
-            console.log(gst);
-            $('#cgst').val(parseFloat(gst.toFixed(2)));
-            $('#sgst').val(parseFloat(gst.toFixed(2)));
-            $('#igst').val(parseFloat(d.toFixed(2)));
+//       var total_with_tax= parseFloat($('#total_with_tax').val());
+//       $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
+      
+//       var pos =document.getElementById("cus_place").value;
+//       var state = document.getElementById("state").value;
+//       d=0
+          
+//           gst = taxamount / 2;
+//       console.log(gst);
+//       $('#cgst').val(parseFloat(gst.toFixed(2)));
+//       $('#sgst').val(parseFloat(gst.toFixed(2)));
+//       $('#igst').val(parseFloat(d.toFixed(2)));
 
-            var cgst= parseFloat($('#cgst').val());
-            $('#cgst').val(( taxamount-cgst ).toFixed(2));
-            var sgst= parseFloat($('#sgst').val());
-            $('#sgst').val(( taxamount-sgst ).toFixed(2));
-            document.getElementById("tr_cgst").style.display = "table-row";
-            document.getElementById("tr_sgst").style.display = "table-row";
-           
-            // }
-            // if(pos!=state){
-               
-            // console.log(gst);
-            // $('#cgst').val(parseFloat(d.toFixed(2)));
-            // $('#sgst').val(parseFloat(d.toFixed(2)));
-            // $('#igst').val(parseFloat(taxamount.toFixed(2)));
+//       var cgst= parseFloat($('#cgst').val());
+//       $('#cgst').val(( taxamount-cgst ).toFixed(2));
+//       var sgst= parseFloat($('#sgst').val());
+//       $('#sgst').val(( taxamount-sgst ).toFixed(2));
+//       document.getElementById("tr_cgst").style.display = "table-row";
+//       document.getElementById("tr_sgst").style.display = "table-row";
+     
+      
 
-           
-            // var igst= parseFloat($('#igst').val());
-            // $('#igst').val(( total_taxamount-igst ).toFixed(2));
-           
-            // }
-           
-           
+//       tr.remove();
+      
+      
+//   });
+// }
+// else
+// {
+// $('#item_tablee').on('click', '.delete-roww', function () {
+//       var tr = $(this).closest('tr');
+//       var taxamount= parseFloat(tr.find('input[name^="taxamountt"]').val());
+//       var amount = parseFloat(tr.find('input[name^="amountt"]').val());
+//       var subtotal = parseFloat($('#subtotal').val());
 
-            tr.remove();
-            
-            
-        });
-     }
-     else
-     {
-      $('#item_tablee').on('click', '.delete-roww', function () {
-            var tr = $(this).closest('tr');
-            var taxamount= parseFloat(tr.find('input[name^="taxamountt"]').val());
-            var amount = parseFloat(tr.find('input[name^="amountt"]').val());
-            var subtotal = parseFloat($('#subtotal').val());
+//       var total_taxamount = parseFloat($('#total_taxamount').val());
+//       $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
 
-            var total_taxamount = parseFloat($('#total_taxamount').val());
-            $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
+//       $('#subtotal').val((subtotal - amount).toFixed(2));
 
-            $('#subtotal').val((subtotal - amount).toFixed(2));
+//       var total_with_tax= parseFloat($('#total_with_tax').val());
+//       $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
+      
+//       var pos =document.getElementById("cus_place").value;
+//       var state = document.getElementById("state").value;
+//       d=0
+      
+         
+//       console.log(gst);
+//       $('#cgst').val(parseFloat(d.toFixed(2)));
+//       $('#sgst').val(parseFloat(d.toFixed(2)));
+//       $('#igst').val(parseFloat(taxamount.toFixed(2)));
 
-            var total_with_tax= parseFloat($('#total_with_tax').val());
-            $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
-            
-            var pos =document.getElementById("cus_place").value;
-            var state = document.getElementById("state").value;
-            d=0
-            // if(pos==state){
-                
-            //     gst = taxamount / 2;
-            // console.log(gst);
-            // $('#cgst').val(parseFloat(gst.toFixed(2)));
-            // $('#sgst').val(parseFloat(gst.toFixed(2)));
-            // $('#igst').val(parseFloat(d.toFixed(2)));
+     
+//       var igst= parseFloat($('#igst').val());
+//       $('#igst').val(( total_taxamount-igst ).toFixed(2));
+//       document.getElementById('tr_igst').style.display = "table-row";
 
-            // var cgst= parseFloat($('#cgst').val());
-            // $('#cgst').val(( taxamount-cgst ).toFixed(2));
-            // var sgst= parseFloat($('#sgst').val());
-            // $('#sgst').val(( taxamount-sgst ).toFixed(2));
-           
-            // }
-            // if(pos!=state){
-               
-            console.log(gst);
-            $('#cgst').val(parseFloat(d.toFixed(2)));
-            $('#sgst').val(parseFloat(d.toFixed(2)));
-            $('#igst').val(parseFloat(taxamount.toFixed(2)));
+     
+     
+     
 
-           
-            var igst= parseFloat($('#igst').val());
-            $('#igst').val(( total_taxamount-igst ).toFixed(2));
-            document.getElementById('tr_igst').style.display = "table-row";
+//       tr.remove();
+      
+      
+//   });
+// }
 
-           
-            // }
-           
-           
+// });
 
-            tr.remove();
-            
-            
-        });
-     }
-
-    });
+// ...................................................................
 
 
 function test(taxamount) {
@@ -2655,10 +2636,9 @@ function test(taxamount) {
             $('#igst').val(parseFloat(d.toFixed(2)));
             document.getElementById("tr_cgst").style.display = "table-row";
             document.getElementById("tr_sgst").style.display = "table-row";
-            // document.getElementById('tr_cgst').style= ('display: flex');
+            document.getElementById("tr_igst").style.display = "none";
+
             
-            // document.getElementById('tr_sgst').style= ('display: flex');
-            // document.getElementById('tr_igst').style= ('display: none');
 
            
         }
@@ -2670,8 +2650,47 @@ function test(taxamount) {
             $('#cgst').val(d.toFixed(2));
             $('#sgst').val(d.toFixed(2));
             document.getElementById("tr_igst").style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "none";
+            document.getElementById("tr_cgst").style.display = "none";
+
+
         }
     }
+
+    // Calculate total
+    // $(document).ready(function () {
+    //     $('#shipping_charge, #adjustment_charge').on('keyup', function () {
+    //         var shipping_charge = parseFloat($('#shipping_charge').val() || 0);
+    //         var adjustment_charge = parseFloat($('#adjustment_charge').val() || 0);
+    //         var subtotal = parseFloat($('#subtotal').val() || 0);
+    //         var total_tax = parseFloat($('#total_taxamount').val() || 0);
+    //         var total = subtotal + total_tax + shipping_charge + adjustment_charge;
+    //         // total = Math.round(total);
+
+    //         $('#shipping_charge').val(shipping_charge.toFixed(2));
+    //         $('#adjustment_charge').val(adjustment_charge.toFixed(2));
+    //         $('#total_with_tax').val(total.toFixed(2));
+    //     });
+    // });
+
+    function calc_ship()
+    {
+      // $('#table_tot tr').each(function() {
+        var shipping_charge=parseFloat($('#shipping_charge').val());
+        var adjustment_charge=parseFloat($('#adjustment_charge').val());
+        var subtotal=parseFloat($('#subtotal').val());
+        var total_tax=parseFloat($('#total_taxamount').val());
+        var total=subtotal + total_tax + shipping_charge + adjustment_charge;
+
+        $('#shipping_charge').val(shipping_charge.toFixed(2));
+            $('#adjustment_charge').val(adjustment_charge.toFixed(2));
+            $('#total_with_tax').val(total.toFixed(2));
+
+
+      // });
+    }
+
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
