@@ -247,30 +247,44 @@ style="background-color: rgba(124, 124, 123, 0.507); height: 600px; overflow-y: 
             <table class="table  mt-2">
                 <tr>
                     <td class="text-dark" style="font-weight: bold;">Sub-Total:</td>
-                    <td class="text-right" style="text-align: end;">{{ invoice.subtotal|floatformat:1}}</td>
+                    <td class="text-right" style="text-align: end;">{{ invoice.subtotal|floatformat:1 }}</td>
                 </tr>
-                {% if invoice.cgst != 0 %}
+                {% if invoice.cgst|floatformat:1 != 0|floatformat:1 %}
                 <tr>
                     <td class="text-right text-dark">CGST:</td>
-                    <td class="text-right" style="text-align: end;">{{ invoice.cgst|floatformat:1}}</td>
+                    <td class="text-right" style="text-align: end;">{{ invoice.cgst|floatformat:1 }}</td>
                 </tr>
                 {% endif %}
-                {% if invoice.sgst != 0 %}
+
+                {% if invoice.sgst|floatformat:1 != 0|floatformat:1 %}
                 <tr>
                     <td class="text-right text-dark">SGST:</td>
-                    <td class="text-right" style="text-align: end;">{{ invoice.sgst|floatformat:1}}</td>
+                    <td class="text-right" style="text-align: end;">{{ invoice.sgst|floatformat:1 }}</td>
                 </tr>
                 {% endif %}
-                {% if invoice.igst != 0 %}
+
+                {% if invoice.igst|floatformat:1 != 0|floatformat:1 %}
                 <tr>
                     <td class="text-right text-dark">IGST:</td>
-                    <td class="text-right" style="text-align: end;">{{ invoice.igst|floatformat:1}}</td>
+                    <td class="text-right" style="text-align: end;">{{ invoice.igst|floatformat:1 }}</td>
                 </tr>
                 {% endif %}
                 <tr>
                   <td class="text-right text-dark">TAX:</td>
                   <td class="text-right" style="text-align: end;">{{ invoice.t_tax}}</td>
               </tr>
+              {% if invoice.shipping_charge != 0 %}
+                <tr>
+                    <td class="text-right text-dark">Shipping Charge:</td>
+                    <td class="text-right" style="text-align: end;">{{ invoice.shipping_charge|floatformat:1 }}</td>
+                </tr>
+                {% endif %}
+                {% if invoice.adjustment != 0 %}
+                <tr>
+                    <td class="text-right text-dark">Adjustment Charge:</td>
+                    <td class="text-right" style="text-align: end;">{{ invoice.adjustment|floatformat:1}}</td>
+                </tr>
+                {% endif %}
                 
                 
                 <tr>

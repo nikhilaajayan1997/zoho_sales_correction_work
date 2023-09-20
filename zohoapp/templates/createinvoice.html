@@ -230,10 +230,12 @@ crossorigin="anonymous"></script>
                           class='form-control bg-transparent border-0 text-light text-right rate' name='rate[]'
                           value='0.00' >
                   </td>
+
                   <td class='text-right'><input type='number' id='discount1'
                     class='form-control bg-transparent border-0 text-light text-right discount' name='discount[]'
                     value='0.00'>
-            </td>
+                  </td>
+
                   <td class='text-right'> <select name="tax[]" id="tax1" class='form-control bg-transparent border-0 text-light text-right tax'  >
                     <option>Select Tax</option>
                       <option value="0" class="text-dark">GST 0%</option>
@@ -2479,14 +2481,14 @@ if( x != y )
   
   $('#item_tablee tbody tr').each(function() {
         // get the values of the input fields for this row
-        var qty = $(this).find('.qtyy').val();
-        var rate = $(this).find('.ratee').val();
-        var discount = $(this).find('.discountt').val();
-        var tax = $(this).find('.taxx').val();
+        var qtyy = $(this).find('.qtyy').val();
+        var ratee = $(this).find('.ratee').val();
+        var discountt = $(this).find('.discountt').val();
+        var taxx = $(this).find('.taxx').val();
 
-        $(this).find('.taxamountt').val((qty * rate - discount) * (tax / 100));
-        var taxamount = parseFloat($(this).find('.taxamountt').val());
-        $(this).find('.amountt').val(qty * rate - discount);
+        $(this).find('.taxamountt').val((qtyy * ratee - discountt) * (tax / 100));
+        var taxamountt = parseFloat($(this).find('.taxamountt').val());
+        $(this).find('.amountt').val(qtyy * ratee - discountt);
         
         // // calculate the tax amount and total amount for this row
         // var taxamount = (qty * rate) * (tax / 100);

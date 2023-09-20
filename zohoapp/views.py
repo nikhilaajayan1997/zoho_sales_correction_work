@@ -2147,6 +2147,7 @@ def edited_prod(request,id):
     invoic = invoice.objects.get(id=id)
     cust=invoic.customer.placeofsupply
     cust_id=invoic.customer.id
+    cust_email=invoic.customer.customerEmail
     pay=payment_terms.objects.all()
     sales=Sales.objects.all()
     purchase=Purchase.objects.all()
@@ -2175,6 +2176,8 @@ def edited_prod(request,id):
         invoic.igst = request.POST['igst']
         invoic.cgst = request.POST['cgst']
         invoic.sgst = request.POST['sgst']
+        invoic.shipping_charge=request.POST['shipping_charge']
+        invoic.adjustment=request.POST['adjustment_charge']
         invoic.t_tax = request.POST['totaltax']
         invoic.grandtotal = request.POST['t_total']
 
@@ -2206,7 +2209,7 @@ def edited_prod(request,id):
             hsn=request.POST.getlist('hsn[]')
             quantity=request.POST.getlist('quantity[]')
             rate=request.POST.getlist('rate[]')
-            desc=request.POST.getlist('desc[]')
+            discount=request.POST.getlist('discount[]')
             tax=request.POST.getlist('tax[]')
             amount=request.POST.getlist('amount[]')
             obj_dele=invoice_item.objects.filter(inv_id=invoic.id)
@@ -2216,31 +2219,31 @@ def edited_prod(request,id):
             hsnn=request.POST.getlist('hsnn[]')
             quantityy=request.POST.getlist('quantityy[]')
             ratee=request.POST.getlist('ratee[]')
-            descc=request.POST.getlist('descc[]')
+            discountt=request.POST.getlist('discountt[]')
             taxx=request.POST.getlist('taxx[]')
             amountt=request.POST.getlist('amountt[]')
             obj_dele=invoice_item.objects.filter(inv_id=invoic.id)
             obj_dele.delete()
        
         if x==y:
-            if len(item)==len(hsn)==len(quantity)==len(desc)==len(tax)==len(amount)==len(rate):
+            if len(item)==len(hsn)==len(quantity)==len(discount)==len(tax)==len(amount)==len(rate):
 
-                mapped = zip(item,hsn,quantity,desc,tax,amount,rate)
+                mapped = zip(item,hsn,quantity,discount,tax,amount,rate)
                 mapped = list(mapped)
                 for element in mapped:
                     created = invoice_item.objects.get_or_create(inv=invoic,product=element[0],hsn=element[1],
-                                        quantity=element[2],desc=element[3],tax=element[4],total=element[5],rate=element[6])
+                                        quantity=element[2],discount=element[3],tax=element[4],total=element[5],rate=element[6])
                     
                 return redirect('detailedview',id)
         
         else:
-            if len(itemm)==len(hsnn)==len(quantityy)==len(descc)==len(taxx)==len(amountt)==len(ratee):
+            if len(itemm)==len(hsnn)==len(quantityy)==len(discountt)==len(taxx)==len(amountt)==len(ratee):
 
-                mapped = zip(itemm,hsnn,quantityy,descc,taxx,amountt,ratee)
+                mapped = zip(itemm,hsnn,quantityy,discountt,taxx,amountt,ratee)
                 mapped = list(mapped)
                 for element in mapped:
                     created = invoice_item.objects.get_or_create(inv=invoic,product=element[0],hsn=element[1],
-                                        quantity=element[2],desc=element[3],tax=element[4],total=element[5],rate=element[6])
+                                        quantity=element[2],discount=element[3],tax=element[4],total=element[5],rate=element[6])
                     
                 return redirect('detailedview',id)
                     
@@ -2257,6 +2260,7 @@ def edited_prod(request,id):
             'cust':cust,
             'comp':comp,
             'custo_id':cust_id,
+            'cust_email':cust_email,
         }             
         
     return render(request, 'invoiceedit.html', context)

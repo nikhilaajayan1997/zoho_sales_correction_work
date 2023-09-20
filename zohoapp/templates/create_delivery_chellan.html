@@ -512,8 +512,11 @@ transition: transform 0.4s ,top 0.4s;
 <form method="POST" action="" enctype="multipart/form-data" novalidate
     id="forms">
     {% csrf_token %}
-    <input class="hidden"  name="hidden_state" id="state" value="{{company.state}}">
-    <input class="hidden"  id="cus_place" name="hidden_cus_place"  value="">
+    <input  id="state1" name="hidden_state1" value="{{ company.state }}">
+                <input  id="state" name="hidden_state" value="">
+
+                <input type="text" name="samp" id="samp" >
+                <input  id="cus_place" name="hidden_cus_place"  value="">
 
     <div class="row mb-4">
         <div class="col-sm-2">
@@ -2494,12 +2497,21 @@ $(document).ready(function() {
 
               $("#cemail_row").removeClass('d-none');
               $("#cemail_row").addClass('d-flex');
+
               $('#customer_mail').val(' '+ data.customer_email);
-              $('#cus_place').val(data.cust_place_supply);
+              $('#samp').val(data.cust_place_supply);
               $('#customer_id').val(data.cust_id);
-              var x=document.getElementById("cus_place").value
+              var plc=document.getElementById("samp").value
               
-              var y=document.getElementById("state").value
+              var ste=document.getElementById("state1").value
+              var y=ste.toLowerCase();  
+              var inputstring=plc;
+              const parts = inputstring.split("-");   
+              var extractedWord = parts[1];  
+              var extractedWord1= extractedWord.trim();
+              var x=extractedWord1.toLowerCase();  
+              $('#cus_place').val(x);
+              $('#state').val(y);
                                 if ( x == y )
                                 {
                                    document.getElementById("item_table").style.display="block"

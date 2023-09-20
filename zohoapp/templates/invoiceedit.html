@@ -49,10 +49,23 @@
 
 <script>
   window.onload=function(){        
-      var x="{{ comp }}";
-      var y="{{ cust }}";
-      document.getElementById("cus_place").value="{{ cust }}";
-      document.getElementById("customer_id").value="{{ custo_id }}";
+        var ste="{{ comp }}";
+        var plc="{{ cust }}";
+        var x=ste.toLowerCase(); 
+
+        var inputstring=plc;
+        const parts = inputstring.split("-");   
+        var extractedWord = parts[1];  
+        var extractedWord1= extractedWord.trim();
+        var y=extractedWord1.toLowerCase();  
+        document.getElementById("cus_place").value=y;
+        document.getElementById("state").value=x;
+        document.getElementById("cx_mail").value="{{cust_email}}";
+        document.getElementById("customer_id").value="{{ custo_id }}";
+        var ig="{{ i.igst }}";
+        var cg="{{ i.cgst }}";
+        var sg="{{ i.sgst }}";
+
       if ( x == y )
                               {
                                  document.getElementById("item_table").style.display="block"
@@ -71,6 +84,19 @@
                                  document.getElementById("add-row").style.display="none"
                                  document.getElementById("add-roww").style.display="block"
                               }
+                  
+      if ( ig != 0 ){
+        document.getElementById("tr_igst").style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "none";
+            document.getElementById("tr_cgst").style.display = "none";
+
+      }
+      else{
+
+        document.getElementById("tr_cgst").style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "table-row";
+            document.getElementById("tr_igst").style.display = "none";
+      }
                   
   }
 </script>
@@ -93,8 +119,10 @@
 <div>
   <form method="post" action="{% url 'edited_prod' i.id %}" enctype="multipart/form-data">
     {% csrf_token %}
-    <input class="hidden"  id="cus_place" name="hidden_cus_place"  value="">
-    <input class="hidden"  name="hidden_state" id="state" value="{{ company.state }}">
+    <input  id="state1" name="hidden_state1" value="{{ company.state }}">
+    <input  id="state" name="hidden_state" value="">
+    <input type="text" name="samp" id="samp" >
+    <input  id="cus_place" name="hidden_cus_place"  value="">
 
     <div class="row mb-4 border-top pt-5">
         <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div>
@@ -116,7 +144,7 @@
     <div class="row mb-4">
       <div class="col-sm-2"><label for="estimate_number">Customer Mail</label></div>
       <div class="col-sm-6"><input type="email" class="form-control text-dark" id="cx_mail" name="cx_mail" value="{{i.customer.customerEmail}}">
-        <input type="text" style="display: none;" id="customer_id" name="customer_id"  readonly>
+        <input type="text"  style="display: none;" id="customer_id" name="customer_id"  readonly>
       </div>
   </div>
 
@@ -176,7 +204,7 @@
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Hsn</th>
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Quantity</th>
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Rate</th>
-                        <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Description</th>
+                        <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Discount</th>
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Tax %</th>
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Total</th>
                     </tr>
@@ -221,8 +249,8 @@
                                 class='form-control bg-transparent  text-light border-0  text-right rate' name='rate[]'
                                 value="{{k.rate}}" >
                         </td>
-                        <td class='text-right'><input type='text' id='desc{{forloop.counter}}'
-                                class='form-control bg-transparent  text-light border-0  text-right desc' value="{{k.desc}}" name='desc[]'
+                        <td class='text-right'><input type='number' id='discount{{forloop.counter}}'
+                                class='form-control bg-transparent  text-light border-0  text-right discount' value="{{k.discount}}" name='discount[]'
                                 >
                         </td>
                         <td class='text-right'> <select name='tax[]'  id='tax{{forloop.counter}}'  
@@ -274,7 +302,7 @@
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Hsn</th>
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Quantity</th>
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Rate</th>
-                        <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Description</th>
+                        <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Discount</th>
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Tax %</th>
                         <th style="font-weight: bold;color: rgb(245, 154, 36);" class="text-right">Total</th>
                     </tr>
@@ -318,10 +346,10 @@
         
                         <td class='text-right'><input type='number' id='ratee{{forloop.counter}}'
                                 class='form-control bg-transparent  text-light border-0  text-right ratee' name='ratee[]'
-                                value="{{k.rate}}" >
+                                value="{{k.rate}}">
                         </td>
-                        <td class='text-right'><input type='text' id='descc{{forloop.counter}}'
-                                class='form-control bg-transparent  text-light border-0  text-right descc' value="{{k.desc}}" name='descc[]' >
+                        <td class='text-right'><input type='number' id='discountt{{forloop.counter}}'
+                                class='form-control bg-transparent  text-light border-0  text-right discountt' value="{{k.discount}}" name='discountt[]' >
                                
                         </td>
                         <td class='text-right'> <select name='taxx[]' id='taxx{{forloop.counter}}' class='form-control bg-transparent text-light text-right border-0 taxx'>
@@ -387,24 +415,46 @@
                         </center>
                     </td>
                 </tr>
-                <tr   id="tr_cgst">
-                    <td class="text-black" style="font-weight: bold;">CGST</td>
-                    <td>
-                        <center>
-                            <input style="width: 50%;"  type="number" id='cgst' name="cgst" value="{{i.cgst}}"
-                            class="bg-transparent form-control border-0 text-right cgst" readonly>                        
-                        </center>
-                    </td>
-                </tr>
-                <tr  id="tr_sgst">
-                    <td class="text-black" style="font-weight: bold;">SGST</td>
-                    <td>
-                        <center>
-                            <input style="width: 50%;"  type="number" id='sgst' name="sgst" value="{{i.sgst}}"
-                            class="bg-transparent form-control border-0 text-right" readonly>                        
-                        </center>
-                    </td>
-                </tr>
+
+
+                <tr  id="tr_cgst">
+                  <td class="text-black" style="font-weight: bold;">CGST</td>
+                  <td>
+                      <center>
+                          <input style="width: 50%;"  type="number" id='cgst' name="cgst" value="{{i.cgst}}"
+                          class="bg-transparent form-control border-0 text-right cgst" readonly>                        
+                      </center>
+                  </td>
+              </tr>
+              
+
+              <tr id="tr_sgst">
+                  <td class="text-black" style="font-weight: bold;">SGST</td>
+                  <td>
+                      <center>
+                          <input style="width: 50%;"  type="number" id='sgst' name="sgst" value="{{i.sgst}}"
+                          class="bg-transparent form-control border-0 text-right" readonly>                        
+                      </center>
+                  </td>
+              </tr>
+              
+              
+
+               
+                <tr>
+                  <td class="text-black" style="font-weight: bold;">Shipping Charges</td>
+                  <!-- <td></td> -->
+                  <!-- <td><input type="number" id="shipping"> <i class="fas fa-question"></i></td> -->
+                  <td><center><input type="number" id="shipping_charge" name="shipping_charge" step="any" onchange="calc_ship()" value="{{i.shipping_charge}}" 
+                      class="form-control bg-transparent border-0 text-right shipping_charge" style="width: 50%;"></center></td>
+              </tr>
+              <tr>
+                  <td class="text-black" style="font-weight: bold;">Adjustmment</td>
+                  <!-- <td></td> -->
+                  <!-- <td><input type="number" id="adjustment"> <i class="fas fa-question"></i></td> -->
+                  <td><center><input type="number" id="adjustment_charge" name="adjustment_charge" step="any" onchange="calc_ship()" value="{{i.adjustment}}" 
+                      class="form-control bg-transparent border-0 text-right adjustment" style="width: 50%;"></center> </td>
+              </tr>
                 <tr>
                     <td class="text-black" style="font-weight: bold;">Tax Amount</td>
                     <td>
@@ -1621,16 +1671,25 @@ $(document).ready(function() {
 
             success: function(data) {
 
-              $("#cemail_row").removeClass('d-none');
-              $("#cemail_row").addClass('d-flex');
+              // $("#cemail_row").removeClass('d-none');
+              // $("#cemail_row").addClass('d-flex');
               
               
               $('#cx_mail').val(' '+ data.customer_email);
-              $('#cus_place').val(data.cust_place_supply);
+              $('#samp').val(data.cust_place_supply);
               $('#customer_id').val(data.cust_id);
-              var x=document.getElementById("cus_place").value
+               var plc=document.getElementById("samp").value
               
-              var y=document.getElementById("state").value
+              var ste=document.getElementById("state1").value
+              var y=ste.toLowerCase();  
+              var inputstring=plc;
+              const parts = inputstring.split("-");   
+              var extractedWord = parts[1];  
+              var extractedWord1= extractedWord.trim();
+              var x=extractedWord1.toLowerCase();  
+              $('#cus_place').val(x);
+              $('#state').val(y);
+
                                 if ( x == y )
                                 {
                                    document.getElementById("item_table").style.display="block"
@@ -1838,8 +1897,8 @@ function reloadUnit() {
                 <td class='text-right'><input type='number' id='rate${RowCount}'
                         class='form-control bg-transparent  text-light border-0  text-right rate' name='rate[]' value='0.00'
                         ></td>
-                <td class='text-right'><input type='text' id='desc${RowCount}'
-                        class='form-control bg-transparent  text-light border-0  text-right desc' name='desc[]' >
+                <td class='text-right'><input type='number' id='discount${RowCount}'
+                        class='form-control bg-transparent  text-light border-0  text-right discount' name='discount[]' >
                 </td>
                 <td class='text-right'> <select name='tax[]' id='tax${RowCount}'
                         class="form-control bg-transparent  text-light   text-right border-0 tax">
@@ -1880,6 +1939,7 @@ function reloadUnit() {
 
         $('#item_table').on('click', '.delete-row', function () {
             $(this).closest('tr').remove();
+            calc();
         });
 
     });
@@ -1917,8 +1977,8 @@ $(document).ready(function () {
                 <td class='text-right'><input type='number' id='ratee${RowCount}'
                         class='form-control bg-transparent  text-light border-0  text-right ratee' name='ratee[]' value='0.00'
                         ></td>
-                <td class='text-right'><input type='text' id='descc${RowCount}'
-                        class='form-control bg-transparent  text-light border-0  text-right descc' name='descc[]' >
+                <td class='text-right'><input type='number' id='discount${RowCount}'
+                        class='form-control bg-transparent  text-light border-0  text-right discount' name='discount[]' >
                 </td>
                 <td class='text-right'> 
                   <select name='taxx[]' id='taxx${RowCount}'
@@ -1958,6 +2018,7 @@ $(document).ready(function () {
 
         $('#item_tablee').on('click', '.delete-roww', function () {
             $(this).closest('tr').remove();
+            calc();
         });
 
     });
@@ -1995,16 +2056,20 @@ function calc() {
         // get the values of the input fields for this row
         var qty = $(this).find('.qty').val();
         var rate = $(this).find('.rate').val();
-        var desc = $(this).find('.desc').val();
+        var discount = $(this).find('.discount').val();
         var tax = $(this).find('.tax').val();
+
+        $(this).find('.taxamount').val((qty * rate - discount) * (tax / 100));
+        var taxamount = parseFloat($(this).find('.taxamount').val());
+        $(this).find('.amount').val(qty * rate - discount);
         
-        // calculate the tax amount and total amount for this row
-        var taxamount = (qty * rate) * (tax / 100);
-        var amount = qty * rate;
+        // // calculate the tax amount and total amount for this row
+        // var taxamount = (qty * rate) * (tax / 100);
+        // var amount = qty * rate;
         
-        // update the tax amount and total amount input fields for this row
-        $(this).find('.taxamount').val(taxamount.toFixed(2));
-        $(this).find('.amount').val(amount.toFixed(2));
+        // // update the tax amount and total amount input fields for this row
+        // $(this).find('.taxamount').val(taxamount.toFixed(2));
+        // $(this).find('.amount').val(amount.toFixed(2));
     });
     
     // calculate the total amount and total tax amount for all rows
@@ -2037,16 +2102,20 @@ function calc() {
         // get the values of the input fields for this row
         var qty = $(this).find('.qtyy').val();
         var rate = $(this).find('.ratee').val();
-        var desc = $(this).find('.descc').val();
+        var discount = $(this).find('.discountt').val();
         var tax = $(this).find('.taxx').val();
+
+        $(this).find('.taxamountt').val((qty * rate - discount) * (tax / 100));
+        var taxamount = parseFloat($(this).find('.taxamountt').val());
+        $(this).find('.amountt').val(qty * rate - discount);
         
-        // calculate the tax amount and total amount for this row
-        var taxamount = (qty * rate) * (tax / 100);
-        var amount = qty * rate;
+        // // calculate the tax amount and total amount for this row
+        // var taxamount = (qty * rate) * (tax / 100);
+        // var amount = qty * rate;
         
-        // update the tax amount and total amount input fields for this row
-        $(this).find('.taxamountt').val(taxamount.toFixed(2));
-        $(this).find('.amountt').val(amount.toFixed(2));
+        // // update the tax amount and total amount input fields for this row
+        // $(this).find('.taxamountt').val(taxamount.toFixed(2));
+        // $(this).find('.amountt').val(amount.toFixed(2));
     });
     
     // calculate the total amount and total tax amount for all rows
@@ -2073,86 +2142,86 @@ function calc() {
 
 }
 
-  // Update subtotal when a row is deleted
-    $(document).ready(function dlt () {
+  // // Update subtotal when a row is deleted
+  //   $(document).ready(function dlt () {
 
-      var x=document.getElementById("cus_place").value
-      var y=document.getElementById("state").value
+  //     var x=document.getElementById("cus_place").value
+  //     var y=document.getElementById("state").value
 
-      if ( x==y )
-      {
-        $('#item_table').on('click', '.delete-row', function () {
-            var tr = $(this).closest('tr');
-            var taxamount= parseFloat(tr.find('input[name^="taxamount"]').val());
-            var amount = parseFloat(tr.find('input[name^="amount"]').val());
-            var subtotal = parseFloat($('#subtotal').val());
+  //     if ( x==y )
+  //     {
+  //       $('#item_table').on('click', '.delete-row', function () {
+  //           var tr = $(this).closest('tr');
+  //           var taxamount= parseFloat(tr.find('input[name^="taxamount"]').val());
+  //           var amount = parseFloat(tr.find('input[name^="amount"]').val());
+  //           var subtotal = parseFloat($('#subtotal').val());
 
-            var total_taxamount = parseFloat($('#total_taxamount').val());
-            $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
+  //           var total_taxamount = parseFloat($('#total_taxamount').val());
+  //           $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
 
-            $('#subtotal').val((subtotal - amount).toFixed(2));
+  //           $('#subtotal').val((subtotal - amount).toFixed(2));
 
-            var total_with_tax= parseFloat($('#total_with_tax').val());
-            $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
+  //           var total_with_tax= parseFloat($('#total_with_tax').val());
+  //           $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
             
-            var pos = $("#customer_sel option:selected").data("pos");
-            var state = document.getElementById("state").value;
-            d=0
-            gst = taxamount / 2;
-            console.log(gst);
-            $('#cgst').val(parseFloat(gst.toFixed(2)));
-            $('#sgst').val(parseFloat(gst.toFixed(2)));
-            $('#igst').val(parseFloat(d.toFixed(2)));
+  //           var pos = $("#customer_sel option:selected").data("pos");
+  //           var state = document.getElementById("state").value;
+  //           d=0
+  //           gst = taxamount / 2;
+  //           console.log(gst);
+  //           $('#cgst').val(parseFloat(gst.toFixed(2)));
+  //           $('#sgst').val(parseFloat(gst.toFixed(2)));
+  //           $('#igst').val(parseFloat(d.toFixed(2)));
 
-            var cgst= parseFloat($('#cgst').val());
-            $('#cgst').val(( taxamount-cgst ).toFixed(2));
-            var sgst= parseFloat($('#sgst').val());
-            $('#sgst').val(( taxamount-sgst ).toFixed(2));
-            tr.remove();
-        });
-      }
+  //           var cgst= parseFloat($('#cgst').val());
+  //           $('#cgst').val(( taxamount-cgst ).toFixed(2));
+  //           var sgst= parseFloat($('#sgst').val());
+  //           $('#sgst').val(( taxamount-sgst ).toFixed(2));
+  //           tr.remove();
+  //       });
+  //     }
 
-      else
-      {
-        $('#item_tablee').on('click', '.delete-roww', function () {
-            var tr = $(this).closest('tr');
-            var taxamount= parseFloat(tr.find('input[name^="taxamountt"]').val());
-            var amount = parseFloat(tr.find('input[name^="amountt"]').val());
-            var subtotal = parseFloat($('#subtotal').val());
+  //     else
+  //     {
+  //       $('#item_tablee').on('click', '.delete-roww', function () {
+  //           var tr = $(this).closest('tr');
+  //           var taxamount= parseFloat(tr.find('input[name^="taxamountt"]').val());
+  //           var amount = parseFloat(tr.find('input[name^="amountt"]').val());
+  //           var subtotal = parseFloat($('#subtotal').val());
 
-            var total_taxamount = parseFloat($('#total_taxamount').val());
-            $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
+  //           var total_taxamount = parseFloat($('#total_taxamount').val());
+  //           $('#total_taxamount').val((total_taxamount-taxamount).toFixed(2));
 
-            $('#subtotal').val((subtotal - amount).toFixed(2));
+  //           $('#subtotal').val((subtotal - amount).toFixed(2));
 
-            var total_with_tax= parseFloat($('#total_with_tax').val());
-            $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
+  //           var total_with_tax= parseFloat($('#total_with_tax').val());
+  //           $('#total_with_tax').val((total_with_tax  - amount - taxamount).toFixed(2));
             
-            var pos = $("#customer_sel option:selected").data("pos");
-            var state = document.getElementById("state").value;
-            d=0
+  //           var pos = $("#customer_sel option:selected").data("pos");
+  //           var state = document.getElementById("state").value;
+  //           d=0
                
-            console.log(gst);
-            $('#cgst').val(parseFloat(d.toFixed(2)));
-            $('#sgst').val(parseFloat(d.toFixed(2)));
-            $('#igst').val(parseFloat(taxamount.toFixed(2)));
+  //           console.log(gst);
+  //           $('#cgst').val(parseFloat(d.toFixed(2)));
+  //           $('#sgst').val(parseFloat(d.toFixed(2)));
+  //           $('#igst').val(parseFloat(taxamount.toFixed(2)));
 
-            var igst= parseFloat($('#igst').val());
-            $('#igst').val(( total_taxamount-igst ).toFixed(2));
+  //           var igst= parseFloat($('#igst').val());
+  //           $('#igst').val(( total_taxamount-igst ).toFixed(2));
 
-            tr.remove();
+  //           tr.remove();
             
-        });
-      }
+  //       });
+  //     }
 
 
-    });
+  //   });
 
 function test(taxamount) {
         console.log('test333');
         console.log(taxamount)
         d = 0;
-        var pos = $("#customer_sel option:selected").data("pos");
+        var pos = document.getElementById("cus_place").value;
         var state = document.getElementById("state").value;
         console.log(pos)
         console.log('state')
@@ -2168,10 +2237,9 @@ function test(taxamount) {
             $('#cgst').val(parseFloat(gst.toFixed(2)));
             $('#sgst').val(parseFloat(gst.toFixed(2)));
             $('#igst').val(parseFloat(d.toFixed(2)));
-            // document.getElementById('tr_cgst').style= ('display: flex');
-            
-            // document.getElementById('tr_sgst').style= ('display: flex');
-            // document.getElementById('tr_igst').style= ('display: none');
+            document.getElementById("tr_cgst").style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "table-row";
+            document.getElementById("tr_igst").style.display = "none";
 
            
         }
@@ -2182,11 +2250,32 @@ function test(taxamount) {
             $('#igst').val(taxamount.toFixed(2));
             $('#cgst').val(d.toFixed(2));
             $('#sgst').val(d.toFixed(2));
-            document.getElementById('cgst')= ('display: none');
-            document.getElementById('sgst')= ('display: none');
-            document.getElementById('igst')= ('display: block');
+            document.getElementById("tr_igst").style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "none";
+            document.getElementById("tr_cgst").style.display = "none";
         }
     }
+
+
+    function calc_ship()
+    {
+      // $('#table_tot tr').each(function() {
+        var shipping_charge=parseFloat($('#shipping_charge').val());
+        var adjustment_charge=parseFloat($('#adjustment_charge').val());
+        var subtotal=parseFloat($('#subtotal').val());
+        var total_tax=parseFloat($('#total_taxamount').val());
+        var total=subtotal + total_tax + shipping_charge + adjustment_charge;
+
+        $('#shipping_charge').val(shipping_charge.toFixed(2));
+            $('#adjustment_charge').val(adjustment_charge.toFixed(2));
+            $('#total_with_tax').val(total.toFixed(2));
+
+
+      // });
+    }
+
+
+
 </script>
 
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
