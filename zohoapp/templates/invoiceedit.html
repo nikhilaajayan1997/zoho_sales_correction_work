@@ -1441,6 +1441,33 @@
 
 </div>
 <script>
+  // Event handler for clone button  .... TABLE 2
+var rowCount = 1;
+$('#item_tablee').on('click', '.clone-roww', function () {
+  var row= $(this).closest('tr');
+  var clonedRow= row.clone(); // Clone the current row
+  var newRowId = 'row' + rowCount; // Generate a new ID for the cloned row
+  clonedRow.attr('id', newRowId); // Set the new ID for the cloned row
+
+  // Clone the options for tax, account, and item
+  var currentItem = row.find('.item_selectt').val();
+  clonedRow.find('.item_selectt').val(currentItem);
+  
+  var currentTax = row.find('.taxx').val();
+  clonedRow.find('.taxx').val(currentTax);
+
+  rowCount++; // Increment row counter
+
+  $('#item_tablee tbody').append(clonedRow);
+  var row = $(this).closest('tr');
+  calc();
+  calc_total();
+     
+});
+</script>
+
+
+<script>
 
 // Event handler for clone button  .... TABLE 1
 var rowCount = 1;
@@ -1466,29 +1493,7 @@ $('#item_table').on('click', '.clone-row', function () {
      
 });
 
-// Event handler for clone button  .... TABLE 2
-var rowCount = 1;
-$('#item_tablee').on('click', '.clone-roww', function () {
-  var row = $(this).closest('tr');
-  var clonedRow = row.clone(); // Clone the current row
-  var newRowId = 'row' + rowCount; // Generate a new ID for the cloned row
-  clonedRow.attr('id', newRowId); // Set the new ID for the cloned row
 
-  // Clone the options for tax, account, and item
-  var currentItem = row.find('.item_selectt').val();
-  clonedRow.find('.item_selectt').val(currentItem);
-  
-  var currentTax = row.find('.taxx').val();
-  clonedRow.find('.taxx').val(currentTax);
-
-  rowCount++; // Increment row counter
-
-  $('#item_tablee tbody').append(clonedRow);
-  var row = $(this).closest('tr');
-  calc();
-  calc_total();
-     
-});
 
 
    
@@ -1952,36 +1957,36 @@ function reloadUnit() {
 
 $(document).ready(function () {
         $('#add-roww').click(function () {
-            var table = document.getElementById("item_tablee");
-            var RowCount = table.rows.length;
-            console.log(RowCount);
-            var newRow = $(`
-            <tr id='row${RowCount}' >
+            var tablee = document.getElementById("item_tablee");
+            var RowCountt = tablee.rows.length;
+            console.log(RowCountt);
+            var newRoww = $(`
+            <tr id='row${RowCountt}' >
                 <td>
                     <div class='form-group'>
                         <select
                             class='form-control bg-transparent  text-light   border-0 item_selectt' name='itemm[]'
-                            id='itemm${RowCount}'>
+                            id='itemm${RowCountt}'>
                             {% for i in p %}
                             <option class="text-dark" value="{{i.Name}}">{{i.Name}}</option>
                             {% endfor %}
                         </select></div>
                 </td>
-                <td class='text-right'><input type='text' id='hsnn${RowCount}'
+                <td class='text-right'><input type='text' id='hsnn${RowCountt}'
                   class='form-control bg-transparent  text-light border-0  text-right hsnn' name='hsnn[]'
                   value=''  placeholder="6 Digit No" pattern="[0-9]{6}" required>
                 </td>
-                <td class='text-right'><input type='number' id='qtyy${RowCount}'
+                <td class='text-right'><input type='number' id='qtyy${RowCountt}'
                         class='form-control bg-transparent  text-light border-0  text-right qtyy' name='quantityy[]' value='0' onchange="calc()">
                 </td>
-                <td class='text-right'><input type='number' id='ratee${RowCount}'
+                <td class='text-right'><input type='number' id='ratee${RowCountt}'
                         class='form-control bg-transparent  text-light border-0  text-right ratee' name='ratee[]' value='0.00'
                         ></td>
-                <td class='text-right'><input type='number' id='discount${RowCount}'
-                        class='form-control bg-transparent  text-light border-0  text-right discount' name='discount[]' >
+                <td class='text-right'><input type='number' id='discountt${RowCountt}'
+                        class='form-control bg-transparent  text-light border-0  text-right discountt' name='discountt[]' >
                 </td>
                 <td class='text-right'> 
-                  <select name='taxx[]' id='taxx${RowCount}'
+                  <select name='taxx[]' id='taxx${RowCountt}'
                         class="form-control bg-transparent  text-light   text-right border-0 taxx">
                         <option class="text-dark">Select Tax</option>
                       <option class="text-dark" value="0">IGST 0%</option>
@@ -1993,11 +1998,11 @@ $(document).ready(function () {
                     </select>
                     </td>
                 <td style="display: none;">
-                    <input type="text" name='taxamountt1' id="taxamountt${RowCount}" class="form-control bg-transparent  text-light taxamountt" />
+                    <input type="text" name='taxamountt1' id="taxamountt${RowCountt}" class="form-control bg-transparent  text-light taxamountt" />
                             </td>
-                <td class='text-right'><input type='number' id='amountt${RowCount}'
+                <td class='text-right'><input type='number' id='amountt${RowCountt}'
                         class='form-control bg-transparent  text-light border-0  text-right amountt'style="width: 8rem;" name='amountt[]' value='0.00'></td>
-                <td class='text-center'><button type='button' id='del_btnn${RowCount}'
+                <td class='text-center'><button type='button' id='del_btnn${RowCountt}'
                         class='btn btn-transparent text-danger btn-sm btn-outline-danger rounded-circle delete-roww'
                         style='width:30px'><i class='fa fa-times'></i></button>
                         <button type='button' class='btn btn-transparent text-primary btn-sm btn-outline-primary rounded-circle clone-roww' data-row=1 style='width:30px'>
@@ -2013,7 +2018,7 @@ $(document).ready(function () {
             //             alert("HSN should not be more than 6 digits!");
             //         }
             //     });
-            $('#item_tablee').append(newRow);
+            $('#item_tablee').append(newRoww);
         });
 
         $('#item_tablee').on('click', '.delete-roww', function () {
@@ -2092,22 +2097,24 @@ function calc() {
     $('#total_with_tax').val(total_with_tax.toFixed(2));
 
      test(taxamount);
+     calc_ship();
+
     }
 
 
-    if ( x!=y )
+    if ( x != y )
     {
       // loop through each row in the table
     $('#item_tablee tbody tr').each(function() {
         // get the values of the input fields for this row
-        var qty = $(this).find('.qtyy').val();
-        var rate = $(this).find('.ratee').val();
-        var discount = $(this).find('.discountt').val();
-        var tax = $(this).find('.taxx').val();
+        var qtyy = $(this).find('.qtyy').val();
+        var ratee = $(this).find('.ratee').val();
+        var discountt = $(this).find('.discountt').val();
+        var taxx = $(this).find('.taxx').val();
 
-        $(this).find('.taxamountt').val((qty * rate - discount) * (tax / 100));
+        $(this).find('.taxamountt').val((qtyy * ratee - discountt) * (taxx / 100));
         var taxamount = parseFloat($(this).find('.taxamountt').val());
-        $(this).find('.amountt').val(qty * rate - discount);
+        $(this).find('.amountt').val(qtyy * ratee - discountt);
         
         // // calculate the tax amount and total amount for this row
         // var taxamount = (qty * rate) * (tax / 100);
@@ -2138,6 +2145,8 @@ function calc() {
     $('#total_with_tax').val(total_with_tax.toFixed(2));
 
   test(taxamount);
+  calc_ship();
+
     }
 
 }

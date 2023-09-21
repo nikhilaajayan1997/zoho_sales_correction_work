@@ -133,12 +133,12 @@ crossorigin="anonymous"></script>
     
      
       
-        <div class="row mb-4 ">
+      <div class="row mb-4 ">
           <div class="col-sm-6 col-lg-2 col-md-2">
             <label class="mr-3 " for="input-1">invoice Date</label>
           </div>
           <div class="col-sm-6 col-lg-2 col-md-2">
-            <input class="form-control text-dark"   type="date" name="inv_date" id="input-1">
+            <input type="date" class="form-control text-dark"   name="inv_date" id="input-1" >
           </div>
           
               
@@ -146,10 +146,13 @@ crossorigin="anonymous"></script>
                 <label for="input-2"class="ms-5"> Due Date</label>
               </div>
               <div class="col-sm-6 col-lg-2 col-md-2">
-                <input  class="form-control text-dark" name="due_date" type="date" id="input-2">
+                <input type="date"  class="form-control text-dark" name="due_date"  id="input-2" >
               </div>
               
-            </div>
+      </div>
+      
+
+
             <div class="row mb-4 border-bottom pb-5">
               <div class="col-sm-2">
                 <label for="input-2">Terms</label>
@@ -361,7 +364,7 @@ crossorigin="anonymous"></script>
   
                   <td class='text-right'><input type='number' id='qtyy1'
                     class='form-control bg-transparent border-0 text-light text-right qtyy' name='quantityy[]'
-                    value='0' onchange="calc()"  >
+                    value='0' onchange="calc()">
                   </td>
   
                   <td class='text-right'><input type='number' id='ratee1'
@@ -2474,6 +2477,8 @@ if( x == y )
     $('#total_with_tax').val(total_with_tax.toFixed(2));
 
   test(taxamount);
+  calc_ship();
+
 }
 
 if( x != y )
@@ -2486,7 +2491,7 @@ if( x != y )
         var discountt = $(this).find('.discountt').val();
         var taxx = $(this).find('.taxx').val();
 
-        $(this).find('.taxamountt').val((qtyy * ratee - discountt) * (tax / 100));
+        $(this).find('.taxamountt').val((qtyy * ratee - discountt) * (taxx / 100));
         var taxamountt = parseFloat($(this).find('.taxamountt').val());
         $(this).find('.amountt').val(qtyy * ratee - discountt);
         
@@ -2520,6 +2525,8 @@ if( x != y )
     $('#total_with_tax').val(total_with_tax.toFixed(2));
 
   test(taxamount);
+  calc_ship();
+
 }
 
 }

@@ -123,10 +123,7 @@ transition: transform 0.4s ,top 0.4s;
                 var rate = $(this).find('.rate').val();
                 var discount = $(this).find('.discount').val();
                 var tax = $(this).find('.tax').val();
-                console.log(qty);
-                console.log(rate);
-                console.log(discount);
-                console.log(tax);
+                
                 $(this).find('.taxamount').val(((qty * rate) - discount) * (tax / 100));
                 var taxamount = parseFloat($(this).find('.taxamount').val());
                 $(this).find('.amount').val(qty * rate - discount);
@@ -185,6 +182,8 @@ transition: transform 0.4s ,top 0.4s;
         // $('#baldue').val((taxamount + total).toFixed(2));
 
         test();
+        calc_ship();
+
       }
       else
       {
@@ -206,13 +205,15 @@ transition: transform 0.4s ,top 0.4s;
         $('#total').val((taxamount + total).toFixed(2));
 
         test();
+        calc_ship();
+
       }
     }
 
     function test() {
         console.log('test');
         d = 0;
-        var pos = $("#customer_sel option:selected").data("pos");
+        var pos = document.getElementById("cus_place").value;
         var state = document.getElementById("state").value;
         
         if (pos == state) {
@@ -239,21 +240,36 @@ transition: transform 0.4s ,top 0.4s;
     
         }
     }
-    // Calculate total
-    $(document).ready(function () {
-        $('#shipping, #adjustment').on('keyup', function () {
-            var shipping_charge = parseFloat($('#shipping').val() || 0);
-            var adjustment_charge = parseFloat($('#adjustment').val() || 0);
-            var subtotal = parseFloat($('#subtotal').val() || 0);
-            var total_tax = parseFloat($('#total_taxamount').val() || 0);
-            var total = subtotal + total_tax + shipping_charge + adjustment_charge;
-            // total = Math.round(total);
+    // // Calculate total
+    // $(document).ready(function () {
+    //     $('#shipping, #adjustment').on('keyup', function () {
+    //         var shipping_charge = parseFloat($('#shipping').val() || 0);
+    //         var adjustment_charge = parseFloat($('#adjustment').val() || 0);
+    //         var subtotal = parseFloat($('#subtotal').val() || 0);
+    //         var total_tax = parseFloat($('#total_taxamount').val() || 0);
+    //         var total = subtotal + total_tax + shipping_charge + adjustment_charge;
+    //         // total = Math.round(total);
 
-            $('#shipping_charge').val(shipping_charge.toFixed(2));
+    //         $('#shipping_charge').val(shipping_charge.toFixed(2));
+    //         $('#adjustment_charge').val(adjustment_charge.toFixed(2));
+    //         $('#total').val(total.toFixed(2));
+    //     });
+    // });
+
+    function calc_ship()
+    {
+        var shipping_charge=parseFloat($('#shipping_charge').val());
+        var adjustment_charge=parseFloat($('#adjustment_charge').val());
+        var subtotal=parseFloat($('#subtotal').val());
+        var total_tax=parseFloat($('#total_taxamount').val());
+        var total=subtotal + total_tax + shipping_charge + adjustment_charge;
+
+        $('#shipping_charge').val(shipping_charge.toFixed(2));
             $('#adjustment_charge').val(adjustment_charge.toFixed(2));
             $('#total').val(total.toFixed(2));
-        });
-    });
+
+
+    }
 
 </script>
 
@@ -560,7 +576,7 @@ transition: transform 0.4s ,top 0.4s;
     
     <div class="row mb-4">
         <div class="col-sm-2"><label for="reference">Reference#</label></div>
-        <div class="col-sm-6 col-md-6 col-lg-6"> <input type="number" id="reference" name="reference" class="form-control text-dark ">
+        <div class="col-sm-6 col-md-6 col-lg-6"> <input type="number" id="reference" name="reference" class="form-control text-dark " required>
                 </div>
     </div>
     <div class="row mb-4">
@@ -792,12 +808,12 @@ transition: transform 0.4s ,top 0.4s;
                 </tr>
                 <tr>
                     <td class="text-black" style="font-weight: bold;">Shipping Charges</td>
-                    <td><input type="text" id="shipping_charge" name="shipping_charge" step="any" value="0.00" 
+                    <td><input type="number" id="shipping_charge" name="shipping_charge" step="any" onchange="calc_ship()" value="0.00" 
                         class="form-control bg-transparent text-white border-0 text-right shipping_charge  text-dark" style="width: 50%;"></td>
                 </tr>
                 <tr>
                     <td class="text-black" style="font-weight: bold;">Adjustmment</td>
-                    <td><input type="text" id="adjustment_charge" name="adjustment_charge" step="any" value="0.00" 
+                    <td><input type="number" id="adjustment_charge" name="adjustment_charge" step="any" onchange="calc_ship()" value="0.00" 
                         class="form-control bg-transparent text-white border-0 text-right adjustment  text-dark" style="width: 50%;"> </td>
                 </tr>
                 <tr>

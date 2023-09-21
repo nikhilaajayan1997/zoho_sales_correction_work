@@ -45,7 +45,6 @@
         var ste="{{ comp }}";
         var plc="{{ cust }}";
         var x=ste.toLowerCase(); 
-
         var inputstring=plc;
         const parts = inputstring.split("-");   
         var extractedWord = parts[1];  
@@ -205,6 +204,8 @@ function calc(){
         // $('#baldue').val((taxamount + total).toFixed(2));
 
         test();
+        calc_ship();
+
         }
         else
         {
@@ -224,6 +225,8 @@ function calc(){
         // $('#baldue').val((taxamount + total).toFixed(2));
 
         test();
+        calc_ship();
+
         }
         
     }

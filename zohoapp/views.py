@@ -3332,7 +3332,7 @@ def create_delivery_chellan(request):
     # estimates_count = DeliveryChellan.objects.filter(user_id=user.id).count()
     # estimates_count = DeliveryChellan.objects.last().id
     if  DeliveryChellan.objects.all().exists():
-        chellan_count = RetainerInvoice.objects.last().id
+        chellan_count = DeliveryChellan.objects.last().id
         count=chellan_count+1 
     else:
         count=1 
@@ -3765,6 +3765,7 @@ def delivery_challan_edit(request,id):
     estimate = DeliveryChellan.objects.get(id=id)
     cust=estimate.customer.placeofsupply
     cust_id=estimate.customer.id
+    comp=company.state
     payments=payment_terms.objects.all()
     
     pls= customer.objects.get(customerName=estimate.customer_name)
@@ -3800,7 +3801,9 @@ def delivery_challan_edit(request,id):
         'payments':payments,
         'cust':cust,
         'custo_id':cust_id,
+        'comp':comp,
     }
+    print(comp)
     return render(request, 'delivery_challan_edit.html', context)
 
 def update_challan(request,id):
@@ -3827,6 +3830,9 @@ def update_challan(request,id):
 
         estimate.customer_notes = request.POST['customer_note']
         estimate.sub_total = float(request.POST['subtotal'])
+        estimate.igst=float(request.POST['igst'])
+        estimate.cgst=float(request.POST['cgst'])
+        estimate.sgst=float(request.POST['sgst'])
         estimate.tax_amount = float(request.POST['total_taxamount'])
         estimate.shipping_charge = float(request.POST['shipping_charge'])
         estimate.adjustment = float(request.POST['adjustment_charge'])

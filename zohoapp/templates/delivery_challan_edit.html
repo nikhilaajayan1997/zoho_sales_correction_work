@@ -100,11 +100,23 @@ transition: transform 0.4s ,top 0.4s;
 </style>
 
 <script>
-  window.onload=function(){        
-      var x="{{ comp }}";
-      var y="{{ cust }}";
-      document.getElementById("cus_place").value="{{ cust }}";
-      document.getElementById("customer_id").value="{{ custo_id }}";
+  window.onload=function(){  
+
+        var ste="{{comp}}";
+        var plc="{{cust}}";
+        var x=ste.toLowerCase(); 
+
+        var inputstring=plc;
+        const parts = inputstring.split("-");   
+        var extractedWord = parts[1];  
+        var extractedWord1= extractedWord.trim();
+        var y=extractedWord1.toLowerCase();  
+        document.getElementById("cus_place").value=y;
+        document.getElementById("state").value=x;
+        document.getElementById("customer_id").value="{{ custo_id }}";
+        var ig="{{ estimate.igst }}";
+        var cg="{{ estimate.cgst }}";
+        var sg="{{ estimate.sgst }}";
       if ( x == y )
                               {
                                  document.getElementById("item_table").style.display="block"
@@ -125,6 +137,19 @@ transition: transform 0.4s ,top 0.4s;
                                  document.getElementById("add-row").style.display="none"
                                  document.getElementById("add-roww").style.display="block"
                               }
+
+      if ( ig != 0 ){
+        document.getElementById("tr_igst").style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "none";
+            document.getElementById("tr_cgst").style.display = "none";
+
+      }
+      else{
+
+        document.getElementById("tr_cgst").style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "table-row";
+            document.getElementById("tr_igst").style.display = "none";
+      }
                   
   }
 </script>
@@ -251,6 +276,8 @@ transition: transform 0.4s ,top 0.4s;
         // $('#baldue').val((taxamount + total).toFixed(2));
 
         test();
+        calc_ship();
+
       }
       else
       {
@@ -272,6 +299,7 @@ transition: transform 0.4s ,top 0.4s;
         $('#total').val((taxamount + total).toFixed(2));
 
         test();
+        calc_ship();
       }
     }
 
@@ -281,7 +309,7 @@ transition: transform 0.4s ,top 0.4s;
     function test() {
         console.log('test');
         d = 0;
-        var pos = $("#customer_sel option:selected").data("pos");
+        var pos = document.getElementById("cus_place").value;
         var state = document.getElementById("state").value;
 
         if (pos == state) {
@@ -295,6 +323,8 @@ transition: transform 0.4s ,top 0.4s;
             $('#igst').val(parseFloat(d.toFixed(2)));
             document.getElementById("tr_cgst").style.display = "table-row";
             document.getElementById("tr_sgst").style.display = "table-row";
+            document.getElementById("tr_igst").style.display = "none";
+
 
 
         }else{
@@ -304,6 +334,8 @@ transition: transform 0.4s ,top 0.4s;
             $('#cgst').val(d.toFixed(2));
             $('#sgst').val(d.toFixed(2));
             document.getElementById('tr_igst').style.display = "table-row";
+            document.getElementById("tr_sgst").style.display = "none";
+            document.getElementById("tr_cgst").style.display = "none";
         }
     }
 
@@ -311,22 +343,37 @@ transition: transform 0.4s ,top 0.4s;
 
 
 
-// Calculate total
-$(document).ready(function () {
-    $('#shipping, #adjustment').on('keyup', function () {
-        var shipping_charge = parseFloat($('#shipping').val() || 0);
-        var adjustment_charge = parseFloat($('#adjustment').val() || 0);
-        var subtotal = parseFloat($('#subtotal').val() || 0);
-        var total_tax = parseFloat($('#total_taxamount').val() || 0);
-        var total = subtotal + total_tax + shipping_charge + adjustment_charge;
+// // Calculate total
+// $(document).ready(function () {
+//     $('#shipping, #adjustment').on('keyup', function () {
+//         var shipping_charge = parseFloat($('#shipping').val() || 0);
+//         var adjustment_charge = parseFloat($('#adjustment').val() || 0);
+//         var subtotal = parseFloat($('#subtotal').val() || 0);
+//         var total_tax = parseFloat($('#total_taxamount').val() || 0);
+//         var total = subtotal + total_tax + shipping_charge + adjustment_charge;
+
+//         $('#shipping_charge').val(shipping_charge.toFixed(2));
+//         $('#adjustment_charge').val(adjustment_charge.toFixed(2));
+//         $('#total').val(total.toFixed(2));
+//     });
+// });
+
+
+
+function calc_ship()
+    {
+        var shipping_charge=parseFloat($('#shipping_charge').val());
+        var adjustment_charge=parseFloat($('#adjustment_charge').val());
+        var subtotal=parseFloat($('#subtotal').val());
+        var total_tax=parseFloat($('#total_taxamount').val());
+        var total=subtotal + total_tax + shipping_charge + adjustment_charge;
 
         $('#shipping_charge').val(shipping_charge.toFixed(2));
-        $('#adjustment_charge').val(adjustment_charge.toFixed(2));
-        $('#total').val(total.toFixed(2));
-    });
-});
+            $('#adjustment_charge').val(adjustment_charge.toFixed(2));
+            $('#total').val(total.toFixed(2));
 
 
+    }
 
 </script>
 
@@ -558,15 +605,16 @@ $(document).ready(function () {
 <div class="row  ml-2">
     <div class="col-md-3 "><a class="text-white" style="font-size: 1.5rem;"><i class="fa-solid fa-plus"></i> Edit 
             Delivery Challan</a></div>
-    <input type="hidden" id="state" value="{{ company.state }}">
-</div>
+ </div>
 
 <form method="POST" action="{% url 'update_challan' estimate.id %}" class="p-5" enctype="multipart/form-data" novalidate
     id="forms">
     {% csrf_token %}
-    <input class="hidden" id="state" name="hidden_state" value="{{ company.state }}">
-                <input class="hidden" id="cus_place" name="hidden_cus_place"  value="">
-                <input type="number" id="customer_id" name="customer_id" style="display: none;"  readonly>
+    <input  id="state1" name="hidden_state1" value="{{ company.state }}">
+    <input  id="state" name="hidden_state" value="">
+        <input type="text" name="samp" id="samp" >
+    <input  id="cus_place" name="hidden_cus_place"  value="">
+                <input type="number" id="customer_id" name="customer_id"  readonly>
     
     <div class="row mb-4 border-top pt-5">
         <div class="col-sm-2"><label for="customer_name">Customer Name*</label></div> 
@@ -830,19 +878,19 @@ $(document).ready(function () {
                 <tr style="font-weight: bold;" style="display: none;" id="tr_igst">
                     <td>IGST</td>
                     
-                    <td><input type="text" id='igst' name="igst" step="any"
+                    <td><input type="text" id='igst' name="igst" value="{{ estimate.igst }}" step="any"
                             class="bg-transparent border-0 text-right text-light form-control"></td>
                 </tr>
                 <tr style="font-weight: bold;" style="display: none;" id="tr_cgst">
                     <td>CGST</td>
                     
-                    <td><input type="text" id='cgst' name="cgst" step="any"
+                    <td><input type="text" id='cgst' name="cgst" value="{{ estimate.cgst }}" step="any"
                             class="bg-transparent border-0 text-right text-light form-control"></td>
                 </tr>
                 <tr style="font-weight: bold;" style="display: none;" id="tr_sgst">
                     <td>SGST</td>
                     
-                    <td><input type="text" id='sgst' name="sgst" step="any"
+                    <td><input type="text" id='sgst' name="sgst" value="{{ estimate.sgst }}" step="any"
                             class="bg-transparent border-0 text-right text-light form-control"></td>
                 </tr>
                 <tr style="font-weight: bold;">
@@ -853,12 +901,12 @@ $(document).ready(function () {
                 </tr>
                 <tr style="font-weight: bold;">
                     <td>Shipping Charges</td>
-                    <td><input type="number" id="shipping_charge" name="shipping_charge" value="{{estimate.shipping_charge}}"
+                    <td><input type="number" id="shipping_charge" name="shipping_charge" onchange="calc_ship()" value="{{estimate.shipping_charge}}"
                             class="bg-transparent border-0 text-right text-light form-control shipping_charge" step="any"></td>
                 </tr>
                 <tr style="font-weight: bold;">
                     <td>Adjustmment</td>
-                    <td><input type="number" id="adjustment_charge" name="adjustment_charge" value="{{estimate.adjustment}}"
+                    <td><input type="number" id="adjustment_charge" name="adjustment_charge" onchange="calc_ship()" value="{{estimate.adjustment}}"
                             class="bg-transparent border-0 text-right text-light form-control adjustment" step="any"> </td>
                 </tr>
                 <tr>
@@ -2586,11 +2634,19 @@ $(document).ready(function() {
               
               
               $('#customer_mail').val(' '+ data.customer_email);
-              $('#cus_place').val(data.cust_place_supply);
+              $('#samp').val(data.cust_place_supply);
               $('#customer_id').val(data.cust_id);
-              var x=document.getElementById("cus_place").value
+              var plc=document.getElementById("samp").value
               
-              var y=document.getElementById("state").value
+              var ste=document.getElementById("state1").value
+              var y=ste.toLowerCase();  
+              var inputstring=plc;
+              const parts = inputstring.split("-");   
+              var extractedWord = parts[1];  
+              var extractedWord1= extractedWord.trim();
+              var x=extractedWord1.toLowerCase();  
+              $('#cus_place').val(x);
+              $('#state').val(y);
                                 if ( x == y )
                                 {
                                    document.getElementById("item_table").style.display="block"
