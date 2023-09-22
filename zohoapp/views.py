@@ -972,8 +972,9 @@ def filter_retainer_sent(request):
 
 @login_required(login_url='login')
 def add_invoice(request):
+    user=request.user.id
     payments=payment_terms.objects.all()
-    customer1=customer.objects.all()
+    customer1=customer.objects.filter(user=user)
     if  RetainerInvoice.objects.all().exists():
         ret_invoice_count = RetainerInvoice.objects.last().id
         count=ret_invoice_count+1 
@@ -1100,11 +1101,12 @@ def retainer_template(request,pk):
 
 @login_required(login_url='login')
 def retainer_edit_page(request,pk):
+    user=request.user.id
     invoice=RetainerInvoice.objects.get(id=pk)
     payments=payment_terms.objects.all()
     cust_id=customer.objects.get(id=invoice.customer_name.id)
     custo_id=cust_id.id
-    customer1=customer.objects.all()
+    customer1=customer.objects.filter(user=user)
     items=Retaineritems.objects.filter(retainer=pk)
     context={'invoice':invoice, 'customer1':customer1,'items':items,'custo_id':custo_id,'payments':payments}
     return render(request,'retainer_invoice_edit.html', context)
@@ -1855,7 +1857,7 @@ def payment_term(request):
 @login_required(login_url='login')
 
 def invoiceview(request):
-    user=request.user
+    user=request.user.id
     invoicev=invoice.objects.filter(user=user)
     
     if not payment_terms.objects.filter(Terms='net 15').exists(): 
@@ -1865,10 +1867,8 @@ def invoiceview(request):
     elif not  payment_terms.objects.filter(Terms='net 30').exists():
         payment_terms(Terms='net 30',Days=30).save() 
     
-    
     context={
         'invoice':invoicev,
-        
     }
     return render(request,'invoiceview.html',context)
 
@@ -1986,9 +1986,10 @@ def addinvoice(request):
 @login_required(login_url='login')
 
 def add_prod(request):
-    c=customer.objects.all()
+    user=request.user.id
+    c=customer.objects.filter(user=user)
     company = company_details.objects.get(user=request.user.id)
-    p=AddItem.objects.all()
+    p=AddItem.objects.filter(user=user)
     i=invoice.objects.all()
     payments=payment_terms.objects.all()
     sales=Sales.objects.all()
@@ -2109,6 +2110,11 @@ def add_prod(request):
     return render(request,'createinvoice.html',context)
 
 
+
+
+
+
+
 @login_required(login_url='login')
 
 def add_payment(request):
@@ -2140,9 +2146,9 @@ def add_cx(request):
 
 def edited_prod(request,id):
     print(id)
-    user=request.user
-    c = customer.objects.all()
-    p = AddItem.objects.all()
+    user=request.user.id
+    c = customer.objects.filter(user=user)
+    p=AddItem.objects.filter(user=user)
     invoiceitem = invoice_item.objects.filter(inv_id=id)
     invoic = invoice.objects.get(id=id)
     cust=invoic.customer.placeofsupply
@@ -3373,6 +3379,8 @@ def delivery_chellan_home(request):
     viewitem=DeliveryChellan.objects.filter(user=request.user)
     
     return render(request,'delivery_chellan.html',{'view':viewitem,"company":company})  
+
+    
 def create_challan_draft(request):
     
     cur_user = request.user
@@ -5696,7 +5704,7 @@ def recurbills_customer(request):
                         customerWorkPhone = w_mobile,customerMobile = p_mobile, customerEmail=email,skype = skype,Facebook = fb, 
                         Twitter = twitter,placeofsupply=supply,Taxpreference = tax,currency=currency, website=website, 
                         designation = desg, department = dpt,OpeningBalance=balance,Address1=street1,Address2=street2, city=city, 
-                        state=state, PaymentTerms=payment,zipcode=pincode,country=country,  fax = fax,  phone1 = phone,user = u)
+                        state=state, PaymentTerms=payment,zipcode=pincode,country=country,fax=fax,phone1=phone,user=u)
         cust.save()
 
         return HttpResponse({"message": "success"})
